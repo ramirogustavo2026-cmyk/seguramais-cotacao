@@ -1033,6 +1033,85 @@
 
                     </div>
 
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: SEGURO DIVERSOS          -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-diversos" style="display: none;">
+                        <div id="step-3-diversos" class="step">
+                            <h3 class="step-title text-center">Proteção e Riscos (Diversos)</h3>
+
+                            <!-- 1. O que você deseja proteger? -->
+                            <div class="input-group">
+                                <label for="p1-protecao-diversos">*1. O que você deseja proteger?</label>
+                                <select id="p1-protecao-diversos" required onchange="verificarProtecaoDiversos(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Equipamento</option>
+                                    <option value="2">2 — Objeto pessoal</option>
+                                    <option value="3">3 — Evento</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <!-- Campos Condicionais da Pergunta 1 -->
+                            <div id="cond-p1-equipamento" style="display: none;" class="input-group mt-10">
+                                <label for="p1-qual-equipamento">Qual equipamento deseja proteger?</label>
+                                <input type="text" id="p1-qual-equipamento" placeholder="Ex: Câmera fotográfica, drone, notebook...">
+                            </div>
+                            <div id="cond-p1-objeto" style="display: none;" class="input-group mt-10">
+                                <label for="p1-qual-objeto">Qual objeto pessoal deseja proteger?</label>
+                                <input type="text" id="p1-qual-objeto" placeholder="Ex: Relógio, joia, instrumento musical...">
+                            </div>
+                            <div id="cond-p1-evento" style="display: none;" class="input-group mt-10">
+                                <label for="p1-qual-evento">Qual é o evento?</label>
+                                <input type="text" id="p1-qual-evento" placeholder="Ex: Casamento, show, feira corporativa...">
+                            </div>
+                            <div id="cond-p1-outro" style="display: none;" class="input-group mt-10">
+                                <label for="p1-especificar-protecao">Por favor, especifique o que deseja proteger:</label>
+                                <input type="text" id="p1-especificar-protecao" placeholder="Descreva o bem ou serviço...">
+                            </div>
+
+                            <!-- 2. Qual é o principal risco que deseja proteger? -->
+                            <div class="input-group mt-20">
+                                <label for="p2-risco-diversos">*2. Qual é o principal risco que deseja proteger?</label>
+                                <select id="p2-risco-diversos" required onchange="verificarRiscoDiversos(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Roubo ou furto</option>
+                                    <option value="2">2 — Danos acidentais</option>
+                                    <option value="3">3 — Perda ou quebra</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <!-- Campo Condicional da Pergunta 2 -->
+                            <div id="cond-p2-especificar-risco" style="display: none;" class="input-group mt-10">
+                                <label for="p2-qual-risco">Especifique o risco que deseja proteger:</label>
+                                <input type="text" id="p2-qual-risco" placeholder="Ex: Inundações, incêndio, cancelamento...">
+                            </div>
+
+                            <!-- 3. Qual é o valor aproximado do bem ou serviço? -->
+                            <div class="input-group mt-20">
+                                <label for="p3-valor-diversos">*3. Qual é o valor aproximado do bem ou serviço?</label>
+                                <select id="p3-valor-diversos" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Até R$ 5.000</option>
+                                    <option value="2">2 — R$ 5.001 a R$ 20.000</option>
+                                    <option value="3">3 — Acima de R$ 20.000</option>
+                                </select>
+                            </div>
+
+                            <!-- 4. Observações -->
+                            <div class="input-group mt-20">
+                                <label for="p4-observacoes-diversos">4. Observações adicionais:</label>
+                                <textarea id="p4-observacoes-diversos" rows="3" placeholder="Existe alguma informação adicional que gostaria de informar sobre o seguro?"></textarea>
+                            </div>
+
+                            <div class="modal-footer footer-espacado mt-20">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
             </div>
 

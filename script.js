@@ -45,11 +45,13 @@ function abrirModal(servico) {
     const fluxoMoto = document.getElementById('fluxo-moto');
     const fluxoCaminhao = document.getElementById('fluxo-caminhao');
     const fluxoVida = document.getElementById('fluxo-vida');
+    const fluxoDiversos = document.getElementById('fluxo-diversos');
 
     if (fluxoAuto) fluxoAuto.style.display = 'none';
     if (fluxoMoto) fluxoMoto.style.display = 'none';
     if (fluxoCaminhao) fluxoCaminhao.style.display = 'none';
     if (fluxoVida) fluxoVida.style.display = 'none';
+    if (fluxoDiversos) fluxoDiversos.style.display = 'none';
 
     // Mostrar o fluxo correto
     if (servico === 'Moto' && fluxoMoto) {
@@ -58,6 +60,8 @@ function abrirModal(servico) {
         fluxoCaminhao.style.display = 'block';
     } else if (servico === 'Vida' && fluxoVida) {
         fluxoVida.style.display = 'block';
+    } else if (servico === 'Diversos' && fluxoDiversos) {
+        fluxoDiversos.style.display = 'block';
     } else if (fluxoAuto) {
         fluxoAuto.style.display = 'block';
     }
@@ -93,6 +97,7 @@ function mostrarEtapa(numero) {
         if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
+        if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
 
         const step = document.getElementById(`step-${numero}-${sufixo}`);
         if (step) {
@@ -104,7 +109,7 @@ function mostrarEtapa(numero) {
 
 function proximaEtapa() {
     if (validarEtapaAtual()) {
-        const maxEtapas = 5;
+        const maxEtapas = (tipoSeguroAtual === 'Diversos') ? 3 : 5;
         if (etapaAtual < maxEtapas) {
             etapaAtual++;
             mostrarEtapa(etapaAtual);
@@ -376,6 +381,24 @@ function verificarAdicionaisVida(valor) {
     if (divQuaisAdic) divQuaisAdic.style.display = (valor === '1') ? 'block' : 'none';
 }
 
+// 6.1 LÓGICA CONDICIONAL DO SEGURO DIVERSOS
+function verificarProtecaoDiversos(valor) {
+    const divEquip = document.getElementById('cond-p1-equipamento');
+    const divObjeto = document.getElementById('cond-p1-objeto');
+    const divEvento = document.getElementById('cond-p1-evento');
+    const divOutro = document.getElementById('cond-p1-outro');
+
+    if (divEquip) divEquip.style.display = (valor === '1') ? 'block' : 'none';
+    if (divObjeto) divObjeto.style.display = (valor === '2') ? 'block' : 'none';
+    if (divEvento) divEvento.style.display = (valor === '3') ? 'block' : 'none';
+    if (divOutro) divOutro.style.display = (valor === '4') ? 'block' : 'none';
+}
+
+function verificarRiscoDiversos(valor) {
+    const divRisco = document.getElementById('cond-p2-especificar-risco');
+    if (divRisco) divRisco.style.display = (valor === '4') ? 'block' : 'none';
+}
+
 // 7. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
     const dataList = document.getElementById('lista-profissoes');
@@ -431,6 +454,7 @@ function validarEtapaAtual() {
         if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
+        if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
 
         stepDiv = document.getElementById(`step-${etapaAtual}-${sufixo}`);
     }
