@@ -65,7 +65,7 @@
             <div class="modal-body">
                 <form id="form-cotacao" onsubmit="event.preventDefault();" novalidate>
                     
-                    <!-- ETAPA 1: DADOS OBRIGATÓRIOS DO SEGURADO -->
+                    <!-- ETAPA 1: DADOS OBRIGATÓRIOS DO SEGURADO (COMUM) -->
                     <div id="step-1" class="step active">
                         <p class="step-subtitle text-center">Ótimo! É rapidinho, vamos começar...</p>
                         <h3 class="step-title text-center">Primeiro algumas informações sobre o segurado</h3>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
 
-                    <!-- ETAPA 2: ENDEREÇO (BUSCA AUTOMÁTICA DE CEP VIA VIACEP) -->
+                    <!-- ETAPA 2: ENDEREÇO (COMUM) -->
                     <div id="step-2" class="step">
                         <h3 class="step-title text-center">Qual o endereço do imóvel / residência?</h3>
 
@@ -129,33 +129,7 @@
                                 <label for="uf">UF</label>
                                 <select id="uf">
                                     <option value="">UF</option>
-                                    <option value="AC">AC</option>
-                                    <option value="AL">AL</option>
-                                    <option value="AP">AP</option>
-                                    <option value="AM">AM</option>
-                                    <option value="BA">BA</option>
-                                    <option value="CE">CE</option>
-                                    <option value="DF">DF</option>
-                                    <option value="ES">ES</option>
-                                    <option value="GO">GO</option>
-                                    <option value="MA">MA</option>
-                                    <option value="MT">MT</option>
-                                    <option value="MS">MS</option>
-                                    <option value="MG">MG</option>
-                                    <option value="PA">PA</option>
-                                    <option value="PB">PB</option>
-                                    <option value="PR">PR</option>
-                                    <option value="PE">PE</option>
-                                    <option value="PI">PI</option>
-                                    <option value="RJ">RJ</option>
-                                    <option value="RN">RN</option>
-                                    <option value="RS">RS</option>
-                                    <option value="RO">RO</option>
-                                    <option value="RR">RR</option>
-                                    <option value="SC">SC</option>
-                                    <option value="SP">SP</option>
-                                    <option value="SE">SE</option>
-                                    <option value="TO">TO</option>
+                                    <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
                                 </select>
                             </div>
                         </div>
@@ -166,210 +140,334 @@
                         </div>
                     </div>
 
-                    <!-- ETAPA 3: CONDUTOR PRINCIPAL -->
-                    <div id="step-3" class="step">
-                        <h3 class="step-title text-center">Quem é o condutor principal?</h3>
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: AUTO                     -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-auto" style="display: none;">
+                        
+                        <!-- ETAPA 3 (AUTO) -->
+                        <div id="step-3-auto" class="step">
+                            <h3 class="step-title text-center">Quem é o condutor principal?</h3>
+                            <div class="options-grid grid-2">
+                                <button type="button" class="btn-option active" onclick="selecionarTipoCondutor('segurado', this)">SEGURADO</button>
+                                <button type="button" class="btn-option" onclick="selecionarTipoCondutor('outra_pessoa', this)">OUTRA PESSOA</button>
+                            </div>
 
-                        <div class="options-grid grid-2">
-                            <button type="button" class="btn-option active" onclick="selecionarTipoCondutor('segurado', this)">SEGURADO</button>
-                            <button type="button" class="btn-option" onclick="selecionarTipoCondutor('outra_pessoa', this)">OUTRA PESSOA</button>
-                        </div>
+                            <div id="campos-outra-pessoa" style="display: none;" class="mt-20">
+                                <div class="input-group">
+                                    <label for="outra-nome">*Nome do Condutor</label>
+                                    <input type="text" id="outra-nome" placeholder="Nome completo">
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group flex-1">
+                                        <label for="outra-nasc">*Data Nasc.</label>
+                                        <input type="date" id="outra-nasc">
+                                    </div>
+                                    <div class="input-group flex-1">
+                                        <label for="outra-cpf">*CPF</label>
+                                        <input type="text" id="outra-cpf" placeholder="000.000.000-00">
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div id="campos-outra-pessoa" style="display: none;" class="mt-20">
+                            <div class="input-group mt-20">
+                                <label for="profissao-condutor">Profissão do Condutor:</label>
+                                <input type="text" id="profissao-condutor" list="lista-profissoes" placeholder="Digite ou selecione a profissão..." autocomplete="off">
+                                <datalist id="lista-profissoes"></datalist>
+                            </div>
+
                             <div class="input-group">
-                                <label for="outra-nome">*Nome do Condutor</label>
-                                <input type="text" id="outra-nome" placeholder="Nome completo">
-                            </div>
-
-                            <div class="form-row">
-                                <div class="input-group flex-1">
-                                    <label for="outra-nasc">*Data Nasc.</label>
-                                    <input type="date" id="outra-nasc">
-                                </div>
-                                <div class="input-group flex-1">
-                                    <label for="outra-cpf">*CPF</label>
-                                    <input type="text" id="outra-cpf" placeholder="000.000.000-00">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- CAMPO DE PROFISSÃO COM DATALIST / BUSCA INTELIGENTE -->
-                        <div class="input-group mt-20">
-                            <label for="profissao-condutor">Profissão do Condutor:</label>
-                            <input type="text" id="profissao-condutor" list="lista-profissoes" placeholder="Digite ou selecione a profissão..." autocomplete="off">
-                            <datalist id="lista-profissoes"></datalist>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="tempo-habilitacao">*Tempo de habilitação</label>
-                            <select id="tempo-habilitacao" required>
-                                <option value="Mais de 10 anos">Mais de 10 anos</option>
-                                <option value="8 a 10 anos">8 a 10 anos</option>
-                                <option value="5 a 7 anos">5 a 7 anos</option>
-                                <option value="2 a 4 anos">2 a 4 anos</option>
-                                <option value="Menos de 1 ano">Menos de 1 ano</option>
-                            </select>
-                        </div>
-
-                        <div class="modal-footer footer-espacado">
-                            <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
-                            <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
-                        </div>
-                    </div>
-
-                    <!-- ETAPA 4: UTILIZAÇÃO E PERNOITE -->
-                    <div id="step-4" class="step">
-                        <p class="step-subtitle text-center">Vamos falar um pouco sobre como o veículo é utilizado</p>
-
-                        <div class="input-group mt-10">
-                            <label for="tipo-utilizacao">Qual o tipo de utilização do veículo?</label>
-                            <select id="tipo-utilizacao">
-                                <option value="Locomoção Diária">Locomoção Diária</option>
-                                <option value="Lazer">Lazer</option>
-                                <option value="Comercial">Comercial / Trabalho</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="km-mensal">*Km mensal</label>
-                            <select id="km-mensal" required>
-                                <option value="">Selecione...</option>
-                                <option value="Até 500 km">Até 500 km</option>
-                                <option value="500 a 1000 km">500 a 1000 km</option>
-                                <option value="Mais de 1000 km">Mais de 1000 km</option>
-                            </select>
-                        </div>
-
-                        <label class="label-block text-center mt-10">*Haverá condutor(es) com idade entre 17 e 25 anos?</label>
-                        <div class="options-grid grid-2 mt-10">
-                            <button type="button" class="btn-option" onclick="selecionarOpcaoUnica(this)">SIM</button>
-                            <button type="button" class="btn-option active" onclick="selecionarOpcaoUnica(this)">NÃO</button>
-                        </div>
-
-                        <label class="label-block text-center mt-20">*O veículo pernoita no endereço do(a) segurado(a)?</label>
-                        <div class="options-grid grid-2 mt-10">
-                            <button type="button" class="btn-option active" onclick="selecionarOpcaoUnica(this)">SIM</button>
-                            <button type="button" class="btn-option" onclick="selecionarOpcaoUnica(this)">NÃO</button>
-                        </div>
-
-                        <div class="input-group mt-20">
-                            <label for="local-pernoite">*O local de pernoite é</label>
-                            <select id="local-pernoite" required>
-                                <option value="CASA / SOBRADO">CASA / SOBRADO</option>
-                                <option value="APARTAMENTO">APARTAMENTO</option>
-                                <option value="CONDOMÍNIO FECHADO">CONDOMÍNIO FECHADO</option>
-                            </select>
-                        </div>
-
-                        <div class="modal-footer footer-espacado">
-                            <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
-                            <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
-                        </div>
-                    </div>
-
-                    <!-- ETAPA 5: DETALHES DO LOCAL DE PERNOITE -->
-                    <div id="step-5" class="step">
-                        <h3 class="step-title text-center">Sobre o local de pernoite</h3>
-
-                        <div class="radio-group-vertical">
-                            <label class="radio-option">
-                                <input type="radio" name="tipo-garagem" value="manual" checked>
-                                <span>Garagem / estacionamento com portão manual</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="tipo-garagem" value="automatico">
-                                <span>Garagem / estacionamento com portão automático</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="tipo-garagem" value="pago">
-                                <span>Garagem / estacionamento em local pago (de terceiros)</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="tipo-garagem" value="sem_garagem">
-                                <span>Não pernoita em garagem / estacionamento fechado</span>
-                            </label>
-                        </div>
-
-                        <label class="label-block text-center mt-20">*Utiliza o veículo para ir e voltar do local de trabalho?</label>
-                        <div class="options-grid grid-2 mt-10">
-                            <button type="button" class="btn-option" onclick="selecionarOpcaoUnica(this)">SIM</button>
-                            <button type="button" class="btn-option active" onclick="selecionarOpcaoUnica(this)">NÃO</button>
-                        </div>
-
-                        <label class="label-block text-center mt-20">Utiliza o veículo para ir e voltar do local de estudo?</label>
-                        <div class="options-grid grid-2 mt-10">
-                            <button type="button" class="btn-option" onclick="selecionarOpcaoUnica(this)">SIM</button>
-                            <button type="button" class="btn-option active" onclick="selecionarOpcaoUnica(this)">NÃO</button>
-                        </div>
-
-                        <div class="modal-footer footer-espacado">
-                            <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
-                            <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
-                        </div>
-                    </div>
-
-                    <!-- ETAPA 6: INFORMAÇÕES DO VEÍCULO (INTEGRADA COM TABELA FIPE) -->
-                    <div id="step-6" class="step">
-                        <p class="step-subtitle text-center">Agora precisamos de algumas informações sobre o veículo</p>
-
-                        <div class="form-row mt-10">
-                            <div class="input-group flex-1">
-                                <label for="placa">Placa</label>
-                                <input type="text" id="placa" placeholder="ABC1D23">
-                            </div>
-                            <div class="input-group flex-1">
-                                <label for="chassi">Chassi</label>
-                                <input type="text" id="chassi" placeholder="Chassi do veículo">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="input-group flex-1">
-                                <label for="ano_fabricacao">*Ano Fabricaç.</label>
-                                <input type="number" id="ano_fabricacao" placeholder="2016" required>
-                            </div>
-                            <div class="input-group flex-1">
-                                <label for="ano_modelo">Ano Mod.</label>
-                                <input type="number" id="ano_modelo" placeholder="2016">
-                            </div>
-                        </div>
-
-                        <!-- SELEÇÃO DE MARCA (FIPE) -->
-                        <div class="input-group">
-                            <label for="marca">*Marca</label>
-                            <select id="marca" required onchange="carregarModelos(this.value)">
-                                <option value="">A carregar marcas...</option>
-                            </select>
-                        </div>
-
-                        <!-- BUSCA DE MODELO (FIPE VIA DATALIST) -->
-                        <div class="input-group">
-                            <label for="modelo">*Modelo</label>
-                            <input type="text" id="modelo" list="lista-modelos" placeholder="Selecione primeiro a marca..." required disabled autocomplete="off">
-                            <datalist id="lista-modelos"></datalist>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="input-group flex-1">
-                                <label for="portas">Portas</label>
-                                <select id="portas">
-                                    <option value="4">4</option>
-                                    <option value="2">2</option>
+                                <label for="tempo-habilitacao">*Tempo de habilitação</label>
+                                <select id="tempo-habilitacao">
+                                    <option value="Mais de 10 anos">Mais de 10 anos</option>
+                                    <option value="8 a 10 anos">8 a 10 anos</option>
+                                    <option value="5 a 7 anos">5 a 7 anos</option>
+                                    <option value="2 a 4 anos">2 a 4 anos</option>
+                                    <option value="Menos de 1 ano">Menos de 1 ano</option>
                                 </select>
                             </div>
-                            <div class="input-group flex-1">
-                                <label for="passageiros">Passag.</label>
-                                <select id="passageiros">
-                                    <option value="5">5</option>
-                                    <option value="2">2</option>
-                                </select>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
                             </div>
                         </div>
 
-                        <div class="modal-footer footer-espacado">
-                            <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
-                            <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                        <!-- ETAPA 4 (AUTO) -->
+                        <div id="step-4-auto" class="step">
+                            <p class="step-subtitle text-center">Vamos falar um pouco sobre como o veículo é utilizado</p>
+                            <div class="input-group mt-10">
+                                <label for="tipo-utilizacao">Qual o tipo de utilização do veículo?</label>
+                                <select id="tipo-utilizacao">
+                                    <option value="Locomoção Diária">Locomoção Diária</option>
+                                    <option value="Lazer">Lazer</option>
+                                    <option value="Comercial">Comercial / Trabalho</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="km-mensal">*Km mensal</label>
+                                <select id="km-mensal">
+                                    <option value="">Selecione...</option>
+                                    <option value="Até 500 km">Até 500 km</option>
+                                    <option value="500 a 1000 km">500 a 1000 km</option>
+                                    <option value="Mais de 1000 km">Mais de 1000 km</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
                         </div>
+
+                        <!-- ETAPA 5 (AUTO) -->
+                        <div id="step-5-auto" class="step">
+                            <h3 class="step-title text-center">Informações do Veículo</h3>
+                            <div class="form-row mt-10">
+                                <div class="input-group flex-1">
+                                    <label for="placa">Placa</label>
+                                    <input type="text" id="placa" placeholder="ABC1D23">
+                                </div>
+                                <div class="input-group flex-1">
+                                    <label for="chassi">Chassi</label>
+                                    <input type="text" id="chassi" placeholder="Chassi do veículo">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="marca">*Marca</label>
+                                <select id="marca" onchange="carregarModelos(this.value)">
+                                    <option value="">A carregar marcas...</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="modelo">*Modelo</label>
+                                <input type="text" id="modelo" list="lista-modelos" placeholder="Selecione primeiro a marca..." disabled autocomplete="off">
+                                <datalist id="lista-modelos"></datalist>
+                            </div>
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: MOTO (9 PERGUNTAS)       -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-moto" style="display: none;">
+
+                        <!-- ETAPA 3 (MOTO): PERGUNTAS 1, 2 E 3 -->
+                        <div id="step-3-moto" class="step">
+                            <h3 class="step-title text-center">Uso e Garagem da Moto</h3>
+
+                            <!-- 1. Qual é o tipo de uso da moto? -->
+                            <div class="input-group">
+                                <label for="p1-uso-moto">*1. Qual é o tipo de uso da moto?</label>
+                                <select id="p1-uso-moto" required onchange="verificarUsoMoto(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Uso pessoal</option>
+                                    <option value="2">2 — Trabalho/entrega</option>
+                                    <option value="3">3 — Ambos</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p1-local" style="display: none;" class="input-group mt-10">
+                                <label for="p1-local-estacionado">Onde a moto fica estacionada?</label>
+                                <input type="text" id="p1-local-estacionado" placeholder="Ex: Garagem de casa, pátio...">
+                            </div>
+
+                            <div id="cond-p1-km" style="display: none;" class="input-group mt-10">
+                                <label for="p1-km-dia">Quantos quilômetros roda por dia?</label>
+                                <input type="number" id="p1-km-dia" placeholder="Ex: 40">
+                            </div>
+
+                            <!-- 2. A moto fica estacionada em garagem fechada durante a noite? -->
+                            <div class="input-group mt-20">
+                                <label for="p2-garagem-noite">*2. A moto fica estacionada em garagem fechada durante a noite?</label>
+                                <select id="p2-garagem-noite" required onchange="verificarGaragemNoite(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-tipo-garagem" style="display: none;" class="input-group mt-10">
+                                <label for="p2-propria-condominio">A garagem é própria ou condomínio?</label>
+                                <select id="p2-propria-condominio">
+                                    <option value="propria">Garagem Própria</option>
+                                    <option value="condominio">Condomínio</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-onde-estaciona" style="display: none;" class="input-group mt-10">
+                                <label for="p2-local-noite">Onde normalmente a moto fica estacionada?</label>
+                                <input type="text" id="p2-local-noite" placeholder="Ex: Na calçada, estacionamento rotativo...">
+                            </div>
+
+                            <!-- 3. Onde a moto fica estacionada durante o trabalho? -->
+                            <div class="input-group mt-20">
+                                <label for="p3-estacionamento-trabalho">*3. Onde a moto fica estacionada durante o trabalho?</label>
+                                <select id="p3-estacionamento-trabalho" required onchange="verificarEstacionamentoTrabalho(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Garagem</option>
+                                    <option value="2">2 — Estacionamento</option>
+                                    <option value="3">3 — Na rua</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-seguranca" style="display: none;" class="input-group mt-10">
+                                <label for="p3-possui-seguranca">O estacionamento possui segurança / vigilância?</label>
+                                <select id="p3-possui-seguranca">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-alerta-rua" style="display: none; background-color: #fef3c7; border: 1px solid #f59e0b; color: #92400e; padding: 10px; border-radius: 6px;" class="mt-10 text-center">
+                                <small>Aviso: Estacionar em via pública eleva o nível de risco da cotação.</small>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 4 (MOTO): PERGUNTAS 4, 5 E 6 -->
+                        <div id="step-4-moto" class="step">
+                            <h3 class="step-title text-center">Perfil do Condutor e Entregas</h3>
+
+                            <!-- 4. Você utiliza a moto para fazer entregas? -->
+                            <div class="input-group">
+                                <label for="p4-entregas">*4. Você utiliza a moto para fazer entregas?</label>
+                                <select id="p4-entregas" required onchange="verificarEntregas(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p4-horas" style="display: none;" class="input-group mt-10">
+                                <label for="p4-horas-dia">Quantas horas por dia trabalha com a moto?</label>
+                                <input type="number" id="p4-horas-dia" placeholder="Ex: 8">
+                            </div>
+
+                            <!-- 5. Quantos anos você tem? -->
+                            <div class="input-group mt-20">
+                                <label for="p5-idade">*5. Quantos anos você tem?</label>
+                                <select id="p5-idade" required onchange="verificarIdadeMoto(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="menos_18">1 — Menos de 18</option>
+                                    <option value="18_25">2 — 18 a 25</option>
+                                    <option value="26_40">3 — 26 a 40</option>
+                                    <option value="mais_40">4 — Mais de 40</option>
+                                </select>
+                            </div>
+
+                            <div id="alerta-bloqueio-idade" style="display: none; background-color: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 12px; border-radius: 6px;" class="mt-10 text-center">
+                                <strong>Bloqueio:</strong> Não é possível continuar a cotação para condutores menores de 18 anos.
+                            </div>
+
+                            <!-- 6. Há quanto tempo você possui habilitação para moto? -->
+                            <div class="input-group mt-20">
+                                <label for="p6-tempo-habilitacao">*6. Há quanto tempo você possui habilitação para moto?</label>
+                                <select id="p6-tempo-habilitacao" required onchange="verificarHabilitacaoMoto(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Menos de 1 ano</option>
+                                    <option value="2">2 — 1 a 3 anos</option>
+                                    <option value="3">3 — Mais de 3 anos</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p6-experiencia" style="display: none;" class="input-group mt-10">
+                                <label for="p6-experiencia-anterior">Já possui experiência anterior?</label>
+                                <select id="p6-experiencia-anterior">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" id="btn-next-step-4-moto" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 5 (MOTO): PERGUNTAS 7, 8 E 9 -->
+                        <div id="step-5-moto" class="step">
+                            <h3 class="step-title text-center">Financiamento, Seguro e Histórico</h3>
+
+                            <!-- 7. A moto possui financiamento? -->
+                            <div class="input-group">
+                                <label for="p7-financiamento">*7. A moto possui financiamento?</label>
+                                <select id="p7-financiamento" required onchange="verificarFinanciamento(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p7-financeira" style="display: none;" class="input-group mt-10">
+                                <label for="p7-instituicao">Qual instituição financeira?</label>
+                                <input type="text" id="p7-instituicao" placeholder="Ex: Banco Pan, Bradesco...">
+                            </div>
+
+                            <!-- 8. Qual é a finalidade principal do seguro? -->
+                            <div class="input-group mt-20">
+                                <label for="p8-finalidade">*8. Qual é a finalidade principal do seguro?</label>
+                                <select id="p8-finalidade" required onchange="verificarFinalidadeSeguro(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Roubo e furto</option>
+                                    <option value="2">2 — Acidentes</option>
+                                    <option value="3">3 — Roubo, furto e acidentes</option>
+                                    <option value="4">4 — Cobertura completa</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p8-coberturas" style="display: none;" class="input-group mt-10">
+                                <label for="p8-coberturas-adicionais">Quais coberturas adicionais deseja?</label>
+                                <input type="text" id="p8-coberturas-adicionais" placeholder="Ex: Guincho ilimitado, proteção a terceiros...">
+                            </div>
+
+                            <!-- 9. A moto já sofreu algum acidente? -->
+                            <div class="input-group mt-20">
+                                <label for="p9-acidentes">*9. A moto já sofreu algum acidente?</label>
+                                <select id="p9-acidentes" required onchange="verificarAcidentes(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p9-detalhes-acidente" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p9-qtd-acidentes">Quantos acidentes?</label>
+                                    <input type="number" id="p9-qtd-acidentes" placeholder="Ex: 1">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p9-indenizacao">Houve indenização?</label>
+                                    <select id="p9-indenizacao">
+                                        <option value="sim">Sim</option>
+                                        <option value="nao">Não</option>
+                                    </select>
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p9-data-ultimo">Quando ocorreu o último?</label>
+                                    <input type="month" id="p9-data-ultimo">
+                                </div>
+                            </div>
+
+                            <div id="cond-p9-observacoes" style="display: none;" class="input-group mt-10">
+                                <label for="p9-obs">Observações adicionais para a cotação:</label>
+                                <textarea id="p9-obs" rows="2" placeholder="Digite aqui alguma observação se desejar..."></textarea>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
                     </div>
 
                 </form>

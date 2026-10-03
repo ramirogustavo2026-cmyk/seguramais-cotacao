@@ -1,5 +1,5 @@
 let etapaAtual = 1;
-const totalEtapas = 6;
+let tipoSeguroAtual = 'Auto';
 
 // Mapeamento de Ícones por Serviço
 const iconesServico = {
@@ -12,7 +12,7 @@ const iconesServico = {
     'Empresarial': 'building-2'
 };
 
-// Lista Ampliada de Profissões Pré-fixadas
+// Lista de Profissões Pré-fixadas
 const profissoesPreFixadas = [
     "Administrador",
     "Advogado",
@@ -53,6 +53,7 @@ const profissoesPreFixadas = [
 
 // 1. ABRIR E FECHAR MODAL
 function abrirModal(servico) {
+    tipoSeguroAtual = servico;
     const modal = document.getElementById('modal-overlay');
     const headerText = document.getElementById('modal-header-text');
     const headerIcon = document.getElementById('modal-header-icon');
@@ -63,6 +64,17 @@ function abrirModal(servico) {
         const nomeIcone = iconesServico[servico] || 'shield';
         headerIcon.innerHTML = `<i data-lucide="${nomeIcone}"></i>`;
         lucide.createIcons();
+    }
+
+    const fluxoAuto = document.getElementById('fluxo-auto');
+    const fluxoMoto = document.getElementById('fluxo-moto');
+
+    if (servico === 'Moto') {
+        if (fluxoAuto) fluxoAuto.style.display = 'none';
+        if (fluxoMoto) fluxoMoto.style.display = 'block';
+    } else {
+        if (fluxoAuto) fluxoAuto.style.display = 'block';
+        if (fluxoMoto) fluxoMoto.style.display = 'none';
     }
 
     etapaAtual = 1;
@@ -78,26 +90,33 @@ function fecharModal() {
     limparErros();
 }
 
-// 2. NAVEGAÇÃO E MOSTRAR ETAPAS
+// 2. NAVEGAÇÃO ENTRE ETAPAS
 function mostrarEtapa(numero) {
-    for (let i = 1; i <= totalEtapas; i++) {
-        const step = document.getElementById(`step-${i}`);
-        if (step) {
-            step.classList.remove('active');
-            step.style.display = 'none';
-        }
-    }
+    document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+        step.style.display = 'none';
+    });
 
-    const currentStep = document.getElementById(`step-${numero}`);
-    if (currentStep) {
-        currentStep.classList.add('active');
-        currentStep.style.display = 'block';
+    if (numero === 1 || numero === 2) {
+        const step = document.getElementById(`step-${numero}`);
+        if (step) {
+            step.classList.add('active');
+            step.style.display = 'block';
+        }
+    } else {
+        const sufixo = (tipoSeguroAtual === 'Moto') ? 'moto' : 'auto';
+        const step = document.getElementById(`step-${numero}-${sufixo}`);
+        if (step) {
+            step.classList.add('active');
+            step.style.display = 'block';
+        }
     }
 }
 
 function proximaEtapa() {
     if (validarEtapaAtual()) {
-        if (etapaAtual < totalEtapas) {
+        const maxEtapas = 5;
+        if (etapaAtual < maxEtapas) {
             etapaAtual++;
             mostrarEtapa(etapaAtual);
         }
@@ -111,17 +130,7 @@ function etapaAnterior() {
     }
 }
 
-// 3. SELEÇÃO DE OPÇÕES (BOTÕES SIM / NÃO E TIPO DE CONDUTOR)
-function selecionarOpcaoUnica(elemento) {
-    const container = elemento.closest('.options-grid');
-    if (!container) return;
-
-    const botoes = container.querySelectorAll('.btn-option');
-    botoes.forEach(btn => btn.classList.remove('active'));
-
-    elemento.classList.add('active');
-}
-
+// 3. SELEÇÃO DE CONDUTOR (FLUXO AUTO)
 function selecionarTipoCondutor(tipo, elemento) {
     const parent = elemento.closest('.options-grid');
     if (parent) {
@@ -147,7 +156,73 @@ function selecionarTipoCondutor(tipo, elemento) {
     }
 }
 
-// 4. PREENCHER LISTA DE PROFISSÕES (DATALIST)
+// 4. LÓGICA CONDICIONAL DO SEGURO MOTO (9 PERGUNTAS)
+function verificarUsoMoto(valor) {
+    const condLocal = document.getElementById('cond-p1-local');
+    const condKm = document.getElementById('cond-p1-km');
+
+    if (condLocal) condLocal.style.display = (valor === '1' || valor === '3') ? 'block' : 'none';
+    if (condKm) condKm.style.display = (valor === '2' || valor === '3') ? 'block' : 'none';
+}
+
+function verificarGaragemNoite(valor) {
+    const condTipo = document.getElementById('cond-p2-tipo-garagem');
+    const condOnde = document.getElementById('cond-p2-onde-estaciona');
+
+    if (condTipo) condTipo.style.display = (valor === '1') ? 'block' : 'none';
+    if (condOnde) condOnde.style.display = (valor === '2') ? 'block' : 'none';
+}
+
+function verificarEstacionamentoTrabalho(valor) {
+    const condSeguranca = document.getElementById('cond-p3-seguranca');
+    const condAlerta = document.getElementById('cond-p3-alerta-rua');
+
+    if (condSeguranca) condSeguranca.style.display = (valor === '2') ? 'block' : 'none';
+    if (condAlerta) condAlerta.style.display = (valor === '3') ? 'block' : 'none';
+}
+
+function verificarEntregas(valor) {
+    const condHoras = document.getElementById('cond-p4-horas');
+    if (condHoras) condHoras.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarIdadeMoto(valor) {
+    const alerta = document.getElementById('alerta-bloqueio-idade');
+    const btnProx = document.getElementById('btn-next-step-4-moto');
+
+    if (valor === 'menos_18') {
+        if (alerta) alerta.style.display = 'block';
+        if (btnProx) btnProx.disabled = true;
+    } else {
+        if (alerta) alerta.style.display = 'none';
+        if (btnProx) btnProx.disabled = false;
+    }
+}
+
+function verificarHabilitacaoMoto(valor) {
+    const condExp = document.getElementById('cond-p6-experiencia');
+    if (condExp) condExp.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarFinanciamento(valor) {
+    const condFin = document.getElementById('cond-p7-financeira');
+    if (condFin) condFin.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarFinalidadeSeguro(valor) {
+    const condCob = document.getElementById('cond-p8-coberturas');
+    if (condCob) condCob.style.display = (valor === '4') ? 'block' : 'none';
+}
+
+function verificarAcidentes(valor) {
+    const condDetalhes = document.getElementById('cond-p9-detalhes-acidente');
+    const condObs = document.getElementById('cond-p9-observacoes');
+
+    if (condDetalhes) condDetalhes.style.display = (valor === '1') ? 'block' : 'none';
+    if (condObs) condObs.style.display = (valor === '2') ? 'block' : 'none';
+}
+
+// 5. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
     const dataList = document.getElementById('lista-profissoes');
     if (!dataList) return;
@@ -160,7 +235,7 @@ function carregarProfissoes() {
     });
 }
 
-// 5. EXIBIÇÃO E REMOÇÃO DE MENSAGENS DE ERRO
+// 6. VALIDAÇÃO DE CAMPOS E MENSAGENS DE ERRO
 function mostrarErroCampo(campo, mensagem = "Por favor, preencha este campo.") {
     campo.classList.add('erro');
     const inputGroup = campo.closest('.input-group');
@@ -180,27 +255,31 @@ function limparErroCampo(campo) {
     const inputGroup = campo.closest('.input-group');
     if (inputGroup) {
         const msgExistente = inputGroup.querySelector('.erro-mensagem');
-        if (msgExistente) {
-            msgExistente.remove();
-        }
+        if (msgExistente) msgExistente.remove();
     }
 }
 
 function limparErros() {
     document.querySelectorAll('.input-group').forEach(group => {
-        const campo = group.querySelector('input, select');
+        const campo = group.querySelector('input, select, textarea');
         if (campo) campo.classList.remove('erro');
         const msg = group.querySelector('.erro-mensagem');
         if (msg) msg.remove();
     });
 }
 
-// 6. VALIDAÇÃO DE CAMPOS DA ETAPA ATUAL
 function validarEtapaAtual() {
-    const stepDiv = document.getElementById(`step-${etapaAtual}`);
+    let stepDiv;
+    if (etapaAtual === 1 || etapaAtual === 2) {
+        stepDiv = document.getElementById(`step-${etapaAtual}`);
+    } else {
+        const sufixo = (tipoSeguroAtual === 'Moto') ? 'moto' : 'auto';
+        stepDiv = document.getElementById(`step-${etapaAtual}-${sufixo}`);
+    }
+
     if (!stepDiv) return true;
 
-    const campos = stepDiv.querySelectorAll('input[required], select[required]');
+    const campos = stepDiv.querySelectorAll('input[required], select[required], textarea[required]');
     let valido = true;
 
     campos.forEach(campo => {
@@ -222,23 +301,7 @@ function validarEtapaAtual() {
     return valido;
 }
 
-// 7. EVENTOS INICIAIS AO CARREGAR A PÁGINA
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('input, select').forEach(campo => {
-        campo.addEventListener('input', () => limparErroCampo(campo));
-        campo.addEventListener('change', () => limparErroCampo(campo));
-    });
-
-    const cepInput = document.getElementById('cep');
-    if (cepInput) {
-        cepInput.addEventListener('blur', buscarCEP);
-    }
-
-    carregarMarcasFIPE();
-    carregarProfissoes(); // Carrega as profissões na datalist
-});
-
-// 8. INTEGRAÇÃO TABELA FIPE (MARCAS E MODELOS)
+// 7. INTEGRAÇÃO COM APIS (FIPE E VIACEP)
 function carregarMarcasFIPE() {
     const selectMarca = document.getElementById('marca');
     if (!selectMarca) return;
@@ -296,7 +359,6 @@ function carregarModelos(codigoMarca) {
         });
 }
 
-// 9. BUSCA AUTOMÁTICA DE CEP (VIACEP)
 function buscarCEP() {
     const cepInput = document.getElementById('cep');
     if (!cepInput) return;
@@ -332,10 +394,25 @@ function buscarCEP() {
     }
 }
 
-// 10. ENVIO FINAL DO FORMULÁRIO
+// 8. ENVIO FINAL E CARREGAMENTO INICIAL
 function enviarFormulario() {
     if (validarEtapaAtual()) {
         alert('Cotação enviada com sucesso!');
         fecharModal();
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input, select, textarea').forEach(campo => {
+        campo.addEventListener('input', () => limparErroCampo(campo));
+        campo.addEventListener('change', () => limparErroCampo(campo));
+    });
+
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
+        cepInput.addEventListener('blur', buscarCEP);
+    }
+
+    carregarMarcasFIPE();
+    carregarProfissoes();
+});
