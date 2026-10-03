@@ -1,0 +1,341 @@
+let etapaAtual = 1;
+const totalEtapas = 6;
+
+// Mapeamento de Ícones por Serviço
+const iconesServico = {
+    'Auto': 'car',
+    'Moto': 'bike',
+    'Caminhão': 'truck',
+    'Vida': 'heart',
+    'Diversos': 'shield',
+    'Residencial': 'home',
+    'Empresarial': 'building-2'
+};
+
+// Lista Ampliada de Profissões Pré-fixadas
+const profissoesPreFixadas = [
+    "Administrador",
+    "Advogado",
+    "Analista de Sistemas / TI",
+    "Aposentado / Pensionista",
+    "Arquiteto",
+    "Assistente Social",
+    "Autônomo",
+    "Bancário",
+    "Biólogo",
+    "Comerciante / Empresário",
+    "Contador / Auditor",
+    "Corretor de Imóveis",
+    "Corretor de Seguros",
+    "Dentista",
+    "Dermatologista",
+    "Designer / Publicitário",
+    "Economista",
+    "Educador Físico / Personal Trainer",
+    "Empresário",
+    "Enfermeiro",
+    "Engenheiro",
+    "Estudante",
+    "Farmacêutico",
+    "Fisioterapeuta",
+    "Funcionário Público",
+    "Jornalista / Comunicador",
+    "Médico",
+    "Motorista / Entregador",
+    "Nutricionista",
+    "Professor / Educador",
+    "Psicólogo",
+    "Técnico em Enfermagem",
+    "Técnico em Informática",
+    "Veterinário",
+    "Outras Atividades"
+];
+
+// 1. ABRIR E FECHAR MODAL
+function abrirModal(servico) {
+    const modal = document.getElementById('modal-overlay');
+    const headerText = document.getElementById('modal-header-text');
+    const headerIcon = document.getElementById('modal-header-icon');
+
+    if (headerText) headerText.innerText = `SEGURO ${servico.toUpperCase()}`;
+    
+    if (headerIcon) {
+        const nomeIcone = iconesServico[servico] || 'shield';
+        headerIcon.innerHTML = `<i data-lucide="${nomeIcone}"></i>`;
+        lucide.createIcons();
+    }
+
+    etapaAtual = 1;
+    mostrarEtapa(etapaAtual);
+    limparErros();
+    
+    if (modal) modal.style.display = 'flex';
+}
+
+function fecharModal() {
+    const modal = document.getElementById('modal-overlay');
+    if (modal) modal.style.display = 'none';
+    limparErros();
+}
+
+// 2. NAVEGAÇÃO E MOSTRAR ETAPAS
+function mostrarEtapa(numero) {
+    for (let i = 1; i <= totalEtapas; i++) {
+        const step = document.getElementById(`step-${i}`);
+        if (step) {
+            step.classList.remove('active');
+            step.style.display = 'none';
+        }
+    }
+
+    const currentStep = document.getElementById(`step-${numero}`);
+    if (currentStep) {
+        currentStep.classList.add('active');
+        currentStep.style.display = 'block';
+    }
+}
+
+function proximaEtapa() {
+    if (validarEtapaAtual()) {
+        if (etapaAtual < totalEtapas) {
+            etapaAtual++;
+            mostrarEtapa(etapaAtual);
+        }
+    }
+}
+
+function etapaAnterior() {
+    if (etapaAtual > 1) {
+        etapaAtual--;
+        mostrarEtapa(etapaAtual);
+    }
+}
+
+// 3. SELEÇÃO DE OPÇÕES (BOTÕES SIM / NÃO E TIPO DE CONDUTOR)
+function selecionarOpcaoUnica(elemento) {
+    const container = elemento.closest('.options-grid');
+    if (!container) return;
+
+    const botoes = container.querySelectorAll('.btn-option');
+    botoes.forEach(btn => btn.classList.remove('active'));
+
+    elemento.classList.add('active');
+}
+
+function selecionarTipoCondutor(tipo, elemento) {
+    const parent = elemento.closest('.options-grid');
+    if (parent) {
+        const botoes = parent.querySelectorAll('.btn-option');
+        botoes.forEach(btn => btn.classList.remove('active'));
+    }
+    elemento.classList.add('active');
+
+    const containerOutraPessoa = document.getElementById('campos-outra-pessoa');
+    if (!containerOutraPessoa) return;
+
+    const camposOutro = containerOutraPessoa.querySelectorAll('input');
+
+    if (tipo === 'outra_pessoa') {
+        containerOutraPessoa.style.display = 'block';
+        camposOutro.forEach(c => c.setAttribute('required', 'true'));
+    } else {
+        containerOutraPessoa.style.display = 'none';
+        camposOutro.forEach(c => {
+            c.removeAttribute('required');
+            limparErroCampo(c);
+        });
+    }
+}
+
+// 4. PREENCHER LISTA DE PROFISSÕES (DATALIST)
+function carregarProfissoes() {
+    const dataList = document.getElementById('lista-profissoes');
+    if (!dataList) return;
+
+    dataList.innerHTML = '';
+    profissoesPreFixadas.sort().forEach(profissao => {
+        const option = document.createElement('option');
+        option.value = profissao;
+        dataList.appendChild(option);
+    });
+}
+
+// 5. EXIBIÇÃO E REMOÇÃO DE MENSAGENS DE ERRO
+function mostrarErroCampo(campo, mensagem = "Por favor, preencha este campo.") {
+    campo.classList.add('erro');
+    const inputGroup = campo.closest('.input-group');
+    if (!inputGroup) return;
+
+    let msgExistente = inputGroup.querySelector('.erro-mensagem');
+    if (!msgExistente) {
+        const msgDiv = document.createElement('span');
+        msgDiv.className = 'erro-mensagem';
+        msgDiv.innerText = mensagem;
+        inputGroup.appendChild(msgDiv);
+    }
+}
+
+function limparErroCampo(campo) {
+    campo.classList.remove('erro');
+    const inputGroup = campo.closest('.input-group');
+    if (inputGroup) {
+        const msgExistente = inputGroup.querySelector('.erro-mensagem');
+        if (msgExistente) {
+            msgExistente.remove();
+        }
+    }
+}
+
+function limparErros() {
+    document.querySelectorAll('.input-group').forEach(group => {
+        const campo = group.querySelector('input, select');
+        if (campo) campo.classList.remove('erro');
+        const msg = group.querySelector('.erro-mensagem');
+        if (msg) msg.remove();
+    });
+}
+
+// 6. VALIDAÇÃO DE CAMPOS DA ETAPA ATUAL
+function validarEtapaAtual() {
+    const stepDiv = document.getElementById(`step-${etapaAtual}`);
+    if (!stepDiv) return true;
+
+    const campos = stepDiv.querySelectorAll('input[required], select[required]');
+    let valido = true;
+
+    campos.forEach(campo => {
+        if (campo.offsetWidth > 0 && campo.offsetHeight > 0) {
+            if (!campo.value || campo.value.trim() === '') {
+                mostrarErroCampo(campo, "Por favor, preencha este campo.");
+                valido = false;
+            } else {
+                limparErroCampo(campo);
+            }
+        }
+    });
+
+    if (!valido) {
+        const primeiroErro = stepDiv.querySelector('.erro');
+        if (primeiroErro) primeiroErro.focus();
+    }
+
+    return valido;
+}
+
+// 7. EVENTOS INICIAIS AO CARREGAR A PÁGINA
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input, select').forEach(campo => {
+        campo.addEventListener('input', () => limparErroCampo(campo));
+        campo.addEventListener('change', () => limparErroCampo(campo));
+    });
+
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
+        cepInput.addEventListener('blur', buscarCEP);
+    }
+
+    carregarMarcasFIPE();
+    carregarProfissoes(); // Carrega as profissões na datalist
+});
+
+// 8. INTEGRAÇÃO TABELA FIPE (MARCAS E MODELOS)
+function carregarMarcasFIPE() {
+    const selectMarca = document.getElementById('marca');
+    if (!selectMarca) return;
+
+    fetch('https://parallelum.com.br/fipe/api/v1/carros/marcas')
+        .then(res => res.json())
+        .then(marcas => {
+            selectMarca.innerHTML = '<option value="">Selecione a marca...</option>';
+            marcas.forEach(m => {
+                selectMarca.innerHTML += `<option value="${m.codigo}">${m.nome}</option>`;
+            });
+        })
+        .catch(err => {
+            console.error('Erro ao carregar marcas FIPE:', err);
+            selectMarca.innerHTML = '<option value="">Erro ao carregar marcas</option>';
+        });
+}
+
+function carregarModelos(codigoMarca) {
+    const inputModelo = document.getElementById('modelo');
+    const dataListModelos = document.getElementById('lista-modelos');
+
+    if (!inputModelo || !dataListModelos) return;
+
+    if (!codigoMarca) {
+        inputModelo.disabled = true;
+        inputModelo.value = '';
+        inputModelo.placeholder = 'Selecione primeiro a marca...';
+        dataListModelos.innerHTML = '';
+        return;
+    }
+
+    inputModelo.value = '';
+    inputModelo.placeholder = 'A carregar modelos...';
+    inputModelo.disabled = true;
+
+    fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${codigoMarca}/modelos`)
+        .then(res => res.json())
+        .then(data => {
+            dataListModelos.innerHTML = '';
+            data.modelos.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m.nome;
+                dataListModelos.appendChild(option);
+            });
+
+            inputModelo.placeholder = 'Digite para pesquisar o modelo...';
+            inputModelo.disabled = false;
+            inputModelo.focus();
+        })
+        .catch(err => {
+            console.error('Erro ao carregar modelos FIPE:', err);
+            inputModelo.placeholder = 'Digite o modelo manualmente...';
+            inputModelo.disabled = false;
+        });
+}
+
+// 9. BUSCA AUTOMÁTICA DE CEP (VIACEP)
+function buscarCEP() {
+    const cepInput = document.getElementById('cep');
+    if (!cepInput) return;
+
+    let cep = cepInput.value.replace(/\D/g, '');
+
+    if (cep.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.erro) {
+                    const logradouro = document.getElementById('logradouro');
+                    const bairro = document.getElementById('bairro');
+                    const cidade = document.getElementById('cidade');
+                    const uf = document.getElementById('uf');
+
+                    if (logradouro) { logradouro.value = data.logradouro || ''; limparErroCampo(logradouro); }
+                    if (bairro) { bairro.value = data.bairro || ''; limparErroCampo(bairro); }
+                    if (cidade) { cidade.value = data.localidade || ''; limparErroCampo(cidade); }
+                    if (uf && data.uf) { uf.value = data.uf.toUpperCase(); limparErroCampo(uf); }
+
+                    limparErroCampo(cepInput);
+                    const numero = document.getElementById('numero');
+                    if (numero) numero.focus();
+                } else {
+                    mostrarErroCampo(cepInput, "CEP não encontrado.");
+                }
+            })
+            .catch(err => {
+                console.error('Erro ao buscar CEP:', err);
+                mostrarErroCampo(cepInput, "Erro ao buscar CEP.");
+            });
+    }
+}
+
+// 10. ENVIO FINAL DO FORMULÁRIO
+function enviarFormulario() {
+    if (validarEtapaAtual()) {
+        alert('Cotação enviada com sucesso!');
+        fecharModal();
+    }
+}
