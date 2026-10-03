@@ -260,7 +260,6 @@
                         <div id="step-3-moto" class="step">
                             <h3 class="step-title text-center">Uso e Garagem da Moto</h3>
 
-                            <!-- 1. Qual é o tipo de uso da moto? -->
                             <div class="input-group">
                                 <label for="p1-uso-moto">*1. Qual é o tipo de uso da moto?</label>
                                 <select id="p1-uso-moto" required onchange="verificarUsoMoto(this.value)">
@@ -281,7 +280,6 @@
                                 <input type="number" id="p1-km-dia" placeholder="Ex: 40">
                             </div>
 
-                            <!-- 2. A moto fica estacionada em garagem fechada durante a noite? -->
                             <div class="input-group mt-20">
                                 <label for="p2-garagem-noite">*2. A moto fica estacionada em garagem fechada durante a noite?</label>
                                 <select id="p2-garagem-noite" required onchange="verificarGaragemNoite(this.value)">
@@ -304,7 +302,6 @@
                                 <input type="text" id="p2-local-noite" placeholder="Ex: Na calçada, estacionamento rotativo...">
                             </div>
 
-                            <!-- 3. Onde a moto fica estacionada durante o trabalho? -->
                             <div class="input-group mt-20">
                                 <label for="p3-estacionamento-trabalho">*3. Onde a moto fica estacionada durante o trabalho?</label>
                                 <select id="p3-estacionamento-trabalho" required onchange="verificarEstacionamentoTrabalho(this.value)">
@@ -337,7 +334,6 @@
                         <div id="step-4-moto" class="step">
                             <h3 class="step-title text-center">Perfil do Condutor e Entregas</h3>
 
-                            <!-- 4. Você utiliza a moto para fazer entregas? -->
                             <div class="input-group">
                                 <label for="p4-entregas">*4. Você utiliza a moto para fazer entregas?</label>
                                 <select id="p4-entregas" required onchange="verificarEntregas(this.value)">
@@ -352,7 +348,6 @@
                                 <input type="number" id="p4-horas-dia" placeholder="Ex: 8">
                             </div>
 
-                            <!-- 5. Quantos anos você tem? -->
                             <div class="input-group mt-20">
                                 <label for="p5-idade">*5. Quantos anos você tem?</label>
                                 <select id="p5-idade" required onchange="verificarIdadeMoto(this.value)">
@@ -368,7 +363,6 @@
                                 <strong>Bloqueio:</strong> Não é possível continuar a cotação para condutores menores de 18 anos.
                             </div>
 
-                            <!-- 6. Há quanto tempo você possui habilitação para moto? -->
                             <div class="input-group mt-20">
                                 <label for="p6-tempo-habilitacao">*6. Há quanto tempo você possui habilitação para moto?</label>
                                 <select id="p6-tempo-habilitacao" required onchange="verificarHabilitacaoMoto(this.value)">
@@ -397,7 +391,6 @@
                         <div id="step-5-moto" class="step">
                             <h3 class="step-title text-center">Financiamento, Seguro e Histórico</h3>
 
-                            <!-- 7. A moto possui financiamento? -->
                             <div class="input-group">
                                 <label for="p7-financiamento">*7. A moto possui financiamento?</label>
                                 <select id="p7-financiamento" required onchange="verificarFinanciamento(this.value)">
@@ -412,7 +405,6 @@
                                 <input type="text" id="p7-instituicao" placeholder="Ex: Banco Pan, Bradesco...">
                             </div>
 
-                            <!-- 8. Qual é a finalidade principal do seguro? -->
                             <div class="input-group mt-20">
                                 <label for="p8-finalidade">*8. Qual é a finalidade principal do seguro?</label>
                                 <select id="p8-finalidade" required onchange="verificarFinalidadeSeguro(this.value)">
@@ -429,7 +421,6 @@
                                 <input type="text" id="p8-coberturas-adicionais" placeholder="Ex: Guincho ilimitado, proteção a terceiros...">
                             </div>
 
-                            <!-- 9. A moto já sofreu algum acidente? -->
                             <div class="input-group mt-20">
                                 <label for="p9-acidentes">*9. A moto já sofreu algum acidente?</label>
                                 <select id="p9-acidentes" required onchange="verificarAcidentes(this.value)">
@@ -460,6 +451,351 @@
                             <div id="cond-p9-observacoes" style="display: none;" class="input-group mt-10">
                                 <label for="p9-obs">Observações adicionais para a cotação:</label>
                                 <textarea id="p9-obs" rows="2" placeholder="Digite aqui alguma observação se desejar..."></textarea>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: CAMINHÃO (15 PERGUNTAS)  -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-caminhao" style="display: none;">
+
+                        <!-- ETAPA 3 (CAMINHÃO): P1, P2 E P3 (FINALIDADE, CARGA, VIAGENS) -->
+                        <div id="step-3-caminhao" class="step">
+                            <h3 class="step-title text-center">Uso, Carga e Rotas do Caminhão</h3>
+
+                            <!-- 1. Finalidade principal -->
+                            <div class="input-group">
+                                <label for="p1-finalidade-caminhao">*1. Qual é a finalidade principal do caminhão?</label>
+                                <select id="p1-finalidade-caminhao" required onchange="verificarFinalidadeCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Transporte de cargas</option>
+                                    <option value="2">2 — Uso próprio</option>
+                                    <option value="3">3 — Prestação de serviços</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p1-transporte-cargas" style="display: none;" class="input-group mt-10">
+                                <label for="p1-tipo-carga-resp">Qual tipo de carga transporta?</label>
+                                <input type="text" id="p1-tipo-carga-resp" placeholder="Ex: Grãos, eletrodomésticos...">
+                            </div>
+                            <div id="cond-p1-uso-proprio" style="display: none;" class="input-group mt-10">
+                                <label for="p1-normalmente-transporta">O que normalmente transporta?</label>
+                                <input type="text" id="p1-normalmente-transporta" placeholder="Ex: Ferramentas e mercadorias próprias...">
+                            </div>
+                            <div id="cond-p1-servico" style="display: none;" class="input-group mt-10">
+                                <label for="p1-servico-realiza">Qual serviço realiza?</label>
+                                <input type="text" id="p1-servico-realiza" placeholder="Ex: Guincho, caçamba, mudança...">
+                            </div>
+                            <div id="cond-p1-outro" style="display: none;" class="input-group mt-10">
+                                <label for="p1-especificar-outro">Por favor, especifique:</label>
+                                <input type="text" id="p1-especificar-outro" placeholder="Especifique a finalidade...">
+                            </div>
+
+                            <!-- 2. Tipo de carga -->
+                            <div id="grp-p2-tipo-carga" style="display: none;" class="input-group mt-20">
+                                <label for="p2-tipo-carga">*2. Qual tipo de carga o caminhão transporta?</label>
+                                <select id="p2-tipo-carga" onchange="verificarTipoCargaCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Alimentos</option>
+                                    <option value="2">2 — Materiais de construção</option>
+                                    <option value="3">3 — Produtos agrícolas</option>
+                                    <option value="4">4 — Produtos industrializados</option>
+                                    <option value="5">5 — Carga perigosa</option>
+                                    <option value="6">6 — Outra</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-carga-perigosa" style="display: none;" class="input-group mt-10">
+                                <label for="p2-detalhe-carga-perigosa">Qual é o tipo de carga perigosa?</label>
+                                <input type="text" id="p2-detalhe-carga-perigosa" placeholder="Ex: Combustível, químicos, gás...">
+                            </div>
+
+                            <!-- 3. Viagens -->
+                            <div class="input-group mt-20">
+                                <label for="p3-viagens-caminhao">*3. O caminhão realiza viagens:</label>
+                                <select id="p3-viagens-caminhao" required onchange="verificarViagensCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Apenas dentro da cidade</option>
+                                    <option value="2">2 — Dentro do estado</option>
+                                    <option value="3">3 — Entre estados</option>
+                                    <option value="4">4 — Internacionalmente</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-cidade" style="display: none;" class="input-group mt-10">
+                                <label for="p3-distancia-media">Distância média percorrida por dia (km):</label>
+                                <input type="number" id="p3-distancia-media" placeholder="Ex: 120">
+                            </div>
+                            <div id="cond-p3-estado" style="display: none;" class="input-group mt-10">
+                                <label for="p3-regioes-atendidas">Quais cidades/regiões costuma atender?</label>
+                                <input type="text" id="p3-regioes-atendidas" placeholder="Ex: Grande SP e Vale do Paraíba">
+                            </div>
+                            <div id="cond-p3-estados" style="display: none;" class="input-group mt-10">
+                                <label for="p3-estados-atendidos">Quais estados costuma atender?</label>
+                                <input type="text" id="p3-estados-atendidos" placeholder="Ex: SP, RJ, MG e PR">
+                            </div>
+                            <div id="cond-p3-internacional" style="display: none;" class="input-group mt-10">
+                                <label for="p3-paises-atendidos">Quais países costuma atender?</label>
+                                <input type="text" id="p3-paises-atendidos" placeholder="Ex: Argentina, Uruguai, Paraguai">
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 4 (CAMINHÃO): P4, P5, P6 E P7 (CONDUTOR, RASTREADOR, ESTACIONAMENTO, ACIDENTES) -->
+                        <div id="step-4-caminhao" class="step">
+                            <h3 class="step-title text-center">Motorista, Segurança e Histórico</h3>
+
+                            <!-- 4. Quem dirige -->
+                            <div class="input-group">
+                                <label for="p4-quem-dirige">*4. Quem dirige o caminhão?</label>
+                                <select id="p4-quem-dirige" required onchange="verificarQuemDirigeCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — O próprio proprietário</option>
+                                    <option value="2">2 — Motorista contratado</option>
+                                    <option value="3">3 — Vários motoristas</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p4-tempo-cnh" style="display: none;" class="input-group mt-10">
+                                <label for="p4-tempo-cnh-motorista">Há quanto tempo o motorista possui CNH de caminhão?</label>
+                                <select id="p4-tempo-cnh-motorista">
+                                    <option value="menos_2">Menos de 2 anos</option>
+                                    <option value="2_5">2 a 5 anos</option>
+                                    <option value="mais_5">Mais de 5 anos</option>
+                                </select>
+                            </div>
+                            <div id="cond-p4-qtd-motoristas" style="display: none;" class="input-group mt-10">
+                                <label for="p4-qtd-motoristas-num">Quantos motoristas utilizam o veículo?</label>
+                                <input type="number" id="p4-qtd-motoristas-num" placeholder="Ex: 3">
+                            </div>
+
+                            <!-- 5. Rastreador -->
+                            <div class="input-group mt-20">
+                                <label for="p5-rastreador">*5. O caminhão possui rastreador?</label>
+                                <select id="p5-rastreador" required onchange="verificarRastreadorCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p5-monitoramento" style="display: none;" class="input-group mt-10">
+                                <label for="p5-monitoramento-24h">O rastreador possui monitoramento 24 horas?</label>
+                                <select id="p5-monitoramento-24h">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p5-deseja-rastreio" style="display: none;" class="input-group mt-10">
+                                <label for="p5-incluir-rastreio">Deseja incluir rastreamento como parte da proteção?</label>
+                                <select id="p5-incluir-rastreio">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <!-- 6. Estacionamento -->
+                            <div class="input-group mt-20">
+                                <label for="p6-estacionamento-caminhao">*6. Onde o caminhão costuma ficar estacionado?</label>
+                                <select id="p6-estacionamento-caminhao" required onchange="verificarEstacionamentoCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Garagem própria</option>
+                                    <option value="2">2 — Garagem da empresa</option>
+                                    <option value="3">3 — Estacionamento</option>
+                                    <option value="4">4 — Via pública</option>
+                                    <option value="5">5 — Outro local</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p6-empresa-acesso" style="display: none;" class="input-group mt-10">
+                                <label for="p6-controle-acesso">O local possui controle de acesso?</label>
+                                <select id="p6-controle-acesso">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p6-estac-seguranca" style="display: none;" class="input-group mt-10">
+                                <label for="p6-possui-seguranca">O estacionamento possui segurança / vigilância?</label>
+                                <select id="p6-possui-seguranca">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p6-via-noite" style="display: none;" class="input-group mt-10">
+                                <label for="p6-rua-noite">Fica estacionado na rua durante a noite?</label>
+                                <select id="p6-rua-noite">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p6-outro-local" style="display: none;" class="input-group mt-10">
+                                <label for="p6-especificar-local">Por favor, especifique o local:</label>
+                                <input type="text" id="p6-especificar-local" placeholder="Especifique o local...">
+                            </div>
+
+                            <!-- 7. Acidentes -->
+                            <div class="input-group mt-20">
+                                <label for="p7-acidente-caminhao">*7. O caminhão já sofreu algum acidente?</label>
+                                <select id="p7-acidente-caminhao" required onchange="verificarAcidenteCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p7-detalhes-acidente" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p7-qtd-acidentes">Quantos acidentes?</label>
+                                    <input type="number" id="p7-qtd-acidentes" placeholder="Ex: 1">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p7-ultimo-acidente">Quando ocorreu o último?</label>
+                                    <input type="month" id="p7-ultimo-acidente">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p7-danos-caminhao">Houve danos significativos ao caminhão?</label>
+                                    <select id="p7-danos-caminhao">
+                                        <option value="sim">Sim</option>
+                                        <option value="nao">Não</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 5 (CAMINHÃO): P8 A P15 (ROUBO, COBERTURAS, TERCEIROS, ACESSÓRIOS, FINANCIAMENTO, ANO, VALOR, OBS) -->
+                        <div id="step-5-caminhao" class="step">
+                            <h3 class="step-title text-center">Cobertura e Dados Finais do Caminhão</h3>
+
+                            <!-- 8. Roubo ou Furto -->
+                            <div class="input-group">
+                                <label for="p8-roubo-caminhao">*8. O caminhão já foi roubado ou furtado alguma vez?</label>
+                                <select id="p8-roubo-caminhao" required onchange="verificarRouboCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p8-detalhes-roubo" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p8-quando-aconteceu">Quando aconteceu?</label>
+                                    <input type="month" id="p8-quando-aconteceu">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p8-veiculo-recuperado">O veículo foi recuperado?</label>
+                                    <select id="p8-veiculo-recuperado">
+                                        <option value="sim">Sim</option>
+                                        <option value="nao">Não</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 9. Coberturas -->
+                            <div class="input-group mt-20">
+                                <label for="p9-coberturas-caminhao">*9. Quais coberturas você deseja contratar?</label>
+                                <select id="p9-coberturas-caminhao" required onchange="verificarCoberturasCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Roubo e furto</option>
+                                    <option value="2">2 — Colisão</option>
+                                    <option value="3">3 — Roubo, furto e colisão</option>
+                                    <option value="4">4 — Cobertura completa</option>
+                                    <option value="5">5 — Ainda não sei (Análise)</option>
+                                </select>
+                            </div>
+
+                            <!-- 10. Terceiros -->
+                            <div class="input-group mt-20">
+                                <label for="p10-terceiros">*10. Deseja cobertura para danos causados a terceiros?</label>
+                                <select id="p10-terceiros" required onchange="verificarTerceirosCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p10-limite-terceiros" style="display: none;" class="input-group mt-10">
+                                <label for="p10-limite-valor">Qual limite de cobertura deseja para terceiros?</label>
+                                <select id="p10-limite-valor">
+                                    <option value="100k">R$ 100.000,00</option>
+                                    <option value="200k">R$ 200.000,00</option>
+                                    <option value="500k">R$ 500.000,00 ou mais</option>
+                                </select>
+                            </div>
+
+                            <!-- 11. Equipamento / Acessórios -->
+                            <div class="input-group mt-20">
+                                <label for="p11-acessorios">*11. Possui algum equipamento ou acessório adicional?</label>
+                                <select id="p11-acessorios" required onchange="verificarAcessoriosCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p11-detalhe-acessorios" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p11-quais-equipamentos">Quais equipamentos/acessórios possui?</label>
+                                    <input type="text" id="p11-quais-equipamentos" placeholder="Ex: Munck, câmara fria, plataforma...">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p11-valor-aproximado">Valor aproximado dos equipamentos (R$):</label>
+                                    <input type="number" id="p11-valor-aproximado" placeholder="Ex: 35000">
+                                </div>
+                            </div>
+
+                            <!-- 12. Financiado -->
+                            <div class="input-group mt-20">
+                                <label for="p12-financiado">*12. O caminhão é financiado?</label>
+                                <select id="p12-financiado" required onchange="verificarFinanciadoCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p12-banco" style="display: none;" class="input-group mt-10">
+                                <label for="p12-instituicao-fin">Qual é a instituição financeira?</label>
+                                <input type="text" id="p12-instituicao-fin" placeholder="Ex: BV, Santander, Banco do Brasil...">
+                            </div>
+
+                            <!-- 13. Ano do Caminhão -->
+                            <div class="input-group mt-20">
+                                <label for="p13-ano-caminhao">*13. Qual é o ano do caminhão?</label>
+                                <input type="number" id="p13-ano-caminhao" placeholder="Ex: 2018" min="1970" max="2027" required onchange="verificarAnoCaminhao(this.value)">
+                            </div>
+
+                            <div id="cond-p13-conservacao" style="display: none;" class="input-group mt-10">
+                                <label for="p13-estado-conservacao">Como está o estado de conservação/manutenção do veículo?</label>
+                                <textarea id="p13-estado-conservacao" rows="2" placeholder="Descreva brevemente a conservação..."></textarea>
+                            </div>
+
+                            <!-- 14. Valor do Caminhão -->
+                            <div class="input-group mt-20">
+                                <label for="p14-valor-caminhao">*14. Qual é o valor aproximado do caminhão (R$)?</label>
+                                <input type="number" id="p14-valor-caminhao" placeholder="Ex: 250000" required>
+                            </div>
+
+                            <!-- 15. Observações -->
+                            <div class="input-group mt-20">
+                                <label for="p15-observacoes">15. Observações adicionais:</label>
+                                <textarea id="p15-observacoes" rows="2" placeholder="Existe alguma informação adicional sobre o caminhão ou utilização?"></textarea>
                             </div>
 
                             <div class="modal-footer footer-espacado">

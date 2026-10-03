@@ -14,41 +14,15 @@ const iconesServico = {
 
 // Lista de Profissões Pré-fixadas
 const profissoesPreFixadas = [
-    "Administrador",
-    "Advogado",
-    "Analista de Sistemas / TI",
-    "Aposentado / Pensionista",
-    "Arquiteto",
-    "Assistente Social",
-    "Autônomo",
-    "Bancário",
-    "Biólogo",
-    "Comerciante / Empresário",
-    "Contador / Auditor",
-    "Corretor de Imóveis",
-    "Corretor de Seguros",
-    "Dentista",
-    "Dermatologista",
-    "Designer / Publicitário",
-    "Economista",
-    "Educador Físico / Personal Trainer",
-    "Empresário",
-    "Enfermeiro",
-    "Engenheiro",
-    "Estudante",
-    "Farmacêutico",
-    "Fisioterapeuta",
-    "Funcionário Público",
-    "Jornalista / Comunicador",
-    "Médico",
-    "Motorista / Entregador",
-    "Nutricionista",
-    "Professor / Educador",
-    "Psicólogo",
-    "Técnico em Enfermagem",
-    "Técnico em Informática",
-    "Veterinário",
-    "Outras Atividades"
+    "Administrador", "Advogado", "Analista de Sistemas / TI", "Aposentado / Pensionista",
+    "Arquiteto", "Assistente Social", "Autônomo", "Bancário", "Biólogo",
+    "Caminhoneiro / Motorista de Carga", "Comerciante / Empresário", "Contador / Auditor",
+    "Corretor de Imóveis", "Corretor de Seguros", "Dentista", "Dermatologista",
+    "Designer / Publicitário", "Economista", "Educador Físico / Personal Trainer",
+    "Empresário", "Enfermeiro", "Engenheiro", "Estudante", "Farmacêutico",
+    "Fisioterapeuta", "Funcionário Público", "Jornalista / Comunicador", "Médico",
+    "Motorista / Entregador", "Nutricionista", "Professor / Educador", "Psicólogo",
+    "Técnico em Enfermagem", "Técnico em Informática", "Veterinário", "Outras Atividades"
 ];
 
 // 1. ABRIR E FECHAR MODAL
@@ -66,15 +40,22 @@ function abrirModal(servico) {
         lucide.createIcons();
     }
 
+    // Ocultar todos os fluxos específicos
     const fluxoAuto = document.getElementById('fluxo-auto');
     const fluxoMoto = document.getElementById('fluxo-moto');
+    const fluxoCaminhao = document.getElementById('fluxo-caminhao');
 
-    if (servico === 'Moto') {
-        if (fluxoAuto) fluxoAuto.style.display = 'none';
-        if (fluxoMoto) fluxoMoto.style.display = 'block';
-    } else {
-        if (fluxoAuto) fluxoAuto.style.display = 'block';
-        if (fluxoMoto) fluxoMoto.style.display = 'none';
+    if (fluxoAuto) fluxoAuto.style.display = 'none';
+    if (fluxoMoto) fluxoMoto.style.display = 'none';
+    if (fluxoCaminhao) fluxoCaminhao.style.display = 'none';
+
+    // Mostrar o fluxo correto
+    if (servico === 'Moto' && fluxoMoto) {
+        fluxoMoto.style.display = 'block';
+    } else if (servico === 'Caminhão' && fluxoCaminhao) {
+        fluxoCaminhao.style.display = 'block';
+    } else if (fluxoAuto) {
+        fluxoAuto.style.display = 'block';
     }
 
     etapaAtual = 1;
@@ -104,7 +85,10 @@ function mostrarEtapa(numero) {
             step.style.display = 'block';
         }
     } else {
-        const sufixo = (tipoSeguroAtual === 'Moto') ? 'moto' : 'auto';
+        let sufixo = 'auto';
+        if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
+        if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
+
         const step = document.getElementById(`step-${numero}-${sufixo}`);
         if (step) {
             step.classList.add('active');
@@ -130,7 +114,7 @@ function etapaAnterior() {
     }
 }
 
-// 3. SELEÇÃO DE CONDUTOR (FLUXO AUTO)
+// 3. SELEÇÃO DE CONDUTOR (AUTO)
 function selecionarTipoCondutor(tipo, elemento) {
     const parent = elemento.closest('.options-grid');
     if (parent) {
@@ -156,7 +140,7 @@ function selecionarTipoCondutor(tipo, elemento) {
     }
 }
 
-// 4. LÓGICA CONDICIONAL DO SEGURO MOTO (9 PERGUNTAS)
+// 4. LÓGICA CONDICIONAL DO SEGURO MOTO
 function verificarUsoMoto(valor) {
     const condLocal = document.getElementById('cond-p1-local');
     const condKm = document.getElementById('cond-p1-km');
@@ -222,7 +206,109 @@ function verificarAcidentes(valor) {
     if (condObs) condObs.style.display = (valor === '2') ? 'block' : 'none';
 }
 
-// 5. CARREGAR LISTA DE PROFISSÕES
+// 5. LÓGICA CONDICIONAL DO SEGURO CAMINHÃO (15 PERGUNTAS)
+function verificarFinalidadeCaminhao(valor) {
+    const divCargas = document.getElementById('cond-p1-transporte-cargas');
+    const divUsoProprio = document.getElementById('cond-p1-uso-proprio');
+    const divServico = document.getElementById('cond-p1-servico');
+    const divOutro = document.getElementById('cond-p1-outro');
+    const grpP2 = document.getElementById('grp-p2-tipo-carga');
+
+    if (divCargas) divCargas.style.display = (valor === '1') ? 'block' : 'none';
+    if (divUsoProprio) divUsoProprio.style.display = (valor === '2') ? 'block' : 'none';
+    if (divServico) divServico.style.display = (valor === '3') ? 'block' : 'none';
+    if (divOutro) divOutro.style.display = (valor === '4') ? 'block' : 'none';
+
+    // Exibir pergunta 2 somente se for transporte de carga ou uso próprio com carga
+    if (grpP2) grpP2.style.display = (valor === '1' || valor === '2') ? 'block' : 'none';
+}
+
+function verificarTipoCargaCaminhao(valor) {
+    const divPerigosa = document.getElementById('cond-p2-carga-perigosa');
+    if (divPerigosa) divPerigosa.style.display = (valor === '5') ? 'block' : 'none';
+}
+
+function verificarViagensCaminhao(valor) {
+    const divCidade = document.getElementById('cond-p3-cidade');
+    const divEstado = document.getElementById('cond-p3-estado');
+    const divEstados = document.getElementById('cond-p3-estados');
+    const divInter = document.getElementById('cond-p3-internacional');
+
+    if (divCidade) divCidade.style.display = (valor === '1') ? 'block' : 'none';
+    if (divEstado) divEstado.style.display = (valor === '2') ? 'block' : 'none';
+    if (divEstados) divEstados.style.display = (valor === '3') ? 'block' : 'none';
+    if (divInter) divInter.style.display = (valor === '4') ? 'block' : 'none';
+}
+
+function verificarQuemDirigeCaminhao(valor) {
+    const divTempoCNH = document.getElementById('cond-p4-tempo-cnh');
+    const divQtdMotoristas = document.getElementById('cond-p4-qtd-motoristas');
+
+    if (divTempoCNH) divTempoCNH.style.display = (valor === '2') ? 'block' : 'none';
+    if (divQtdMotoristas) divQtdMotoristas.style.display = (valor === '3') ? 'block' : 'none';
+}
+
+function verificarRastreadorCaminhao(valor) {
+    const divMonit = document.getElementById('cond-p5-monitoramento');
+    const divDesejaRastreio = document.getElementById('cond-p5-deseja-rastreio');
+
+    if (divMonit) divMonit.style.display = (valor === '1') ? 'block' : 'none';
+    if (divDesejaRastreio) divDesejaRastreio.style.display = (valor === '2') ? 'block' : 'none';
+}
+
+function verificarEstacionamentoCaminhao(valor) {
+    const divAcesso = document.getElementById('cond-p6-empresa-acesso');
+    const divSeguranca = document.getElementById('cond-p6-estac-seguranca');
+    const divRuaNoite = document.getElementById('cond-p6-via-noite');
+    const divOutroLocal = document.getElementById('cond-p6-outro-local');
+
+    if (divAcesso) divAcesso.style.display = (valor === '2') ? 'block' : 'none';
+    if (divSeguranca) divSeguranca.style.display = (valor === '3') ? 'block' : 'none';
+    if (divRuaNoite) divRuaNoite.style.display = (valor === '4') ? 'block' : 'none';
+    if (divOutroLocal) divOutroLocal.style.display = (valor === '5') ? 'block' : 'none';
+}
+
+function verificarAcidenteCaminhao(valor) {
+    const divDetalhes = document.getElementById('cond-p7-detalhes-acidente');
+    if (divDetalhes) divDetalhes.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarRouboCaminhao(valor) {
+    const divDetalhes = document.getElementById('cond-p8-detalhes-roubo');
+    if (divDetalhes) divDetalhes.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarCoberturasCaminhao(valor) {
+    // Pode expandir caso queira condicionais adicionais de coberturas
+}
+
+function verificarTerceirosCaminhao(valor) {
+    const divLimite = document.getElementById('cond-p10-limite-terceiros');
+    if (divLimite) divLimite.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarAcessoriosCaminhao(valor) {
+    const divDetalhe = document.getElementById('cond-p11-detalhe-acessorios');
+    if (divDetalhe) divDetalhe.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarFinanciadoCaminhao(valor) {
+    const divBanco = document.getElementById('cond-p12-banco');
+    if (divBanco) divBanco.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarAnoCaminhao(ano) {
+    const divConservacao = document.getElementById('cond-p13-conservacao');
+    const anoNum = parseInt(ano, 10);
+    const anoAtual = new Date().getFullYear();
+
+    if (divConservacao) {
+        // Se o caminhão tiver mais de 10 anos, solicita dados sobre manutenção
+        divConservacao.style.display = (anoNum && (anoAtual - anoNum >= 10)) ? 'block' : 'none';
+    }
+}
+
+// 6. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
     const dataList = document.getElementById('lista-profissoes');
     if (!dataList) return;
@@ -235,7 +321,7 @@ function carregarProfissoes() {
     });
 }
 
-// 6. VALIDAÇÃO DE CAMPOS E MENSAGENS DE ERRO
+// 7. VALIDAÇÃO DE CAMPOS E MENSAGENS DE ERRO
 function mostrarErroCampo(campo, mensagem = "Por favor, preencha este campo.") {
     campo.classList.add('erro');
     const inputGroup = campo.closest('.input-group');
@@ -273,7 +359,10 @@ function validarEtapaAtual() {
     if (etapaAtual === 1 || etapaAtual === 2) {
         stepDiv = document.getElementById(`step-${etapaAtual}`);
     } else {
-        const sufixo = (tipoSeguroAtual === 'Moto') ? 'moto' : 'auto';
+        let sufixo = 'auto';
+        if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
+        if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
+
         stepDiv = document.getElementById(`step-${etapaAtual}-${sufixo}`);
     }
 
@@ -301,7 +390,7 @@ function validarEtapaAtual() {
     return valido;
 }
 
-// 7. INTEGRAÇÃO COM APIS (FIPE E VIACEP)
+// 8. INTEGRAÇÃO COM APIS (FIPE E VIACEP)
 function carregarMarcasFIPE() {
     const selectMarca = document.getElementById('marca');
     if (!selectMarca) return;
@@ -394,7 +483,7 @@ function buscarCEP() {
     }
 }
 
-// 8. ENVIO FINAL E CARREGAMENTO INICIAL
+// 9. ENVIO FINAL E CARREGAMENTO INICIAL
 function enviarFormulario() {
     if (validarEtapaAtual()) {
         alert('Cotação enviada com sucesso!');
