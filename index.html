@@ -252,7 +252,7 @@
                     </div>
 
                     <!-- ========================================== -->
-                    <!-- FLUXO ESPECÍFICO: MOTO (9 PERGUNTAS)       -->
+                    <!-- FLUXO ESPECÍFICO: MOTO                     -->
                     <!-- ========================================== -->
                     <div id="fluxo-moto" style="display: none;">
 
@@ -462,15 +462,14 @@
                     </div>
 
                     <!-- ========================================== -->
-                    <!-- FLUXO ESPECÍFICO: CAMINHÃO (15 PERGUNTAS)  -->
+                    <!-- FLUXO ESPECÍFICO: CAMINHÃO                 -->
                     <!-- ========================================== -->
                     <div id="fluxo-caminhao" style="display: none;">
 
-                        <!-- ETAPA 3 (CAMINHÃO): P1, P2 E P3 (FINALIDADE, CARGA, VIAGENS) -->
+                        <!-- ETAPA 3 (CAMINHÃO): P1, P2 E P3 -->
                         <div id="step-3-caminhao" class="step">
                             <h3 class="step-title text-center">Uso, Carga e Rotas do Caminhão</h3>
 
-                            <!-- 1. Finalidade principal -->
                             <div class="input-group">
                                 <label for="p1-finalidade-caminhao">*1. Qual é a finalidade principal do caminhão?</label>
                                 <select id="p1-finalidade-caminhao" required onchange="verificarFinalidadeCaminhao(this.value)">
@@ -499,7 +498,6 @@
                                 <input type="text" id="p1-especificar-outro" placeholder="Especifique a finalidade...">
                             </div>
 
-                            <!-- 2. Tipo de carga -->
                             <div id="grp-p2-tipo-carga" style="display: none;" class="input-group mt-20">
                                 <label for="p2-tipo-carga">*2. Qual tipo de carga o caminhão transporta?</label>
                                 <select id="p2-tipo-carga" onchange="verificarTipoCargaCaminhao(this.value)">
@@ -518,7 +516,6 @@
                                 <input type="text" id="p2-detalhe-carga-perigosa" placeholder="Ex: Combustível, químicos, gás...">
                             </div>
 
-                            <!-- 3. Viagens -->
                             <div class="input-group mt-20">
                                 <label for="p3-viagens-caminhao">*3. O caminhão realiza viagens:</label>
                                 <select id="p3-viagens-caminhao" required onchange="verificarViagensCaminhao(this.value)">
@@ -553,11 +550,10 @@
                             </div>
                         </div>
 
-                        <!-- ETAPA 4 (CAMINHÃO): P4, P5, P6 E P7 (CONDUTOR, RASTREADOR, ESTACIONAMENTO, ACIDENTES) -->
+                        <!-- ETAPA 4 (CAMINHÃO): P4, P5, P6 E P7 -->
                         <div id="step-4-caminhao" class="step">
                             <h3 class="step-title text-center">Motorista, Segurança e Histórico</h3>
 
-                            <!-- 4. Quem dirige -->
                             <div class="input-group">
                                 <label for="p4-quem-dirige">*4. Quem dirige o caminhão?</label>
                                 <select id="p4-quem-dirige" required onchange="verificarQuemDirigeCaminhao(this.value)">
@@ -581,7 +577,6 @@
                                 <input type="number" id="p4-qtd-motoristas-num" placeholder="Ex: 3">
                             </div>
 
-                            <!-- 5. Rastreador -->
                             <div class="input-group mt-20">
                                 <label for="p5-rastreador">*5. O caminhão possui rastreador?</label>
                                 <select id="p5-rastreador" required onchange="verificarRastreadorCaminhao(this.value)">
@@ -606,7 +601,6 @@
                                 </select>
                             </div>
 
-                            <!-- 6. Estacionamento -->
                             <div class="input-group mt-20">
                                 <label for="p6-estacionamento-caminhao">*6. Onde o caminhão costuma ficar estacionado?</label>
                                 <select id="p6-estacionamento-caminhao" required onchange="verificarEstacionamentoCaminhao(this.value)">
@@ -645,7 +639,6 @@
                                 <input type="text" id="p6-especificar-local" placeholder="Especifique o local...">
                             </div>
 
-                            <!-- 7. Acidentes -->
                             <div class="input-group mt-20">
                                 <label for="p7-acidente-caminhao">*7. O caminhão já sofreu algum acidente?</label>
                                 <select id="p7-acidente-caminhao" required onchange="verificarAcidenteCaminhao(this.value)">
@@ -679,11 +672,10 @@
                             </div>
                         </div>
 
-                        <!-- ETAPA 5 (CAMINHÃO): P8 A P15 (ROUBO, COBERTURAS, TERCEIROS, ACESSÓRIOS, FINANCIAMENTO, ANO, VALOR, OBS) -->
+                        <!-- ETAPA 5 (CAMINHÃO): P8 A P15 -->
                         <div id="step-5-caminhao" class="step">
                             <h3 class="step-title text-center">Cobertura e Dados Finais do Caminhão</h3>
 
-                            <!-- 8. Roubo ou Furto -->
                             <div class="input-group">
                                 <label for="p8-roubo-caminhao">*8. O caminhão já foi roubado ou furtado alguma vez?</label>
                                 <select id="p8-roubo-caminhao" required onchange="verificarRouboCaminhao(this.value)">
@@ -707,7 +699,6 @@
                                 </div>
                             </div>
 
-                            <!-- 9. Coberturas -->
                             <div class="input-group mt-20">
                                 <label for="p9-coberturas-caminhao">*9. Quais coberturas você deseja contratar?</label>
                                 <select id="p9-coberturas-caminhao" required onchange="verificarCoberturasCaminhao(this.value)">
@@ -720,7 +711,6 @@
                                 </select>
                             </div>
 
-                            <!-- 10. Terceiros -->
                             <div class="input-group mt-20">
                                 <label for="p10-terceiros">*10. Deseja cobertura para danos causados a terceiros?</label>
                                 <select id="p10-terceiros" required onchange="verificarTerceirosCaminhao(this.value)">
@@ -739,7 +729,6 @@
                                 </select>
                             </div>
 
-                            <!-- 11. Equipamento / Acessórios -->
                             <div class="input-group mt-20">
                                 <label for="p11-acessorios">*11. Possui algum equipamento ou acessório adicional?</label>
                                 <select id="p11-acessorios" required onchange="verificarAcessoriosCaminhao(this.value)">
@@ -760,7 +749,6 @@
                                 </div>
                             </div>
 
-                            <!-- 12. Financiado -->
                             <div class="input-group mt-20">
                                 <label for="p12-financiado">*12. O caminhão é financiado?</label>
                                 <select id="p12-financiado" required onchange="verificarFinanciadoCaminhao(this.value)">
@@ -775,7 +763,6 @@
                                 <input type="text" id="p12-instituicao-fin" placeholder="Ex: BV, Santander, Banco do Brasil...">
                             </div>
 
-                            <!-- 13. Ano do Caminhão -->
                             <div class="input-group mt-20">
                                 <label for="p13-ano-caminhao">*13. Qual é o ano do caminhão?</label>
                                 <input type="number" id="p13-ano-caminhao" placeholder="Ex: 2018" min="1970" max="2027" required onchange="verificarAnoCaminhao(this.value)">
@@ -786,16 +773,256 @@
                                 <textarea id="p13-estado-conservacao" rows="2" placeholder="Descreva brevemente a conservação..."></textarea>
                             </div>
 
-                            <!-- 14. Valor do Caminhão -->
                             <div class="input-group mt-20">
                                 <label for="p14-valor-caminhao">*14. Qual é o valor aproximado do caminhão (R$)?</label>
                                 <input type="number" id="p14-valor-caminhao" placeholder="Ex: 250000" required>
                             </div>
 
-                            <!-- 15. Observações -->
                             <div class="input-group mt-20">
                                 <label for="p15-observacoes">15. Observações adicionais:</label>
                                 <textarea id="p15-observacoes" rows="2" placeholder="Existe alguma informação adicional sobre o caminhão ou utilização?"></textarea>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: SEGURO DE VIDA (11 PERG) -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-vida" style="display: none;">
+
+                        <!-- ETAPA 3 (VIDA): P1, P2 E P3 -->
+                        <div id="step-3-vida" class="step">
+                            <h3 class="step-title text-center">Objetivo e Perfil Pessoal</h3>
+
+                            <!-- P1. Objetivo -->
+                            <div class="input-group">
+                                <label for="p1-objetivo-vida">*1. Qual é o objetivo principal do seguro?</label>
+                                <select id="p1-objetivo-vida" required onchange="verificarObjetivoVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Proteção da família</option>
+                                    <option value="2">2 — Proteção financeira pessoal</option>
+                                    <option value="3">3 — Proteção para financiamento/dívidas</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p1-beneficiario-fam" style="display: none;" class="input-group mt-10">
+                                <label for="p1-beneficiarios-fam">Quem deseja indicar como beneficiário?</label>
+                                <input type="text" id="p1-beneficiarios-fam" placeholder="Ex: Cônjuge, filhos, pais...">
+                            </div>
+                            <div id="cond-p1-sit-pessoal" style="display: none;" class="input-group mt-10">
+                                <label for="p1-situacoes-proteger">Quais situações deseja proteger?</label>
+                                <input type="text" id="p1-situacoes-proteger" placeholder="Ex: Invalidez, afastamento do trabalho, DIT...">
+                            </div>
+                            <div id="cond-p1-tipo-fin" style="display: none;" class="input-group mt-10">
+                                <label for="p1-financiamento-divida">Qual tipo de financiamento ou dívida?</label>
+                                <input type="text" id="p1-financiamento-divida" placeholder="Ex: Financiamento imobiliário, empréstimo...">
+                            </div>
+                            <div id="cond-p1-especificar-outro" style="display: none;" class="input-group mt-10">
+                                <label for="p1-outro-objetivo">Por favor, especifique seu objetivo:</label>
+                                <input type="text" id="p1-outro-objetivo" placeholder="Descreva seu objetivo principal...">
+                            </div>
+
+                            <!-- P2. Faixa etária -->
+                            <div class="input-group mt-20">
+                                <label for="p2-faixa-etaria-vida">*2. Qual é a sua faixa etária?</label>
+                                <select id="p2-faixa-etaria-vida" required onchange="verificarFaixaEtariaVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Até 25 anos</option>
+                                    <option value="2">2 — 26 a 40 anos</option>
+                                    <option value="3">3 — 41 a 60 anos</option>
+                                    <option value="4">4 — Acima de 60 anos</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-adicionais-41" style="display: none;" class="input-group mt-10">
+                                <label for="p2-incluir-adicionais-41">Deseja incluir coberturas adicionais?</label>
+                                <select id="p2-incluir-adicionais-41">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-alerta-analise" style="display: none; background-color: #eff6ff; border: 1px solid #3b82f6; color: #1e40af; padding: 10px; border-radius: 6px;" class="mt-10 text-center">
+                                <small>Informação: Propostas para cima de 60 anos passam por uma análise técnica específica das seguradoras.</small>
+                            </div>
+
+                            <!-- P3. Dependentes -->
+                            <div class="input-group mt-20">
+                                <label for="p3-dependentes-vida">*3. Você possui dependentes financeiros?</label>
+                                <select id="p3-dependentes-vida" required onchange="verificarDependentesVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-qtd-dep" style="display: none;" class="input-group mt-10">
+                                <label for="p3-num-dependentes">Quantos dependentes possui?</label>
+                                <input type="number" id="p3-num-dependentes" placeholder="Ex: 2" min="1">
+                            </div>
+
+                            <div id="cond-p3-protecao-pessoal" style="display: none;" class="input-group mt-10">
+                                <label for="p3-foco-pessoal">Deseja contratar o seguro principalmente para proteção pessoal?</label>
+                                <select id="p3-foco-pessoal">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 4 (VIDA): P4, P5, P6 E P7 -->
+                        <div id="step-4-vida" class="step">
+                            <h3 class="step-title text-center">Cobertura de Riscos e Atividades</h3>
+
+                            <!-- P4. Morte -->
+                            <div class="input-group">
+                                <label for="p4-morte-vida">*4. Você deseja incluir cobertura por morte?</label>
+                                <select id="p4-morte-vida" required onchange="verificarMorteVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p4-valor-morte" style="display: none;" class="input-group mt-10">
+                                <label for="p4-capital-morte">Qual valor de cobertura por morte deseja?</label>
+                                <input type="text" id="p4-capital-morte" placeholder="Ex: R$ 200.000,00">
+                            </div>
+
+                            <!-- P5. Invalidez -->
+                            <div class="input-group mt-20">
+                                <label for="p5-invalidez-vida">*5. Deseja incluir cobertura para invalidez?</label>
+                                <select id="p5-invalidez-vida" required onchange="verificarInvalidezVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p5-tipo-invalidez" style="display: none;" class="input-group mt-10">
+                                <label for="p5-detalhe-invalidez">Qual tipo de invalidez deseja incluir?</label>
+                                <select id="p5-detalhe-invalidez">
+                                    <option value="total_parcial">Invalidez Total e Parcial por Acidente (IPA)</option>
+                                    <option value="funcional">Invalidez Funcional por Doença (IFPD)</option>
+                                    <option value="ambas">Ambas as coberturas</option>
+                                </select>
+                            </div>
+
+                            <!-- P6. Doenças Graves -->
+                            <div class="input-group mt-20">
+                                <label for="p6-doencas-vida">*6. Deseja incluir cobertura para doenças graves?</label>
+                                <select id="p6-doencas-vida" required onchange="verificarDoencasVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p6-tipos-doencas" style="display: none;" class="input-group mt-10">
+                                <label for="p6-quais-doencas">Quais tipos de doenças/coberturas deseja considerar?</label>
+                                <input type="text" id="p6-quais-doencas" placeholder="Ex: Câncer, AVC, Infarto, Diagnóstico de 10 doenças...">
+                            </div>
+
+                            <!-- P7. Esportes de risco -->
+                            <div class="input-group mt-20">
+                                <label for="p7-esportes-vida">*7. Você pratica algum esporte ou atividade considerada de maior risco?</label>
+                                <select id="p7-esportes-vida" required onchange="verificarEsportesVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p7-detalhe-esporte" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p7-qual-atividade">Qual atividade pratica?</label>
+                                    <input type="text" id="p7-qual-atividade" placeholder="Ex: Paraquedismo, mergulho, artes marciais, automobilismo...">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p7-frequencia">Com que frequência?</label>
+                                    <input type="text" id="p7-frequencia" placeholder="Ex: 2 vezes por mês, profissionalmente...">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 5 (VIDA): P8, P9, P10 E P11 -->
+                        <div id="step-5-vida" class="step">
+                            <h3 class="step-title text-center">Valores e Definições Finais</h3>
+
+                            <!-- P8. Indicar Beneficiários -->
+                            <div class="input-group">
+                                <label for="p8-beneficiarios-opcao">*8. Você deseja indicar beneficiários?</label>
+                                <select id="p8-beneficiarios-opcao" required onchange="verificarBeneficiariosVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                    <option value="3">3 — Ainda não sei</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p8-num-benef" style="display: none;" class="input-group mt-10">
+                                <label for="p8-qtd-beneficiarios">Quantos beneficiários deseja indicar?</label>
+                                <input type="number" id="p8-qtd-beneficiarios" placeholder="Ex: 2" min="1">
+                            </div>
+
+                            <div id="cond-p8-msg-posterior" style="display: none; background-color: #f3f4f6; color: #4b5563; padding: 10px; border-radius: 6px;" class="mt-10 text-center">
+                                <small>Sem problemas! Os beneficiários poderão ser definidos a qualquer momento após a emissão da apólice.</small>
+                            </div>
+
+                            <!-- P9. Valor Global da Cobertura -->
+                            <div class="input-group mt-20">
+                                <label for="p9-valor-cobertura">*9. Qual valor de cobertura global você deseja?</label>
+                                <select id="p9-valor-cobertura" required onchange="verificarValorCoberturaVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="50k">1 — R$ 50.000</option>
+                                    <option value="100k">2 — R$ 100.000</option>
+                                    <option value="250k">3 — R$ 250.000</option>
+                                    <option value="500k">4 — R$ 500.000</option>
+                                    <option value="outro">5 — Outro valor</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p9-outro-valor" style="display: none;" class="input-group mt-10">
+                                <label for="p9-especificar-valor">Informe o valor desejado (R$):</label>
+                                <input type="number" id="p9-especificar-valor" placeholder="Ex: 750000">
+                            </div>
+
+                            <!-- P10. Coberturas Adicionais -->
+                            <div class="input-group mt-20">
+                                <label for="p10-cobertura-adicional">*10. Deseja incluir alguma cobertura adicional?</label>
+                                <select id="p10-cobertura-adicional" required onchange="verificarAdicionaisVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p10-quais-adicionais" style="display: none;" class="input-group mt-10">
+                                <label for="p10-quais-coberturas">Selecione ou descreva as coberturas adicionais:</label>
+                                <input type="text" id="p10-quais-coberturas" placeholder="Ex: Assistência Funeral, Diária por Internação, DIT...">
+                            </div>
+
+                            <!-- P11. Observações -->
+                            <div class="input-group mt-20">
+                                <label for="p11-observacoes-vida">11. Observações adicionais:</label>
+                                <textarea id="p11-observacoes-vida" rows="2" placeholder="Existe alguma informação adicional que você gostaria de informar sobre o seguro de vida, seus objetivos ou suas necessidades de cobertura?"></textarea>
                             </div>
 
                             <div class="modal-footer footer-espacado">

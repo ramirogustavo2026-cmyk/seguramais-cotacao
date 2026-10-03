@@ -44,16 +44,20 @@ function abrirModal(servico) {
     const fluxoAuto = document.getElementById('fluxo-auto');
     const fluxoMoto = document.getElementById('fluxo-moto');
     const fluxoCaminhao = document.getElementById('fluxo-caminhao');
+    const fluxoVida = document.getElementById('fluxo-vida');
 
     if (fluxoAuto) fluxoAuto.style.display = 'none';
     if (fluxoMoto) fluxoMoto.style.display = 'none';
     if (fluxoCaminhao) fluxoCaminhao.style.display = 'none';
+    if (fluxoVida) fluxoVida.style.display = 'none';
 
     // Mostrar o fluxo correto
     if (servico === 'Moto' && fluxoMoto) {
         fluxoMoto.style.display = 'block';
     } else if (servico === 'Caminhão' && fluxoCaminhao) {
         fluxoCaminhao.style.display = 'block';
+    } else if (servico === 'Vida' && fluxoVida) {
+        fluxoVida.style.display = 'block';
     } else if (fluxoAuto) {
         fluxoAuto.style.display = 'block';
     }
@@ -88,6 +92,7 @@ function mostrarEtapa(numero) {
         let sufixo = 'auto';
         if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
+        if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
 
         const step = document.getElementById(`step-${numero}-${sufixo}`);
         if (step) {
@@ -206,7 +211,7 @@ function verificarAcidentes(valor) {
     if (condObs) condObs.style.display = (valor === '2') ? 'block' : 'none';
 }
 
-// 5. LÓGICA CONDICIONAL DO SEGURO CAMINHÃO (15 PERGUNTAS)
+// 5. LÓGICA CONDICIONAL DO SEGURO CAMINHÃO
 function verificarFinalidadeCaminhao(valor) {
     const divCargas = document.getElementById('cond-p1-transporte-cargas');
     const divUsoProprio = document.getElementById('cond-p1-uso-proprio');
@@ -219,7 +224,6 @@ function verificarFinalidadeCaminhao(valor) {
     if (divServico) divServico.style.display = (valor === '3') ? 'block' : 'none';
     if (divOutro) divOutro.style.display = (valor === '4') ? 'block' : 'none';
 
-    // Exibir pergunta 2 somente se for transporte de carga ou uso próprio com carga
     if (grpP2) grpP2.style.display = (valor === '1' || valor === '2') ? 'block' : 'none';
 }
 
@@ -257,7 +261,7 @@ function verificarRastreadorCaminhao(valor) {
 }
 
 function verificarEstacionamentoCaminhao(valor) {
-    const divAcesso = document.getElementById('cond-p6-empresa-acesso');
+    const divAcesso = document.getElementById('cond-p6-empresa-accesso');
     const divSeguranca = document.getElementById('cond-p6-estac-seguranca');
     const divRuaNoite = document.getElementById('cond-p6-via-noite');
     const divOutroLocal = document.getElementById('cond-p6-outro-local');
@@ -278,9 +282,7 @@ function verificarRouboCaminhao(valor) {
     if (divDetalhes) divDetalhes.style.display = (valor === '1') ? 'block' : 'none';
 }
 
-function verificarCoberturasCaminhao(valor) {
-    // Pode expandir caso queira condicionais adicionais de coberturas
-}
+function verificarCoberturasCaminhao(valor) {}
 
 function verificarTerceirosCaminhao(valor) {
     const divLimite = document.getElementById('cond-p10-limite-terceiros');
@@ -303,12 +305,78 @@ function verificarAnoCaminhao(ano) {
     const anoAtual = new Date().getFullYear();
 
     if (divConservacao) {
-        // Se o caminhão tiver mais de 10 anos, solicita dados sobre manutenção
         divConservacao.style.display = (anoNum && (anoAtual - anoNum >= 10)) ? 'block' : 'none';
     }
 }
 
-// 6. CARREGAR LISTA DE PROFISSÕES
+// 6. LÓGICA CONDICIONAL DO SEGURO DE VIDA (11 PERGUNTAS)
+function verificarObjetivoVida(valor) {
+    const divFam = document.getElementById('cond-p1-beneficiario-fam');
+    const divSit = document.getElementById('cond-p1-sit-pessoal');
+    const divFin = document.getElementById('cond-p1-tipo-fin');
+    const divOutro = document.getElementById('cond-p1-especificar-outro');
+
+    if (divFam) divFam.style.display = (valor === '1') ? 'block' : 'none';
+    if (divSit) divSit.style.display = (valor === '2') ? 'block' : 'none';
+    if (divFin) divFin.style.display = (valor === '3') ? 'block' : 'none';
+    if (divOutro) divOutro.style.display = (valor === '4') ? 'block' : 'none';
+}
+
+function verificarFaixaEtariaVida(valor) {
+    const divAdic41 = document.getElementById('cond-p2-adicionais-41');
+    const divAnalise = document.getElementById('cond-p2-alerta-analise');
+
+    if (divAdic41) divAdic41.style.display = (valor === '3') ? 'block' : 'none';
+    if (divAnalise) divAnalise.style.display = (valor === '4') ? 'block' : 'none';
+}
+
+function verificarDependentesVida(valor) {
+    const divQtdDep = document.getElementById('cond-p3-qtd-dep');
+    const divProtPessoal = document.getElementById('cond-p3-protecao-pessoal');
+
+    if (divQtdDep) divQtdDep.style.display = (valor === '1') ? 'block' : 'none';
+    if (divProtPessoal) divProtPessoal.style.display = (valor === '2') ? 'block' : 'none';
+}
+
+function verificarMorteVida(valor) {
+    const divValorMorte = document.getElementById('cond-p4-valor-morte');
+    if (divValorMorte) divValorMorte.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarInvalidezVida(valor) {
+    const divTipoInvalidez = document.getElementById('cond-p5-tipo-invalidez');
+    if (divTipoInvalidez) divTipoInvalidez.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarDoencasVida(valor) {
+    const divTiposDoencas = document.getElementById('cond-p6-tipos-doencas');
+    if (divTiposDoencas) divTiposDoencas.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarEsportesVida(valor) {
+    const divDetalheEsporte = document.getElementById('cond-p7-detalhe-esporte');
+    if (divDetalheEsporte) divDetalheEsporte.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+function verificarBeneficiariosVida(valor) {
+    const divNumBenef = document.getElementById('cond-p8-num-benef');
+    const divMsgPosterior = document.getElementById('cond-p8-msg-posterior');
+
+    if (divNumBenef) divNumBenef.style.display = (valor === '1') ? 'block' : 'none';
+    if (divMsgPosterior) divMsgPosterior.style.display = (valor === '3') ? 'block' : 'none';
+}
+
+function verificarValorCoberturaVida(valor) {
+    const divOutroValor = document.getElementById('cond-p9-outro-valor');
+    if (divOutroValor) divOutroValor.style.display = (valor === 'outro') ? 'block' : 'none';
+}
+
+function verificarAdicionaisVida(valor) {
+    const divQuaisAdic = document.getElementById('cond-p10-quais-adicionais');
+    if (divQuaisAdic) divQuaisAdic.style.display = (valor === '1') ? 'block' : 'none';
+}
+
+// 7. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
     const dataList = document.getElementById('lista-profissoes');
     if (!dataList) return;
@@ -321,7 +389,7 @@ function carregarProfissoes() {
     });
 }
 
-// 7. VALIDAÇÃO DE CAMPOS E MENSAGENS DE ERRO
+// 8. VALIDAÇÃO DE CAMPOS E MENSAGENS DE ERRO
 function mostrarErroCampo(campo, mensagem = "Por favor, preencha este campo.") {
     campo.classList.add('erro');
     const inputGroup = campo.closest('.input-group');
@@ -362,6 +430,7 @@ function validarEtapaAtual() {
         let sufixo = 'auto';
         if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
+        if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
 
         stepDiv = document.getElementById(`step-${etapaAtual}-${sufixo}`);
     }
@@ -390,7 +459,7 @@ function validarEtapaAtual() {
     return valido;
 }
 
-// 8. INTEGRAÇÃO COM APIS (FIPE E VIACEP)
+// 9. INTEGRAÇÃO COM APIS (FIPE E VIACEP)
 function carregarMarcasFIPE() {
     const selectMarca = document.getElementById('marca');
     if (!selectMarca) return;
@@ -483,7 +552,7 @@ function buscarCEP() {
     }
 }
 
-// 9. ENVIO FINAL E CARREGAMENTO INICIAL
+// 10. ENVIO FINAL E CARREGAMENTO INICIAL
 function enviarFormulario() {
     if (validarEtapaAtual()) {
         alert('Cotação enviada com sucesso!');
