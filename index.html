@@ -1111,7 +1111,156 @@
                             </div>
                         </div>
                     </div>
+<!-- ========================================== -->
+                <!-- FLUXO: SEGURO RESIDENCIAL                  -->
+                <!-- ========================================== -->
+                <div id="fluxo-residencial" style="display: none;">
+                    
+                    <!-- Etapa 3: Tipo do Imóvel -->
+                    <div id="step-3-residencial" class="step" style="display: none;">
+                        <h3>Qual é o tipo do imóvel?</h3>
+                        <p>Informe as características básicas da residência.</p>
+                        
+                        <div class="input-group">
+                            <label for="tipo-imovel">Tipo de Imóvel *</label>
+                            <select id="tipo-imovel" required onchange="verificarTipoImovelResidencial(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Casa</option>
+                                <option value="2">Apartamento</option>
+                                <option value="3">Outro</option>
+                            </select>
+                        </div>
 
+                        <!-- Condicional: Se Casa (1) -->
+                        <div id="cond-p1-garagem" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="possui-garagem">O imóvel possui garagem? *</label>
+                                <select id="possui-garagem">
+                                    <option value="">Selecione...</option>
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Apartamento (2) -->
+                        <div id="cond-p1-portaria" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="possui-portaria">O condomínio possui portaria? *</label>
+                                <select id="possui-portaria">
+                                    <option value="">Selecione...</option>
+                                    <option value="24h">Sim (Portaria 24h)</option>
+                                    <option value="parcial">Sim (Portaria parcial / remota)</option>
+                                    <option value="nao">Não possui</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Outro (3) -->
+                        <div id="cond-p1-outro-imovel" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="especificar-imovel">Especifique o tipo de imóvel *</label>
+                                <input type="text" id="especificar-imovel" placeholder="Ex: Chácara, Flat, Sobrado em condomínio fechado">
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 4: Posse do Imóvel -->
+                    <div id="step-4-residencial" class="step" style="display: none;">
+                        <h3>O imóvel é próprio ou alugado?</h3>
+                        <p>Precisamos saber a sua relação jurídica com o local.</p>
+
+                        <div class="input-group">
+                            <label for="posse-imovel">Situação do Imóvel *</label>
+                            <select id="posse-imovel" required onchange="verificarPosseImovelResidencial(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Próprio</option>
+                                <option value="2">Alugado</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Alugado (2) -->
+                        <div id="cond-p2-alugado" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="desejo-alugado">O que deseja proteger? *</label>
+                                <select id="desejo-alugado">
+                                    <option value="">Selecione...</option>
+                                    <option value="apenas_bens">Apenas os bens (conteúdo)</option>
+                                    <option value="imovel_e_bens">Também o imóvel (responsabilidade civil / danos estruturais)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 5: Coberturas, Bens e Observações -->
+                    <div id="step-5-residencial" class="step" style="display: none;">
+                        <h3>Coberturas e Detalhes Finais</h3>
+                        <p>Defina as proteções desejadas e informações adicionais.</p>
+
+                        <div class="input-group">
+                            <label for="cobertura-residencial">Qual cobertura deseja contratar? *</label>
+                            <select id="cobertura-residencial" required onchange="verificarCoberturasResidencial(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Incêndio</option>
+                                <option value="2">Roubo e furto</option>
+                                <option value="3">Danos elétricos</option>
+                                <option value="4">Cobertura completa</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Cobertura Completa (4) -->
+                        <div id="cond-p3-adicionais" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label>Selecione as coberturas adicionais desejadas:</label>
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 5px;">
+                                    <label><input type="checkbox" name="adic" value="vendaval"> Vendaval, furacão e granizo</label>
+                                    <label><input type="checkbox" name="adic" value="responsabilidade_civil"> Responsabilidade Civil Familiar</label>
+                                    <label><input type="checkbox" name="adic" value="impacto_veiculos"> Impacto de veículos</label>
+                                    <label><input type="checkbox" name="adic" value="moradia_temporaria"> Perda ou pagamento de aluguel</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 15px;">
+                            <label for="bem-alto-valor">O imóvel possui algum bem de alto valor? *</label>
+                            <select id="bem-alto-valor" required onchange="verificarBemAltoValorResidencial(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Sim</option>
+                                <option value="2">Não</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Possui Bem de Alto Valor (1) -->
+                        <div id="cond-p4-bem-valor" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="qual-bem">Qual é o bem e seu valor aproximado? *</label>
+                                <input type="text" id="qual-bem" placeholder="Ex: Obras de arte, joias, eletrônicos caros - R$ 15.000">
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 15px;">
+                            <label for="obs-residencial">Observações</label>
+                            <textarea id="obs-residencial" rows="3" placeholder="Existe alguma informação adicional sobre o imóvel ou sobre o seguro que gostaria de informar?"></textarea>
+                        </div>
+
+                        <!-- Botão de Conclusão / Envio -->
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-enviar" onclick="enviarFormulario()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Enviar Cotação</button>
+                        </div>
+                    </div>
+
+                </div>
                 </form>
             </div>
 

@@ -46,12 +46,14 @@ function abrirModal(servico) {
     const fluxoCaminhao = document.getElementById('fluxo-caminhao');
     const fluxoVida = document.getElementById('fluxo-vida');
     const fluxoDiversos = document.getElementById('fluxo-diversos');
+    const fluxoResidencial = document.getElementById('fluxo-residencial');
 
     if (fluxoAuto) fluxoAuto.style.display = 'none';
     if (fluxoMoto) fluxoMoto.style.display = 'none';
     if (fluxoCaminhao) fluxoCaminhao.style.display = 'none';
     if (fluxoVida) fluxoVida.style.display = 'none';
     if (fluxoDiversos) fluxoDiversos.style.display = 'none';
+    if (fluxoResidencial) fluxoResidencial.style.display = 'none';
 
     // Mostrar o fluxo correto
     if (servico === 'Moto' && fluxoMoto) {
@@ -62,6 +64,8 @@ function abrirModal(servico) {
         fluxoVida.style.display = 'block';
     } else if (servico === 'Diversos' && fluxoDiversos) {
         fluxoDiversos.style.display = 'block';
+    } else if (servico === 'Residencial' && fluxoResidencial) {
+        fluxoResidencial.style.display = 'block';
     } else if (fluxoAuto) {
         fluxoAuto.style.display = 'block';
     }
@@ -98,6 +102,7 @@ function mostrarEtapa(numero) {
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
         if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
+        if (tipoSeguroAtual === 'Residencial') sufixo = 'residencial';
 
         const step = document.getElementById(`step-${numero}-${sufixo}`);
         if (step) {
@@ -109,7 +114,10 @@ function mostrarEtapa(numero) {
 
 function proximaEtapa() {
     if (validarEtapaAtual()) {
-        const maxEtapas = (tipoSeguroAtual === 'Diversos') ? 3 : 5;
+        let maxEtapas = 5;
+        if (tipoSeguroAtual === 'Diversos') maxEtapas = 3;
+        if (tipoSeguroAtual === 'Residencial') maxEtapas = 5;
+
         if (etapaAtual < maxEtapas) {
             etapaAtual++;
             mostrarEtapa(etapaAtual);
@@ -314,7 +322,7 @@ function verificarAnoCaminhao(ano) {
     }
 }
 
-// 6. LÓGICA CONDICIONAL DO SEGURO DE VIDA (11 PERGUNTAS)
+// 6. LÓGICA CONDICIONAL DO SEGURO DE VIDA
 function verificarObjetivoVida(valor) {
     const divFam = document.getElementById('cond-p1-beneficiario-fam');
     const divSit = document.getElementById('cond-p1-sit-pessoal');
@@ -399,6 +407,36 @@ function verificarRiscoDiversos(valor) {
     if (divRisco) divRisco.style.display = (valor === '4') ? 'block' : 'none';
 }
 
+// 6.2 LÓGICA CONDICIONAL DO SEGURO RESIDENCIAL
+function verificarTipoImovelResidencial(valor) {
+    const divGaragem = document.getElementById('cond-p1-garagem');
+    const divPortaria = document.getElementById('cond-p1-portaria');
+    const divOutro = document.getElementById('cond-p1-outro-imovel');
+
+    if (divGaragem) divGaragem.style.display = (valor === '1') ? 'block' : 'none';
+    if (divPortaria) divPortaria.style.display = (valor === '2') ? 'block' : 'none';
+    if (divOutro) divOutro.style.display = (valor === '3') ? 'block' : 'none';
+}
+
+function verificarPosseImovelResidencial(valor) {
+    const divAlugado = document.getElementById('cond-p2-alugado');
+    if (divAlugado) divAlugado.style.display = (valor === '2') ? 'block' : 'none';
+}
+
+function verificarCoberturaResidencial(valor) {
+    const divAdicionais = document.getElementById('cond-p3-adicionais');
+    if (divAdicionais) {
+        divAdicionais.style.display = (valor === '4') ? 'block' : 'none';
+    }
+}
+
+function verificarBemAltoValorResidencial(valor) {
+    const divBemValor = document.getElementById('cond-p4-bem-valor');
+    if (divBemValor) {
+        divBemValor.style.display = (valor === '1') ? 'block' : 'none';
+    }
+}
+
 // 7. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
     const dataList = document.getElementById('lista-profissoes');
@@ -455,6 +493,7 @@ function validarEtapaAtual() {
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
         if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
+        if (tipoSeguroAtual === 'Residencial') sufixo = 'residencial';
 
         stepDiv = document.getElementById(`step-${etapaAtual}-${sufixo}`);
     }
