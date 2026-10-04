@@ -47,6 +47,7 @@ function abrirModal(servico) {
     const fluxoVida = document.getElementById('fluxo-vida');
     const fluxoDiversos = document.getElementById('fluxo-diversos');
     const fluxoResidencial = document.getElementById('fluxo-residencial');
+    const fluxoEmpresarial = document.getElementById('fluxo-empresarial');
 
     if (fluxoAuto) fluxoAuto.style.display = 'none';
     if (fluxoMoto) fluxoMoto.style.display = 'none';
@@ -54,6 +55,7 @@ function abrirModal(servico) {
     if (fluxoVida) fluxoVida.style.display = 'none';
     if (fluxoDiversos) fluxoDiversos.style.display = 'none';
     if (fluxoResidencial) fluxoResidencial.style.display = 'none';
+    if (fluxoEmpresarial) fluxoEmpresarial.style.display = 'none';
 
     // Mostrar o fluxo correto
     if (servico === 'Moto' && fluxoMoto) {
@@ -66,6 +68,8 @@ function abrirModal(servico) {
         fluxoDiversos.style.display = 'block';
     } else if (servico === 'Residencial' && fluxoResidencial) {
         fluxoResidencial.style.display = 'block';
+    } else if (servico === 'Empresarial' && fluxoEmpresarial) {
+        fluxoEmpresarial.style.display = 'block';
     } else if (fluxoAuto) {
         fluxoAuto.style.display = 'block';
     }
@@ -103,6 +107,7 @@ function mostrarEtapa(numero) {
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
         if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
         if (tipoSeguroAtual === 'Residencial') sufixo = 'residencial';
+        if (tipoSeguroAtual === 'Empresarial') sufixo = 'empresarial';
 
         const step = document.getElementById(`step-${numero}-${sufixo}`);
         if (step) {
@@ -117,6 +122,7 @@ function proximaEtapa() {
         let maxEtapas = 5;
         if (tipoSeguroAtual === 'Diversos') maxEtapas = 3;
         if (tipoSeguroAtual === 'Residencial') maxEtapas = 5;
+        if (tipoSeguroAtual === 'Empresarial') maxEtapas = 5;
 
         if (etapaAtual < maxEtapas) {
             etapaAtual++;
@@ -437,6 +443,31 @@ function verificarBemAltoValorResidencial(valor) {
     }
 }
 
+// 6.3 LÓGICA CONDICIONAL DO SEGURO EMPRESARIAL
+function verificarTipoEmpresa(valor) {
+    const divComercio = document.getElementById('cond-emp-comercio');
+    const divIndustria = document.getElementById('cond-emp-industria');
+    const divEscritorio = document.getElementById('cond-emp-escritorio');
+    const divServicos = document.getElementById('cond-emp-servicos');
+    const divOutro = document.getElementById('cond-emp-outro');
+
+    if (divComercio) divComercio.style.display = (valor === '1') ? 'block' : 'none';
+    if (divIndustria) divIndustria.style.display = (valor === '2') ? 'block' : 'none';
+    if (divEscritorio) divEscritorio.style.display = (valor === '3') ? 'block' : 'none';
+    if (divServicos) divServicos.style.display = (valor === '4') ? 'block' : 'none';
+    if (divOutro) divOutro.style.display = (valor === '5') ? 'block' : 'none';
+}
+
+function verificarImovelEmpresa(valor) {
+    const divAlugado = document.getElementById('cond-emp-alugado');
+    if (divAlugado) divAlugado.style.display = (valor === '2') ? 'block' : 'none';
+}
+
+function verificarBemAltoValorEmp(valor) {
+    const divBemValor = document.getElementById('cond-emp-bem-valor');
+    if (divBemValor) divBemValor.style.display = (valor === '1') ? 'block' : 'none';
+}
+
 // 7. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
     const dataList = document.getElementById('lista-profissoes');
@@ -494,6 +525,7 @@ function validarEtapaAtual() {
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
         if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
         if (tipoSeguroAtual === 'Residencial') sufixo = 'residencial';
+        if (tipoSeguroAtual === 'Empresarial') sufixo = 'empresarial';
 
         stepDiv = document.getElementById(`step-${etapaAtual}-${sufixo}`);
     }
