@@ -47,6 +47,7 @@ function abrirModal(servico) {
     const fluxoVida = document.getElementById('fluxo-vida');
     const fluxoDiversos = document.getElementById('fluxo-diversos');
     const fluxoResidencial = document.getElementById('fluxo-residencial');
+    const fluxoEmpresarial = document.getElementById('fluxo-empresarial');
 
     if (fluxoAuto) fluxoAuto.style.display = 'none';
     if (fluxoMoto) fluxoMoto.style.display = 'none';
@@ -54,6 +55,7 @@ function abrirModal(servico) {
     if (fluxoVida) fluxoVida.style.display = 'none';
     if (fluxoDiversos) fluxoDiversos.style.display = 'none';
     if (fluxoResidencial) fluxoResidencial.style.display = 'none';
+    if (fluxoEmpresarial) fluxoEmpresarial.style.display = 'none';
 
     // Mostrar o fluxo correto
     if (servico === 'Moto' && fluxoMoto) {
@@ -66,6 +68,8 @@ function abrirModal(servico) {
         fluxoDiversos.style.display = 'block';
     } else if (servico === 'Residencial' && fluxoResidencial) {
         fluxoResidencial.style.display = 'block';
+    } else if (servico === 'Empresarial' && fluxoEmpresarial) {
+        fluxoEmpresarial.style.display = 'block';
     } else if (fluxoAuto) {
         fluxoAuto.style.display = 'block';
     }
@@ -103,6 +107,7 @@ function mostrarEtapa(numero) {
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
         if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
         if (tipoSeguroAtual === 'Residencial') sufixo = 'residencial';
+        if (tipoSeguroAtual === 'Empresarial') sufixo = 'empresarial';
 
         const step = document.getElementById(`step-${numero}-${sufixo}`);
         if (step) {
@@ -117,6 +122,7 @@ function proximaEtapa() {
         let maxEtapas = 5;
         if (tipoSeguroAtual === 'Diversos') maxEtapas = 3;
         if (tipoSeguroAtual === 'Residencial') maxEtapas = 5;
+        if (tipoSeguroAtual === 'Empresarial') maxEtapas = 5;
 
         if (etapaAtual < maxEtapas) {
             etapaAtual++;
@@ -437,6 +443,31 @@ function verificarBemAltoValorResidencial(valor) {
     }
 }
 
+// 6.3 LÓGICA CONDICIONAL DO SEGURO EMPRESARIAL
+function verificarTipoEmpresa(valor) {
+    const divComercio = document.getElementById('cond-emp-comercio');
+    const divIndustria = document.getElementById('cond-emp-industria');
+    const divEscritorio = document.getElementById('cond-emp-escritorio');
+    const divServicos = document.getElementById('cond-emp-servicos');
+    const divOutro = document.getElementById('cond-emp-outro');
+
+    if (divComercio) divComercio.style.display = (valor === '1') ? 'block' : 'none';
+    if (divIndustria) divIndustria.style.display = (valor === '2') ? 'block' : 'none';
+    if (divEscritorio) divEscritorio.style.display = (valor === '3') ? 'block' : 'none';
+    if (divServicos) divServicos.style.display = (valor === '4') ? 'block' : 'none';
+    if (divOutro) divOutro.style.display = (valor === '5') ? 'block' : 'none';
+}
+
+function verificarImovelEmpresa(valor) {
+    const divAlugado = document.getElementById('cond-emp-alugado');
+    if (divAlugado) divAlugado.style.display = (valor === '2') ? 'block' : 'none';
+}
+
+function verificarBemAltoValorEmp(valor) {
+    const divBemValor = document.getElementById('cond-emp-bem-valor');
+    if (divBemValor) divBemValor.style.display = (valor === '1') ? 'block' : 'none';
+}
+
 // 7. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
     const dataList = document.getElementById('lista-profissoes');
@@ -494,6 +525,7 @@ function validarEtapaAtual() {
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
         if (tipoSeguroAtual === 'Diversos') sufixo = 'diversos';
         if (tipoSeguroAtual === 'Residencial') sufixo = 'residencial';
+        if (tipoSeguroAtual === 'Empresarial') sufixo = 'empresarial';
 
         stepDiv = document.getElementById(`step-${etapaAtual}-${sufixo}`);
     }
@@ -615,12 +647,152 @@ function buscarCEP() {
     }
 }
 
-// 10. ENVIO FINAL E CARREGAMENTO INICIAL
+// Função auxiliar para validar e-mail
+function validarEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// 10. ENVIO FINAL COM ISOLAMENTO TOTAL POR TIPO DE SEGURO
 function enviarFormulario() {
-    if (validarEtapaAtual()) {
-        alert('Cotação enviada com sucesso!');
-        fecharModal();
+    if (!validarEtapaAtual()) return;
+
+    // Validação do e-mail
+    const inputEmail = document.getElementById('email') || document.querySelector('input[type="email"]');
+    if (inputEmail && inputEmail.value) {
+        if (!validarEmail(inputEmail.value)) {
+            alert('Por favor, insira um e-mail válido antes de enviar a cotação.');
+            inputEmail.focus();
+            return;
+        }
     }
+
+    const tipoAtual = tipoSeguroAtual ? tipoSeguroAtual.toLowerCase().trim() : '';
+
+    // Identifica o modal ativo
+    let modalAtivo = null;
+    if (tipoAtual) {
+        modalAtivo = document.getElementById(`modal-${tipoAtual}`) || 
+                     document.querySelector(`.modal-${tipoAtual}`) || 
+                     document.querySelector(`[data-seguro="${tipoAtual}"]`);
+    }
+    
+    if (!modalAtivo) {
+        modalAtivo = document.getElementById('modal-overlay') || document.querySelector('.modal-ativo') || document.querySelector('form') || document.body;
+    }
+    
+    // Feedback visual no botão
+    const botoes = modalAtivo.querySelectorAll('button, .btn');
+    let botaoEnviar = null;
+    
+    botoes.forEach(btn => {
+        const texto = btn.innerText.toUpperCase();
+        if (texto.includes('ENVIAR') || texto.includes('COTAÇÃO')) {
+            botaoEnviar = btn;
+        }
+    });
+    
+    let textoOriginalBotao = "ENVIAR COTAÇÃO";
+    if (botaoEnviar) {
+        textoOriginalBotao = botaoEnviar.innerText;
+        botaoEnviar.disabled = true;
+        botaoEnviar.innerText = "Enviando...";
+        botaoEnviar.style.opacity = "0.7";
+        botaoEnviar.style.cursor = "not-allowed";
+    }
+
+    // Lista de termos que pertencem a OUTROS seguros para garantir que NUNCA se misturem
+    const termosProibidos = [];
+    if (tipoAtual.includes('auto') || tipoAtual.includes('automovel')) {
+        termosProibidos.push('caminhão', 'caminhao', 'km mensal', 'vida', 'imóvel', 'residencial');
+    } else if (tipoAtual.includes('vida')) {
+        termosProibidos.push('caminhão', 'caminhao', 'placa', 'veículo', 'veiculo', 'imóvel', 'residencial');
+    } else if (tipoAtual.includes('residencial')) {
+        termosProibidos.push('caminhão', 'caminhao', 'placa', 'veículo', 'veiculo', 'vida', 'invalidez');
+    } else if (tipoAtual.includes('caminhao') || tipoAtual.includes('caminhão')) {
+        termosProibidos.push('vida', 'imóvel', 'residencial');
+    }
+
+    // Coleta os campos do modal ativo ou do documento inteiro filtrando por restrição
+    const campos = modalAtivo.querySelectorAll('input, select, textarea');
+    
+    let dadosResumo = `Nova Cotação de Seguro: ${tipoSeguroAtual ? tipoSeguroAtual.toUpperCase() : 'GERAL'}\n\nDetalhes do Cliente / Formulário:\n`;
+
+    campos.forEach(campo => {
+        if (campo.type === 'hidden' || campo.type === 'submit' || campo.type === 'button') return;
+        if (!campo.value || campo.value.trim() === '') return;
+
+        let rotulo = campo.name || campo.id || 'Campo';
+        
+        const label = modalAtivo.querySelector(`label[for="${campo.id}"]`) || document.querySelector(`label[for="${campo.id}"]`);
+        if (label) {
+            rotulo = label.innerText.replace(':', '').trim();
+        } else if (campo.placeholder) {
+            rotulo = campo.placeholder;
+        }
+
+        // Bloqueia termos de outros seguros que possam ter ficado salvos na memória
+        const rotuloLower = rotulo.toLowerCase();
+        const idOuNome = (campo.id + ' ' + campo.name).toLowerCase();
+        
+        const deveIgnorar = termosProibidos.some(termo => rotuloLower.includes(termo) || idOuNome.includes(termo));
+        if (deveIgnorar) return;
+
+        let valorFormatado = campo.value;
+
+        if (campo.tagName.toLowerCase() === 'select') {
+            if (campo.selectedIndex >= 0 && campo.options[campo.selectedIndex]) {
+                const textoOpcao = campo.options[campo.selectedIndex].text;
+                if (textoOpcao && !textoOpcao.toLowerCase().includes('selecione')) {
+                    valorFormatado = textoOpcao;
+                }
+            }
+        }
+
+        if (campo.type === 'radio' || campo.type === 'checkbox') {
+            if (campo.checked) {
+                let textoOpcao = campo.value;
+                const labelRadio = modalAtivo.querySelector(`label[for="${campo.id}"]`) || campo.closest('label');
+                if (labelRadio) {
+                    textoOpcao = labelRadio.innerText.trim();
+                }
+                dadosResumo += `- ${rotulo}: ${textoOpcao}\n`;
+            }
+        } else {
+            dadosResumo += `- ${rotulo}: ${valorFormatado}\n`;
+        }
+    });
+
+    const parametrosEnvio = {
+        tipo_seguro: tipoSeguroAtual ? tipoSeguroAtual.toUpperCase() : 'GERAL',
+        mensagem_completa: dadosResumo,
+        data_envio: new Date().toLocaleString()
+    };
+
+    emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
+        .then((response) => {
+            console.log('E-mail enviado com sucesso!', response.status, response.text);
+            alert('Cotação enviada com sucesso! Em breve entraremos em contato.');
+            
+            if (botaoEnviar) {
+                botaoEnviar.disabled = false;
+                botaoEnviar.innerText = textoOriginalBotao;
+                botaoEnviar.style.opacity = "1";
+                botaoEnviar.style.cursor = "pointer";
+            }
+
+            if (typeof fecharModal === 'function') fecharModal();
+        }, (error) => {
+            console.error('Erro ao enviar e-mail:', error);
+            alert('Ocorreu um erro ao enviar a cotação. Tente novamente.');
+            
+            if (botaoEnviar) {
+                botaoEnviar.disabled = false;
+                botaoEnviar.innerText = textoOriginalBotao;
+                botaoEnviar.style.opacity = "1";
+                botaoEnviar.style.cursor = "pointer";
+            }
+        });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

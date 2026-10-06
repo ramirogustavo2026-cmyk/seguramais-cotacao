@@ -120,9 +120,10 @@ function mostrarEtapa(numero) {
 function proximaEtapa() {
     if (validarEtapaAtual()) {
         let maxEtapas = 5;
+
         if (tipoSeguroAtual === 'Diversos') maxEtapas = 3;
         if (tipoSeguroAtual === 'Residencial') maxEtapas = 5;
-        if (tipoSeguroAtual === 'Empresarial') maxEtapas = 5;
+        if (tipoSeguroAtual === 'Empresarial') maxEtapas = 8;
 
         if (etapaAtual < maxEtapas) {
             etapaAtual++;
@@ -443,7 +444,10 @@ function verificarBemAltoValorResidencial(valor) {
     }
 }
 
-// 6.3 LÓGICA CONDICIONAL DO SEGURO EMPRESARIAL
+// ============================================
+// LÓGICA CONDICIONAL DO SEGURO EMPRESARIAL
+// ============================================
+
 function verificarTipoEmpresa(valor) {
     const divComercio = document.getElementById('cond-emp-comercio');
     const divIndustria = document.getElementById('cond-emp-industria');
@@ -451,21 +455,48 @@ function verificarTipoEmpresa(valor) {
     const divServicos = document.getElementById('cond-emp-servicos');
     const divOutro = document.getElementById('cond-emp-outro');
 
-    if (divComercio) divComercio.style.display = (valor === '1') ? 'block' : 'none';
-    if (divIndustria) divIndustria.style.display = (valor === '2') ? 'block' : 'none';
-    if (divEscritorio) divEscritorio.style.display = (valor === '3') ? 'block' : 'none';
-    if (divServicos) divServicos.style.display = (valor === '4') ? 'block' : 'none';
-    if (divOutro) divOutro.style.display = (valor === '5') ? 'block' : 'none';
+    if (divComercio) {
+        divComercio.style.display = valor === '1' ? 'block' : 'none';
+    }
+
+    if (divIndustria) {
+        divIndustria.style.display = valor === '2' ? 'block' : 'none';
+    }
+
+    if (divEscritorio) {
+        divEscritorio.style.display = valor === '3' ? 'block' : 'none';
+    }
+
+    if (divServicos) {
+        divServicos.style.display = valor === '4' ? 'block' : 'none';
+    }
+
+    if (divOutro) {
+        divOutro.style.display = valor === '5' ? 'block' : 'none';
+    }
 }
+
 
 function verificarImovelEmpresa(valor) {
     const divAlugado = document.getElementById('cond-emp-alugado');
-    if (divAlugado) divAlugado.style.display = (valor === '2') ? 'block' : 'none';
+
+    if (divAlugado) {
+        divAlugado.style.display = valor === '2' ? 'block' : 'none';
+    }
 }
 
-function verificarBemAltoValorEmp(valor) {
-    const divBemValor = document.getElementById('cond-emp-bem-valor');
-    if (divBemValor) divBemValor.style.display = (valor === '1') ? 'block' : 'none';
+
+// FUNÇÃO QUE ESTAVA FALTANDO
+function verificarDesejoProtegerEmp(valor) {
+    const desejoProteger = document.getElementById('desejo-proteger-emp');
+
+    if (!desejoProteger) {
+        return;
+    }
+
+    if (valor) {
+        limparErroCampo(desejoProteger);
+    }
 }
 
 // 7. CARREGAR LISTA DE PROFISSÕES
@@ -647,78 +678,193 @@ function buscarCEP() {
     }
 }
 
-// 10. ENVIO FINAL COM IDENTIFICAÇÃO GARANTIDA E FILTRAGEM CORRETA
+// Função auxiliar para validar e-mail
+function validarEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// 10. ENVIO FINAL COM ISOLAMENTO TOTAL POR TIPO DE SEGURO
 function enviarFormulario() {
     if (!validarEtapaAtual()) return;
 
-    // Identifica o modal ativo ou o container principal do formulário
-    const modalAtivo = document.getElementById('modal-overlay') || document.querySelector('.modal-ativo') || document.body;
-    
-    // Pega todos os campos da página para garantir que não perdemos o topo (nome, contato, cep)
-    const campos = document.querySelectorAll('input, select, textarea');
-    
+    // Validação do e-mail
+    const inputEmail = document.getElementById('email') || document.querySelector('input[type="email"]');
+
+    if (inputEmail && inputEmail.value) {
+        if (!validarEmail(inputEmail.value)) {
+            alert('Por favor, insira um e-mail válido antes de enviar a cotação.');
+            inputEmail.focus();
+            return;
+        }
+    }
+
+    const tipoAtual = tipoSeguroAtual ? tipoSeguroAtual.toLowerCase().trim() : '';
+
+    // Identifica EXATAMENTE o fluxo do seguro selecionado
+    const mapaFluxos = {
+        'auto': 'fluxo-auto',
+        'moto': 'fluxo-moto',
+        'caminhão': 'fluxo-caminhao',
+        'caminhao': 'fluxo-caminhao',
+        'vida': 'fluxo-vida',
+        'diversos': 'fluxo-diversos',
+        'residencial': 'fluxo-residencial',
+        'empresarial': 'fluxo-empresarial'
+    };
+
+    const idFluxo = mapaFluxos[tipoAtual];
+    const fluxoSelecionado = idFluxo ? document.getElementById(idFluxo) : null;
+
+    if (!fluxoSelecionado) {
+        console.error('Fluxo do seguro não encontrado:', tipoSeguroAtual);
+        alert('Não foi possível identificar o tipo de seguro. Atualize a página e tente novamente.');
+        return;
+    }
+
+    // Os dados abaixo são comuns a todos os seguros
+    const etapaCliente = document.getElementById('step-1');
+    const etapaEndereco = document.getElementById('step-2');
+
+    // O botão de envio fica dentro do fluxo específico
+    const botoes = fluxoSelecionado.querySelectorAll('button, .btn');
+
+    let botaoEnviar = null;
+
+    botoes.forEach(btn => {
+        const texto = btn.innerText.toUpperCase();
+
+        if (texto.includes('ENVIAR') || texto.includes('COTAÇÃO')) {
+            botaoEnviar = btn;
+        }
+    });
+
+    let textoOriginalBotao = "ENVIAR COTAÇÃO";
+
+    if (botaoEnviar) {
+        textoOriginalBotao = botaoEnviar.innerText;
+        botaoEnviar.disabled = true;
+        botaoEnviar.innerText = "Enviando...";
+        botaoEnviar.style.opacity = "0.7";
+        botaoEnviar.style.cursor = "not-allowed";
+    }
+
+    // ---------------------------------------------------------
+    // COLETA DOS CAMPOS
+    // ---------------------------------------------------------
+
     let dadosResumo = `Nova Cotação de Seguro: ${tipoSeguroAtual ? tipoSeguroAtual.toUpperCase() : 'GERAL'}\n\nDetalhes do Cliente / Formulário:\n`;
 
-    // Lista de IDs ou nomes que pertencem à identificação do cliente e devem SEMPRE ser incluídos
-    const idsSempreIncluir = ['nome', 'telefone', 'email', 'cep', 'logradouro', 'numero', 'bairro', 'cidade', 'uf'];
+    // Função responsável por coletar os campos de um determinado bloco
+    function coletarCampos(container) {
 
-    campos.forEach(campo => {
-        if (campo.type === 'hidden' || campo.type === 'submit' || campo.type === 'button') return;
-        if (!campo.value || campo.value.trim() === '') return;
+        if (!container) return;
 
-        const idOuNome = (campo.name || campo.id || '').toLowerCase();
-        
-        // Verifica se é um campo de identificação obrigatório
-        const ehIdentificacao = idsSempreIncluir.some(termo => idOuNome.includes(termo));
+        const campos = container.querySelectorAll('input, select, textarea');
 
-        // Se NÃO for campo de identificação, aplicamos o filtro para não puxar lixo de outros seguros escondidos
-        if (!ehIdentificacao) {
-            // Se o campo estiver num container invisível/outro modal fechado, ignoramos
-            if (campo.offsetParent === null) return;
-            
-            // Garante que o campo pertence ao modal ativo atual
-            const containerPai = campo.closest('#modal-overlay, .modal-ativo, form');
-            if (containerPai && containerPai !== modalAtivo && !modalAtivo.contains(containerPai)) {
+        campos.forEach(campo => {
+
+            // Ignora campos que não devem ser enviados
+            if (campo.type === 'hidden' ||
+                campo.type === 'submit' ||
+                campo.type === 'button') {
                 return;
             }
-        }
 
-        let rotulo = campo.name || campo.id || 'Campo';
-        
-        // Tenta achar a label correspondente
-        const label = document.querySelector(`label[for="${campo.id}"]`) || modalAtivo.querySelector(`label[for="${campo.id}"]`);
-        if (label) {
-            rotulo = label.innerText.replace(':', '').trim();
-        } else if (campo.placeholder) {
-            rotulo = campo.placeholder;
-        }
+            // Ignora campos desabilitados
+            if (campo.disabled) return;
 
-        let valorFormatado = campo.value;
+            // Radio e checkbox:
+            // só interessa o que estiver marcado
+            if (campo.type === 'radio' || campo.type === 'checkbox') {
+                if (!campo.checked) return;
+            } else {
+                if (!campo.value || campo.value.trim() === '') return;
+            }
 
-        // Se for <select>, pega o texto descritivo da opção selecionada
-        if (campo.tagName.toLowerCase() === 'select') {
-            if (campo.selectedIndex >= 0 && campo.options[campo.selectedIndex]) {
-                const textoOpcao = campo.options[campo.selectedIndex].text;
-                if (textoOpcao && !textoOpcao.toLowerCase().includes('selecione')) {
-                    valorFormatado = textoOpcao;
+            // Ignora campos condicionais que estejam ocultos
+            const elementoCondicional = campo.closest('[id^="cond-"], #campos-outra-pessoa');
+
+            if (elementoCondicional) {
+                const estilo = window.getComputedStyle(elementoCondicional);
+
+                if (estilo.display === 'none') {
+                    return;
                 }
             }
-        }
 
-        // Se for rádio ou checkbox, só pega se estiver marcado
-        if (campo.type === 'radio' || campo.type === 'checkbox') {
-            if (campo.checked) {
+            // Descobre o nome/label do campo
+            let rotulo = campo.name || campo.id || 'Campo';
+
+            const label =
+                document.querySelector(`label[for="${campo.id}"]`) ||
+                campo.closest('label');
+
+            if (label) {
+                rotulo = label.innerText.replace(':', '').trim();
+            } else if (campo.placeholder) {
+                rotulo = campo.placeholder;
+            }
+
+            // Valor que será enviado
+            let valorFormatado = campo.value;
+
+            // SELECT: pega o texto da opção em vez do value
+            if (campo.tagName.toLowerCase() === 'select') {
+
+                if (
+                    campo.selectedIndex >= 0 &&
+                    campo.options[campo.selectedIndex]
+                ) {
+                    const textoOpcao = campo.options[campo.selectedIndex].text;
+
+                    if (
+                        textoOpcao &&
+                        !textoOpcao.toLowerCase().includes('selecione')
+                    ) {
+                        valorFormatado = textoOpcao;
+                    }
+                }
+            }
+
+            // RADIO / CHECKBOX
+            if (campo.type === 'radio' || campo.type === 'checkbox') {
+
                 let textoOpcao = campo.value;
-                const labelRadio = document.querySelector(`label[for="${campo.id}"]`) || campo.closest('label');
+
+                const labelRadio =
+                    document.querySelector(`label[for="${campo.id}"]`) ||
+                    campo.closest('label');
+
                 if (labelRadio) {
                     textoOpcao = labelRadio.innerText.trim();
                 }
+
                 dadosResumo += `- ${rotulo}: ${textoOpcao}\n`;
+
+            } else {
+
+                dadosResumo += `- ${rotulo}: ${valorFormatado}\n`;
             }
-        } else {
-            dadosResumo += `- ${rotulo}: ${valorFormatado}\n`;
-        }
-    });
+        });
+    }
+
+    // ---------------------------------------------------------
+    // COLETA APENAS OS DADOS COMUNS
+    // ---------------------------------------------------------
+
+    coletarCampos(etapaCliente);
+    coletarCampos(etapaEndereco);
+
+    // ---------------------------------------------------------
+    // COLETA SOMENTE O FLUXO DO SEGURO ESCOLHIDO
+    // ---------------------------------------------------------
+
+    coletarCampos(fluxoSelecionado);
+
+    // ---------------------------------------------------------
+    // PARÂMETROS PARA O EMAILJS
+    // ---------------------------------------------------------
 
     const parametrosEnvio = {
         tipo_seguro: tipoSeguroAtual ? tipoSeguroAtual.toUpperCase() : 'GERAL',
@@ -726,16 +872,44 @@ function enviarFormulario() {
         data_envio: new Date().toLocaleString()
     };
 
-    console.log("Enviando dados consolidados:", parametrosEnvio);
+    // ---------------------------------------------------------
+    // ENVIO
+    // ---------------------------------------------------------
 
     emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
         .then((response) => {
-            console.log('E-mail enviado com sucesso!', response.status, response.text);
+
+            console.log(
+                'E-mail enviado com sucesso!',
+                response.status,
+                response.text
+            );
+
             alert('Cotação enviada com sucesso! Em breve entraremos em contato.');
-            if (typeof fecharModal === 'function') fecharModal();
+
+            if (botaoEnviar) {
+                botaoEnviar.disabled = false;
+                botaoEnviar.innerText = textoOriginalBotao;
+                botaoEnviar.style.opacity = "1";
+                botaoEnviar.style.cursor = "pointer";
+            }
+
+            if (typeof fecharModal === 'function') {
+                fecharModal();
+            }
+
         }, (error) => {
+
             console.error('Erro ao enviar e-mail:', error);
+
             alert('Ocorreu um erro ao enviar a cotação. Tente novamente.');
+
+            if (botaoEnviar) {
+                botaoEnviar.disabled = false;
+                botaoEnviar.innerText = textoOriginalBotao;
+                botaoEnviar.style.opacity = "1";
+                botaoEnviar.style.cursor = "pointer";
+            }
         });
 }
 
