@@ -647,25 +647,46 @@ function buscarCEP() {
     }
 }
 
-// 10. ENVIO FINAL AUTOMÁTICO POR E-MAIL (RECOLHA TOTAL DE TODAS AS ETAPAS)
+// 10. ENVIO FINAL COM IDENTIFICAÇÃO GARANTIDA E FILTRAGEM CORRETA
 function enviarFormulario() {
     if (!validarEtapaAtual()) return;
 
-    const modalAtivo = document.getElementById('modal-overlay');
-    // Recolhe todos os inputs, selects e textareas de TODAS as etapas do modal
-    const campos = modalAtivo.querySelectorAll('input, select, textarea');
+    // Identifica o modal ativo ou o container principal do formulário
+    const modalAtivo = document.getElementById('modal-overlay') || document.querySelector('.modal-ativo') || document.body;
     
-    let dadosResumo = `Nova Cotação de Seguro: ${tipoSeguroAtual.toUpperCase()}\n\nDetalhes do Cliente / Formulário:\n`;
+    // Pega todos os campos da página para garantir que não perdemos o topo (nome, contato, cep)
+    const campos = document.querySelectorAll('input, select, textarea');
+    
+    let dadosResumo = `Nova Cotação de Seguro: ${tipoSeguroAtual ? tipoSeguroAtual.toUpperCase() : 'GERAL'}\n\nDetalhes do Cliente / Formulário:\n`;
+
+    // Lista de IDs ou nomes que pertencem à identificação do cliente e devem SEMPRE ser incluídos
+    const idsSempreIncluir = ['nome', 'telefone', 'email', 'cep', 'logradouro', 'numero', 'bairro', 'cidade', 'uf'];
 
     campos.forEach(campo => {
-        // Ignora campos de controle interno, botões ou campos totalmente vazios
         if (campo.type === 'hidden' || campo.type === 'submit' || campo.type === 'button') return;
         if (!campo.value || campo.value.trim() === '') return;
 
+        const idOuNome = (campo.name || campo.id || '').toLowerCase();
+        
+        // Verifica se é um campo de identificação obrigatório
+        const ehIdentificacao = idsSempreIncluir.some(termo => idOuNome.includes(termo));
+
+        // Se NÃO for campo de identificação, aplicamos o filtro para não puxar lixo de outros seguros escondidos
+        if (!ehIdentificacao) {
+            // Se o campo estiver num container invisível/outro modal fechado, ignoramos
+            if (campo.offsetParent === null) return;
+            
+            // Garante que o campo pertence ao modal ativo atual
+            const containerPai = campo.closest('#modal-overlay, .modal-ativo, form');
+            if (containerPai && containerPai !== modalAtivo && !modalAtivo.contains(containerPai)) {
+                return;
+            }
+        }
+
         let rotulo = campo.name || campo.id || 'Campo';
         
-        // Tenta buscar um rótulo mais amigável na tag <label> associada
-        const label = modalAtivo.querySelector(`label[for="${campo.id}"]`);
+        // Tenta achar a label correspondente
+        const label = document.querySelector(`label[for="${campo.id}"]`) || modalAtivo.querySelector(`label[for="${campo.id}"]`);
         if (label) {
             rotulo = label.innerText.replace(':', '').trim();
         } else if (campo.placeholder) {
@@ -674,7 +695,7 @@ function enviarFormulario() {
 
         let valorFormatado = campo.value;
 
-        // Se for um <select>, pega obrigatoriamente o texto visível da opção selecionada
+        // Se for <select>, pega o texto descritivo da opção selecionada
         if (campo.tagName.toLowerCase() === 'select') {
             if (campo.selectedIndex >= 0 && campo.options[campo.selectedIndex]) {
                 const textoOpcao = campo.options[campo.selectedIndex].text;
@@ -684,11 +705,11 @@ function enviarFormulario() {
             }
         }
 
-        // Se for Radio ou Checkbox, só adiciona se estiver marcado
+        // Se for rádio ou checkbox, só pega se estiver marcado
         if (campo.type === 'radio' || campo.type === 'checkbox') {
             if (campo.checked) {
                 let textoOpcao = campo.value;
-                const labelRadio = modalAtivo.querySelector(`label[for="${campo.id}"]`) || campo.closest('label');
+                const labelRadio = document.querySelector(`label[for="${campo.id}"]`) || campo.closest('label');
                 if (labelRadio) {
                     textoOpcao = labelRadio.innerText.trim();
                 }
@@ -699,19 +720,19 @@ function enviarFormulario() {
         }
     });
 
-    // Parâmetros configurados de acordo com o template do EmailJS
     const parametrosEnvio = {
-        tipo_seguro: tipoSeguroAtual.toUpperCase(),
+        tipo_seguro: tipoSeguroAtual ? tipoSeguroAtual.toUpperCase() : 'GERAL',
         mensagem_completa: dadosResumo,
         data_envio: new Date().toLocaleString()
     };
 
-    // Disparo real via EmailJS
+    console.log("Enviando dados consolidados:", parametrosEnvio);
+
     emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
         .then((response) => {
             console.log('E-mail enviado com sucesso!', response.status, response.text);
             alert('Cotação enviada com sucesso! Em breve entraremos em contato.');
-            fecharModal();
+            if (typeof fecharModal === 'function') fecharModal();
         }, (error) => {
             console.error('Erro ao enviar e-mail:', error);
             alert('Ocorreu um erro ao enviar a cotação. Tente novamente.');
