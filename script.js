@@ -647,12 +647,75 @@ function buscarCEP() {
     }
 }
 
-// 10. ENVIO FINAL E CARREGAMENTO INICIAL
+// 10. ENVIO FINAL AUTOMÁTICO POR E-MAIL (RECOLHA TOTAL DE TODAS AS ETAPAS)
 function enviarFormulario() {
-    if (validarEtapaAtual()) {
-        alert('Cotação enviada com sucesso!');
-        fecharModal();
-    }
+    if (!validarEtapaAtual()) return;
+
+    const modalAtivo = document.getElementById('modal-overlay');
+    // Recolhe todos os inputs, selects e textareas de TODAS as etapas do modal
+    const campos = modalAtivo.querySelectorAll('input, select, textarea');
+    
+    let dadosResumo = `Nova Cotação de Seguro: ${tipoSeguroAtual.toUpperCase()}\n\nDetalhes do Cliente / Formulário:\n`;
+
+    campos.forEach(campo => {
+        // Ignora campos de controle interno, botões ou campos totalmente vazios
+        if (campo.type === 'hidden' || campo.type === 'submit' || campo.type === 'button') return;
+        if (!campo.value || campo.value.trim() === '') return;
+
+        let rotulo = campo.name || campo.id || 'Campo';
+        
+        // Tenta buscar um rótulo mais amigável na tag <label> associada
+        const label = modalAtivo.querySelector(`label[for="${campo.id}"]`);
+        if (label) {
+            rotulo = label.innerText.replace(':', '').trim();
+        } else if (campo.placeholder) {
+            rotulo = campo.placeholder;
+        }
+
+        let valorFormatado = campo.value;
+
+        // Se for um <select>, pega obrigatoriamente o texto visível da opção selecionada
+        if (campo.tagName.toLowerCase() === 'select') {
+            if (campo.selectedIndex >= 0 && campo.options[campo.selectedIndex]) {
+                const textoOpcao = campo.options[campo.selectedIndex].text;
+                if (textoOpcao && !textoOpcao.toLowerCase().includes('selecione')) {
+                    valorFormatado = textoOpcao;
+                }
+            }
+        }
+
+        // Se for Radio ou Checkbox, só adiciona se estiver marcado
+        if (campo.type === 'radio' || campo.type === 'checkbox') {
+            if (campo.checked) {
+                let textoOpcao = campo.value;
+                const labelRadio = modalAtivo.querySelector(`label[for="${campo.id}"]`) || campo.closest('label');
+                if (labelRadio) {
+                    textoOpcao = labelRadio.innerText.trim();
+                }
+                dadosResumo += `- ${rotulo}: ${textoOpcao}\n`;
+            }
+        } else {
+            dadosResumo += `- ${rotulo}: ${valorFormatado}\n`;
+        }
+    });
+
+    // Parâmetros configurados de acordo com o template do EmailJS
+    const parametrosEnvio = {
+        tipo_seguro: tipoSeguroAtual.toUpperCase(),
+        mensagem_completa: dadosResumo,
+        data_envio: new Date().toLocaleString()
+    };
+
+    // Disparo real via EmailJS
+    emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
+        .then((response) => {
+            console.log('E-mail enviado com sucesso!', response.status, response.text);
+            alert('Cotação enviada com sucesso! Em breve entraremos em contato.');
+            fecharModal();
+        }, (error) => {
+            console.error('Erro ao enviar e-mail:', error);
+            alert('Ocorreu um erro ao enviar a cotação. Tente novamente.');
+        });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
