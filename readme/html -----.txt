@@ -1173,7 +1173,7 @@
                         <div id="cond-p1-outro-imovel" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="especificar-imovel">Especifique o tipo de imóvel * </label>
-                                <input type="text" id="especificar-imovel" requiredplaceholder="Ex: Chácara, Flat, Sobrado em condomínio fechado">
+                                <input type="text" id="especificar-imovel" required placeholder="Ex: Chácara, Flat, Sobrado em condomínio fechado">
                             </div>
                         </div>
 
@@ -1419,7 +1419,7 @@
                         <div id="cond-emp-bem-valor" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="qual-equipamento">Qual equipamento/bem e o valor aproximado? *</label>
-                                <input type="text" id="qual-equipamento" requiredplaceholder="Ex: Máquinas específicas, servidores - R$ 50.000">
+                                <input type="text" id="qual-equipamento" required placeholder="Ex: Máquinas específicas, servidores - R$ 50.000">
                             </div>
                         </div>
 
@@ -1490,5 +1490,33 @@
     <script>
         lucide.createIcons();
     </script>
+
+<!-- POPUP DE RETORNO DO ENVIO -->
+<div id="popup-feedback-overlay" class="popup-feedback-overlay">
+    <div class="popup-feedback-card">
+
+        <div id="popup-feedback-icon" class="popup-feedback-icon">
+            ✓
+        </div>
+
+        <h3 id="popup-feedback-title">
+            Cotação enviada!
+        </h3>
+
+        <p id="popup-feedback-message">
+            Sua cotação foi enviada com sucesso.
+        </p>
+
+        <button
+            type="button"
+            class="popup-feedback-button"
+            onclick="fecharPopupFeedback()"
+        >
+            OK
+        </button>
+
+    </div>
+</div>
+    
 </body>
 </html>

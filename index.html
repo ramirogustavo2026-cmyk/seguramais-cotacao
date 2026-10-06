@@ -1491,6 +1491,32 @@
         lucide.createIcons();
     </script>
 
+<!-- POPUP DE RETORNO DO ENVIO -->
+<div id="popup-feedback-overlay" class="popup-feedback-overlay">
+    <div class="popup-feedback-card">
+
+        <div id="popup-feedback-icon" class="popup-feedback-icon">
+            ✓
+        </div>
+
+        <h3 id="popup-feedback-title">
+            Cotação enviada!
+        </h3>
+
+        <p id="popup-feedback-message">
+            Sua cotação foi enviada com sucesso.
+        </p>
+
+        <button
+            type="button"
+            class="popup-feedback-button"
+            onclick="fecharPopupFeedback()"
+        >
+            OK
+        </button>
+
+    </div>
+</div>
     
 </body>
 </html>

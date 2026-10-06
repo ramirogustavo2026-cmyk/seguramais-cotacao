@@ -948,41 +948,47 @@ function enviarFormulario() {
     // ENVIO
     // ---------------------------------------------------------
 
-    emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
-        .then((response) => {
+emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
+    .then((response) => {
 
-            console.log(
-                'E-mail enviado com sucesso!',
-                response.status,
-                response.text
-            );
+        console.log('E-mail enviado com sucesso!', response);
 
-            alert('Cotação enviada com sucesso! Em breve entraremos em contato.');
+        // 1. Volta o botão ao normal
+        if (botaoEnviar) {
+            botaoEnviar.disabled = false;
+            botaoEnviar.innerText = textoOriginalBotao;
+            botaoEnviar.style.opacity = "1";
+            botaoEnviar.style.cursor = "pointer";
+        }
 
-            if (botaoEnviar) {
-                botaoEnviar.disabled = false;
-                botaoEnviar.innerText = textoOriginalBotao;
-                botaoEnviar.style.opacity = "1";
-                botaoEnviar.style.cursor = "pointer";
-            }
+        // 2. Fecha o formulário
+        fecharModal();
 
-            if (typeof fecharModal === 'function') {
-                fecharModal();
-            }
+        // 3. Mostra o popup bonito de sucesso
+        mostrarPopupFeedback(
+            'Cotação enviada!',
+            'Recebemos suas informações com sucesso. Em breve entraremos em contato.',
+            'sucesso'
+        );
 
-        }, (error) => {
+    }, (error) => {
 
-            console.error('Erro ao enviar e-mail:', error);
+        console.error('Erro ao enviar e-mail:', error);
 
-            alert('Ocorreu um erro ao enviar a cotação. Tente novamente.');
+        // Volta o botão ao normal também em caso de erro
+        if (botaoEnviar) {
+            botaoEnviar.disabled = false;
+            botaoEnviar.innerText = textoOriginalBotao;
+            botaoEnviar.style.opacity = "1";
+            botaoEnviar.style.cursor = "pointer";
+        }
 
-            if (botaoEnviar) {
-                botaoEnviar.disabled = false;
-                botaoEnviar.innerText = textoOriginalBotao;
-                botaoEnviar.style.opacity = "1";
-                botaoEnviar.style.cursor = "pointer";
-            }
-        });
+        mostrarPopupFeedback(
+            'Não foi possível enviar',
+            'Ocorreu um erro ao enviar sua cotação. Por favor, tente novamente.',
+            'erro'
+        );
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -999,3 +1005,47 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarMarcasFIPE();
     carregarProfissoes();
 });
+
+function mostrarPopupFeedback(titulo, mensagem, tipo = 'sucesso') {
+
+    const overlay = document.getElementById('popup-feedback-overlay');
+    const tituloPopup = document.getElementById('popup-feedback-title');
+    const mensagemPopup = document.getElementById('popup-feedback-message');
+    const iconePopup = document.getElementById('popup-feedback-icon');
+
+    if (!overlay || !tituloPopup || !mensagemPopup || !iconePopup) {
+        return;
+    }
+
+    overlay.classList.remove('erro', 'aviso');
+
+    if (tipo === 'erro') {
+
+        overlay.classList.add('erro');
+        iconePopup.textContent = '×';
+
+    } else if (tipo === 'aviso') {
+
+        overlay.classList.add('aviso');
+        iconePopup.textContent = '!';
+
+    } else {
+
+        iconePopup.textContent = '✓';
+    }
+
+    tituloPopup.textContent = titulo;
+    mensagemPopup.textContent = mensagem;
+
+    overlay.classList.add('show');
+}
+
+
+function fecharPopupFeedback() {
+
+    const overlay = document.getElementById('popup-feedback-overlay');
+
+    if (overlay) {
+        overlay.classList.remove('show');
+    }
+}

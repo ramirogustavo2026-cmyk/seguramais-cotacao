@@ -1,5 +1,3 @@
-java ----
-
 let etapaAtual = 1;
 let tipoSeguroAtual = 'Auto';
 
@@ -85,7 +83,61 @@ function abrirModal(servico) {
 
 function fecharModal() {
     const modal = document.getElementById('modal-overlay');
-    if (modal) modal.style.display = 'none';
+    const form = document.getElementById('form-cotacao');
+
+    if (modal) {
+        modal.style.display = 'none';
+    }
+
+    // Limpa os valores preenchidos
+    if (form) {
+        form.reset();
+    }
+
+    // Esconde novamente todos os campos condicionais
+    document.querySelectorAll('[id^="cond-"]').forEach(elemento => {
+        elemento.style.display = 'none';
+    });
+
+    // Esconde outros blocos condicionais que não começam com "cond-"
+    const camposOutraPessoa = document.getElementById('campos-outra-pessoa');
+    if (camposOutraPessoa) {
+        camposOutraPessoa.style.display = 'none';
+
+        camposOutraPessoa.querySelectorAll('input').forEach(campo => {
+            campo.removeAttribute('required');
+        });
+    }
+
+    const grupoTipoCarga = document.getElementById('grp-p2-tipo-carga');
+    if (grupoTipoCarga) {
+        grupoTipoCarga.style.display = 'none';
+    }
+
+    const alertaIdade = document.getElementById('alerta-bloqueio-idade');
+    if (alertaIdade) {
+        alertaIdade.style.display = 'none';
+    }
+
+    // Reativa o botão Próximo da Moto
+    const btnMoto = document.getElementById('btn-next-step-4-moto');
+    if (btnMoto) {
+        btnMoto.disabled = false;
+    }
+
+    // Volta "Segurado" como condutor padrão do Auto
+    const botoesCondutor = document.querySelectorAll('#step-3-auto .btn-option');
+
+    botoesCondutor.forEach(botao => {
+        botao.classList.remove('active');
+    });
+
+    if (botoesCondutor.length > 0) {
+        botoesCondutor[0].classList.add('active');
+    }
+
+    etapaAtual = 1;
+
     limparErros();
 }
 
@@ -587,7 +639,7 @@ function validarEtapaAtual() {
     let valido = true;
 
     campos.forEach(campo => {
-        if (campo.offsetWidth > 0 && campo.offsetHeight > 0) {
+        if (!campo.disabled && campo.offsetWidth > 0 && campo.offsetHeight > 0) {
             if (!campo.value || campo.value.trim() === '') {
                 mostrarErroCampo(campo, "Por favor, preencha este campo.");
                 valido = false;
@@ -896,42 +948,47 @@ function enviarFormulario() {
     // ENVIO
     // ---------------------------------------------------------
 
-    emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
-        .then((response) => {
+emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
+    .then((response) => {
 
-            console.log(
-                'E-mail enviado com sucesso!',
-                response.status,
-                response.text
-            );
+        console.log('E-mail enviado com sucesso!', response);
 
-            alert('Cotação enviada com sucesso! Em breve entraremos em contato.');
+        // 1. Volta o botão ao normal
+        if (botaoEnviar) {
+            botaoEnviar.disabled = false;
+            botaoEnviar.innerText = textoOriginalBotao;
+            botaoEnviar.style.opacity = "1";
+            botaoEnviar.style.cursor = "pointer";
+        }
 
-            if (botaoEnviar) {
-                botaoEnviar.disabled = false;
-                botaoEnviar.innerText = textoOriginalBotao;
-                botaoEnviar.style.opacity = "1";
-                botaoEnviar.style.cursor = "pointer";
-            }
+        // 2. Fecha o formulário
+        fecharModal();
 
-            if (typeof fecharModal === 'function') {
-                fecharModal();
-            }
+        // 3. Mostra o popup bonito de sucesso
+        mostrarPopupFeedback(
+            'Cotação enviada!',
+            'Recebemos suas informações com sucesso. Em breve entraremos em contato.',
+            'sucesso'
+        );
 
-        }, (error) => {
+    }, (error) => {
 
-            console.error('Erro ao enviar e-mail:', error);
+        console.error('Erro ao enviar e-mail:', error);
 
-            alert('Ocorreu um erro ao enviar a cotação. Tente novamente.');
+        // Volta o botão ao normal também em caso de erro
+        if (botaoEnviar) {
+            botaoEnviar.disabled = false;
+            botaoEnviar.innerText = textoOriginalBotao;
+            botaoEnviar.style.opacity = "1";
+            botaoEnviar.style.cursor = "pointer";
+        }
 
-            if (botaoEnviar) {
-                botaoEnviar.disabled = false;
-                botaoEnviar.innerText = textoOriginalBotao;
-                botaoEnviar.style.opacity = "1";
-                botaoEnviar.style.cursor = "pointer";
-            }
-        });
-}
+        mostrarPopupFeedback(
+            'Não foi possível enviar',
+            'Ocorreu um erro ao enviar sua cotação. Por favor, tente novamente.',
+            'erro'
+        );
+    });
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input, select, textarea').forEach(campo => {
@@ -947,3 +1004,47 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarMarcasFIPE();
     carregarProfissoes();
 });
+
+function mostrarPopupFeedback(titulo, mensagem, tipo = 'sucesso') {
+
+    const overlay = document.getElementById('popup-feedback-overlay');
+    const tituloPopup = document.getElementById('popup-feedback-title');
+    const mensagemPopup = document.getElementById('popup-feedback-message');
+    const iconePopup = document.getElementById('popup-feedback-icon');
+
+    if (!overlay || !tituloPopup || !mensagemPopup || !iconePopup) {
+        return;
+    }
+
+    overlay.classList.remove('erro', 'aviso');
+
+    if (tipo === 'erro') {
+
+        overlay.classList.add('erro');
+        iconePopup.textContent = '×';
+
+    } else if (tipo === 'aviso') {
+
+        overlay.classList.add('aviso');
+        iconePopup.textContent = '!';
+
+    } else {
+
+        iconePopup.textContent = '✓';
+    }
+
+    tituloPopup.textContent = titulo;
+    mensagemPopup.textContent = mensagem;
+
+    overlay.classList.add('show');
+}
+
+
+function fecharPopupFeedback() {
+
+    const overlay = document.getElementById('popup-feedback-overlay');
+
+    if (overlay) {
+        overlay.classList.remove('show');
+    }
+}
