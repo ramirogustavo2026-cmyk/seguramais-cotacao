@@ -9,14 +9,14 @@
 }
 
 body {
-    background-color: #c5cdd4;
-    color: #333333;
-    font-family: 'Segoe Ui', Tahoma,Geneva,Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 24px;
 }
 
 /* ==========================================================================
@@ -64,17 +64,24 @@ body {
 /* Estilo base dos cartões de serviço */
 .service-card {
     background: #ffffff;
-    border: 1.5px solid transparent;
-    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
     padding: 22px 10px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px;
+
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    transition: all 0.2s ease-in-out;
+
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 /* Circulo do ícone em estado normal */
@@ -104,8 +111,8 @@ body {
    ========================================================================== */
 .service-card:hover {
     transform: translateY(-2px);
-    border-color: #92a1ee;     /* Borda suave azul no cartão */
-    box-shadow: 0 8px 20px rgba(59, 80, 192, 0.12);
+    border-color: #c7d2fe;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
 }
 
 /* A bola fica azul-escuro com ícone branco ao passar o rato */
@@ -148,21 +155,25 @@ body {
 .modal-card {
     background: #ffffff;
     width: 100%;
-    max-width: 460px;
-    max-height: 90vh; /* Impede esticar a tela */
-    border-radius: 16px;
+    max-width: 500px;
+    max-height: 90vh;
+    border-radius: 18px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
 }
 
 .modal-header {
     background-color: #1e293b;
-    padding: 16px 20px;
+    padding: 14px 20px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     flex-shrink: 0;
 }
 
@@ -173,11 +184,14 @@ body {
 }
 
 .header-icon-badge {
-    width: 34px;
-    height: 34px;
-    background-color: #ffffff;
-    color: #1e293b;
-    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+
+    background-color: rgba(255, 255, 255, 0.10);
+    color: #ffffff;
+
+    border-radius: 8px;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -259,23 +273,31 @@ body {
 
 .input-group label {
     font-size: 0.8rem;
-    font-weight: 700; /* Aumentado ligeiramente o peso para dar destaque */
-    color: #4355a4;   /* Tom azul mais escuro/saturado como na segunda imagem */
-    margin-bottom: 6px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 7px;
 }
 
 .input-group input,
 .input-group select,
 .input-group textarea {
     width: 100%;
-    padding: 10px 14px;
-    border: 1.5px solid #cbd5e1; /* Borda cinza neutra e suave */
-    border-radius: 10px;
+    min-height: 44px;
+    padding: 11px 14px;
+
+    border: 1px solid #dbe1e8;
+    border-radius: 9px;
+
     font-size: 0.875rem;
-    color: #334155;
+    color: #1e293b;
+
     outline: none;
     background-color: #ffffff;
-    transition: all 0.2s;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
 }
 
 .input-group select {
@@ -289,8 +311,8 @@ body {
 .input-group input:focus,
 .input-group select:focus,
 .input-group textarea:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    border-color: #3b50c0;
+    box-shadow: 0 0 0 3px rgba(59, 80, 192, 0.10);
 }
 
 /* DESTACAR COM BORDA VERMELHA APENAS QUANDO O JS DETECTAR ERRO NO ENVIO */
@@ -396,6 +418,14 @@ body {
     background-color: #2f40a1; /* Tom ligeiramente mais escuro para o efeito hover */
 }
 
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 .btn-secondary {
     background-color: #e2e8f0;
     color: #475569;
@@ -438,11 +468,69 @@ body {
 }
 
 .input-group input.erro,
-.input-group select.erro {
-    animation: shake 0.3s ease-in-out;
+.input-group select.erro,
+.input-group textarea.erro {
+    border-color: #dc2626 !important;
+    background-color: #fffafa;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
 }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-2px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px;
+        align-items: flex-start;
+    }
+
+    .main-selection-wrapper {
+        gap: 18px;
+    }
+
+    .header-banner {
+        padding: 20px 16px;
+        border-radius: 14px;
+    }
+
+    .services-grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .grid-center {
+        grid-column: auto;
+    }
+
+    .service-card {
+        padding: 18px 8px;
+    }
+
+    .modal-overlay {
+        padding: 8px;
+        align-items: flex-end;
+    }
+
+    .modal-card {
+        max-width: 100%;
+        max-height: 94vh;
+        border-radius: 18px 18px 10px 10px;
+    }
+
+    .modal-body {
+        padding: 20px 16px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 12px 18px;
+    }
 }

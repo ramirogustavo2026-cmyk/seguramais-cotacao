@@ -83,7 +83,61 @@ function abrirModal(servico) {
 
 function fecharModal() {
     const modal = document.getElementById('modal-overlay');
-    if (modal) modal.style.display = 'none';
+    const form = document.getElementById('form-cotacao');
+
+    if (modal) {
+        modal.style.display = 'none';
+    }
+
+    // Limpa os valores preenchidos
+    if (form) {
+        form.reset();
+    }
+
+    // Esconde novamente todos os campos condicionais
+    document.querySelectorAll('[id^="cond-"]').forEach(elemento => {
+        elemento.style.display = 'none';
+    });
+
+    // Esconde outros blocos condicionais que não começam com "cond-"
+    const camposOutraPessoa = document.getElementById('campos-outra-pessoa');
+    if (camposOutraPessoa) {
+        camposOutraPessoa.style.display = 'none';
+
+        camposOutraPessoa.querySelectorAll('input').forEach(campo => {
+            campo.removeAttribute('required');
+        });
+    }
+
+    const grupoTipoCarga = document.getElementById('grp-p2-tipo-carga');
+    if (grupoTipoCarga) {
+        grupoTipoCarga.style.display = 'none';
+    }
+
+    const alertaIdade = document.getElementById('alerta-bloqueio-idade');
+    if (alertaIdade) {
+        alertaIdade.style.display = 'none';
+    }
+
+    // Reativa o botão Próximo da Moto
+    const btnMoto = document.getElementById('btn-next-step-4-moto');
+    if (btnMoto) {
+        btnMoto.disabled = false;
+    }
+
+    // Volta "Segurado" como condutor padrão do Auto
+    const botoesCondutor = document.querySelectorAll('#step-3-auto .btn-option');
+
+    botoesCondutor.forEach(botao => {
+        botao.classList.remove('active');
+    });
+
+    if (botoesCondutor.length > 0) {
+        botoesCondutor[0].classList.add('active');
+    }
+
+    etapaAtual = 1;
+
     limparErros();
 }
 
@@ -585,7 +639,7 @@ function validarEtapaAtual() {
     let valido = true;
 
     campos.forEach(campo => {
-        if (campo.offsetWidth > 0 && campo.offsetHeight > 0) {
+        if (!campo.disabled && campo.offsetWidth > 0 && campo.offsetHeight > 0) {
             if (!campo.value || campo.value.trim() === '') {
                 mostrarErroCampo(campo, "Por favor, preencha este campo.");
                 valido = false;
