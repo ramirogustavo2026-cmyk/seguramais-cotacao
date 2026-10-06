@@ -281,7 +281,7 @@ function verificarRastreadorCaminhao(valor) {
 }
 
 function verificarEstacionamentoCaminhao(valor) {
-    const divAcesso = document.getElementById('cond-p6-empresa-accesso');
+    const divAcesso = document.getElementById('cond-p6-empresa-acesso');
     const divSeguranca = document.getElementById('cond-p6-estac-seguranca');
     const divRuaNoite = document.getElementById('cond-p6-via-noite');
     const divOutroLocal = document.getElementById('cond-p6-outro-local');
@@ -414,7 +414,8 @@ function verificarRiscoDiversos(valor) {
     if (divRisco) divRisco.style.display = (valor === '4') ? 'block' : 'none';
 }
 
-// 6.2 LÓGICA CONDICIONAL DO SEGURO RESIDENCIAL
+/// 6.2 LÓGICA CONDICIONAL DO SEGURO RESIDENCIAL
+
 function verificarTipoImovelResidencial(valor) {
     const divGaragem = document.getElementById('cond-p1-garagem');
     const divPortaria = document.getElementById('cond-p1-portaria');
@@ -427,11 +428,15 @@ function verificarTipoImovelResidencial(valor) {
 
 function verificarPosseImovelResidencial(valor) {
     const divAlugado = document.getElementById('cond-p2-alugado');
-    if (divAlugado) divAlugado.style.display = (valor === '2') ? 'block' : 'none';
+
+    if (divAlugado) {
+        divAlugado.style.display = (valor === '2') ? 'block' : 'none';
+    }
 }
 
-function verificarCoberturaResidencial(valor) {
+function verificarCoberturasResidencial(valor) {
     const divAdicionais = document.getElementById('cond-p3-adicionais');
+
     if (divAdicionais) {
         divAdicionais.style.display = (valor === '4') ? 'block' : 'none';
     }
@@ -439,10 +444,12 @@ function verificarCoberturaResidencial(valor) {
 
 function verificarBemAltoValorResidencial(valor) {
     const divBemValor = document.getElementById('cond-p4-bem-valor');
+
     if (divBemValor) {
         divBemValor.style.display = (valor === '1') ? 'block' : 'none';
     }
 }
+
 
 // ============================================
 // LÓGICA CONDICIONAL DO SEGURO EMPRESARIAL
@@ -476,7 +483,6 @@ function verificarTipoEmpresa(valor) {
     }
 }
 
-
 function verificarImovelEmpresa(valor) {
     const divAlugado = document.getElementById('cond-emp-alugado');
 
@@ -485,8 +491,6 @@ function verificarImovelEmpresa(valor) {
     }
 }
 
-
-// FUNÇÃO QUE ESTAVA FALTANDO
 function verificarDesejoProtegerEmp(valor) {
     const desejoProteger = document.getElementById('desejo-proteger-emp');
 
@@ -496,6 +500,22 @@ function verificarDesejoProtegerEmp(valor) {
 
     if (valor) {
         limparErroCampo(desejoProteger);
+    }
+}
+
+function verificarBemAltoValorEmp(valor) {
+    const divBemValor = document.getElementById('cond-emp-bem-valor');
+
+    if (divBemValor) {
+        divBemValor.style.display = (valor === '1') ? 'block' : 'none';
+    }
+}
+
+function verificarCoberturasEmpresa(valor) {
+    const divAdicionais = document.getElementById('cond-emp-adicionais');
+
+    if (divAdicionais) {
+        divAdicionais.style.display = (valor === '4') ? 'block' : 'none';
     }
 }
 
