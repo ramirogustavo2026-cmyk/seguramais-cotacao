@@ -302,8 +302,6 @@ function verificarRouboCaminhao(valor) {
     if (divDetalhes) divDetalhes.style.display = (valor === '1') ? 'block' : 'none';
 }
 
-function verificarCoberturasCaminhao(valor) {}
-
 function verificarTerceirosCaminhao(valor) {
     const divLimite = document.getElementById('cond-p10-limite-terceiros');
     if (divLimite) divLimite.style.display = (valor === '1') ? 'block' : 'none';
@@ -401,7 +399,7 @@ function verificarProtecaoDiversos(valor) {
     const divEquip = document.getElementById('cond-p1-equipamento');
     const divObjeto = document.getElementById('cond-p1-objeto');
     const divEvento = document.getElementById('cond-p1-evento');
-    const divOutro = document.getElementById('cond-p1-outro');
+    const divOutro = document.getElementById('cond-p1-outro-diversos');
 
     if (divEquip) divEquip.style.display = (valor === '1') ? 'block' : 'none';
     if (divObjeto) divObjeto.style.display = (valor === '2') ? 'block' : 'none';

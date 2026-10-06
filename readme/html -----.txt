@@ -1,3 +1,5 @@
+html -----
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -502,9 +504,9 @@
                                 <input type="text" id="p1-servico-realiza" placeholder="Ex: Guincho, caçamba, mudança...">
                             </div>
                             <div id="cond-p1-outro" style="display: none;" class="input-group mt-10">
-                                <label for="p1-especificar-outro">Por favor, especifique:</label>
-                                <input type="text" id="p1-especificar-outro" placeholder="Especifique a finalidade...">
-                            </div>
+                            <label for="p1-especificar-outro">Por favor, especifique:</label>
+                            <input type="text" id="p1-especificar-outro" placeholder="Especifique a finalidade...">
+                        </div>
 
                             <div id="grp-p2-tipo-carga" style="display: none;" class="input-group mt-20">
                                 <label for="p2-tipo-carga">*2. Qual tipo de carga o caminhão transporta?</label>
@@ -709,7 +711,7 @@
 
                             <div class="input-group mt-20">
                                 <label for="p9-coberturas-caminhao">*9. Quais coberturas você deseja contratar?</label>
-                                <select id="p9-coberturas-caminhao" required onchange="verificarCoberturasCaminhao(this.value)">
+                                <select id="p9-coberturas-caminhao" required>
                                     <option value="">Selecione...</option>
                                     <option value="1">1 — Roubo e furto</option>
                                     <option value="2">2 — Colisão</option>
@@ -1073,10 +1075,10 @@
                                 <label for="p1-qual-evento">Qual é o evento?</label>
                                 <input type="text" id="p1-qual-evento" placeholder="Ex: Casamento, show, feira corporativa...">
                             </div>
-                            <div id="cond-p1-outro" style="display: none;" class="input-group mt-10">
-                                <label for="p1-especificar-protecao">Por favor, especifique o que deseja proteger:</label>
-                                <input type="text" id="p1-especificar-protecao" placeholder="Descreva o bem ou serviço...">
-                            </div>
+                            <div id="cond-p1-outro-diversos" style="display: none;" class="input-group mt-10">
+                            <label for="p1-especificar-outro">Por favor, especifique:</label>
+                            <input type="text" id="p1-especificar-outro" placeholder="Especifique a finalidade...">
+                        </div>
 
                             <!-- 2. Qual é o principal risco que deseja proteger? -->
                             <div class="input-group mt-20">
