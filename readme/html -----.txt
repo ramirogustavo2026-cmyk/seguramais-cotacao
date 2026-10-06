@@ -1,5 +1,3 @@
-html -----
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -188,7 +186,8 @@ html -----
 
                             <div class="input-group">
                                 <label for="tempo-habilitacao">*Tempo de habilitação</label>
-                                <select id="tempo-habilitacao">
+                                <select id="tempo-habilitacao" required>
+                                    <option value="">Selecione...</option>
                                     <option value="Mais de 10 anos">Mais de 10 anos</option>
                                     <option value="8 a 10 anos">8 a 10 anos</option>
                                     <option value="5 a 7 anos">5 a 7 anos</option>
@@ -216,7 +215,7 @@ html -----
                             </div>
                             <div class="input-group">
                                 <label for="km-mensal">*Km mensal</label>
-                                <select id="km-mensal">
+                                <select id="km-mensal" required>
                                     <option value="">Selecione...</option>
                                     <option value="Até 500 km">Até 500 km</option>
                                     <option value="500 a 1000 km">500 a 1000 km</option>
@@ -244,13 +243,13 @@ html -----
                             </div>
                             <div class="input-group">
                                 <label for="marca">*Marca</label>
-                                <select id="marca" onchange="carregarModelos(this.value)">
+                                <select id="marca" required onchange="carregarModelos(this.value)">
                                     <option value="">A carregar marcas...</option>
                                 </select>
                             </div>
                             <div class="input-group">
                                 <label for="modelo">*Modelo</label>
-                                <input type="text" id="modelo" list="lista-modelos" placeholder="Selecione primeiro a marca..." disabled autocomplete="off">
+                                <input type="text" id="modelo" list="lista-modelos" placeholder="Selecione primeiro a marca..." disabled autocomplete="off" required>
                                 <datalist id="lista-modelos"></datalist>
                             </div>
                             <div class="modal-footer footer-espacado">
@@ -510,7 +509,7 @@ html -----
 
                             <div id="grp-p2-tipo-carga" style="display: none;" class="input-group mt-20">
                                 <label for="p2-tipo-carga">*2. Qual tipo de carga o caminhão transporta?</label>
-                                <select id="p2-tipo-carga" onchange="verificarTipoCargaCaminhao(this.value)">
+                                <select id="p2-tipo-carga" required onchange="verificarTipoCargaCaminhao(this.value)">
                                     <option value="">Selecione...</option>
                                     <option value="1">1 — Alimentos</option>
                                     <option value="2">2 — Materiais de construção</option>
@@ -1076,8 +1075,12 @@ html -----
                                 <input type="text" id="p1-qual-evento" placeholder="Ex: Casamento, show, feira corporativa...">
                             </div>
                             <div id="cond-p1-outro-diversos" style="display: none;" class="input-group mt-10">
-                            <label for="p1-especificar-outro">Por favor, especifique:</label>
-                            <input type="text" id="p1-especificar-outro" placeholder="Especifique a finalidade...">
+                            <label for="p1-especificar-protecao">Por favor, especifique o que deseja proteger:</label>
+                            <input
+                                type="text"
+                                id="p1-especificar-protecao"
+                                placeholder="Descreva o bem ou serviço..."
+                            >
                         </div>
 
                             <!-- 2. Qual é o principal risco que deseja proteger? -->
@@ -1145,7 +1148,7 @@ html -----
                         <div id="cond-p1-garagem" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="possui-garagem">O imóvel possui garagem? *</label>
-                                <select id="possui-garagem">
+                                <select id="possui-garagem" required>
                                     <option value="">Selecione...</option>
                                     <option value="sim">Sim</option>
                                     <option value="nao">Não</option>
@@ -1157,7 +1160,7 @@ html -----
                         <div id="cond-p1-portaria" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="possui-portaria">O condomínio possui portaria? *</label>
-                                <select id="possui-portaria">
+                                <select id="possui-portaria" required>
                                     <option value="">Selecione...</option>
                                     <option value="24h">Sim (Portaria 24h)</option>
                                     <option value="parcial">Sim (Portaria parcial / remota)</option>
@@ -1169,8 +1172,8 @@ html -----
                         <!-- Condicional: Se Outro (3) -->
                         <div id="cond-p1-outro-imovel" class="conditional-field" style="display: none;">
                             <div class="input-group">
-                                <label for="especificar-imovel">Especifique o tipo de imóvel *</label>
-                                <input type="text" id="especificar-imovel" placeholder="Ex: Chácara, Flat, Sobrado em condomínio fechado">
+                                <label for="especificar-imovel">Especifique o tipo de imóvel * </label>
+                                <input type="text" id="especificar-imovel" requiredplaceholder="Ex: Chácara, Flat, Sobrado em condomínio fechado">
                             </div>
                         </div>
 
@@ -1198,7 +1201,7 @@ html -----
                         <div id="cond-p2-alugado" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="desejo-alugado">O que deseja proteger? *</label>
-                                <select id="desejo-alugado">
+                                <select id="desejo-alugado" required>
                                     <option value="">Selecione...</option>
                                     <option value="apenas_bens">Apenas os bens (conteúdo)</option>
                                     <option value="imovel_e_bens">Também o imóvel (responsabilidade civil / danos estruturais)</option>
@@ -1254,7 +1257,7 @@ html -----
                         <div id="cond-p4-bem-valor" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="qual-bem">Qual é o bem e seu valor aproximado? *</label>
-                                <input type="text" id="qual-bem" placeholder="Ex: Obras de arte, joias, eletrônicos caros - R$ 15.000">
+                                <input type="text" id="qual-bem" required placeholder="Ex: Obras de arte, joias, eletrônicos caros - R$ 15.000">
                             </div>
                         </div>
 
@@ -1298,7 +1301,7 @@ html -----
                         <div id="cond-emp-comercio" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="possui-estoque-emp">A empresa possui estoque? *</label>
-                                <select id="possui-estoque-emp">
+                                <select id="possui-estoque-emp" required>
                                     <option value="">Selecione...</option>
                                     <option value="sim">Sim</option>
                                     <option value="nao">Não</option>
@@ -1310,7 +1313,7 @@ html -----
                         <div id="cond-emp-industria" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="tipo-producao">Qual tipo de produção realiza? *</label>
-                                <input type="text" id="tipo-producao" placeholder="Ex: Têxtil, Metalúrgica, Alimentícia">
+                                <input type="text" id="tipo-producao" required placeholder="Ex: Têxtil, Metalúrgica, Alimentícia">
                             </div>
                         </div>
 
@@ -1318,7 +1321,7 @@ html -----
                         <div id="cond-emp-escritorio" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="qtd-funcionarios">Quantos funcionários possui? *</label>
-                                <input type="number" id="qtd-funcionarios" placeholder="Ex: 10">
+                                <input type="number" id="qtd-funcionarios" required placeholder="Ex: 10">
                             </div>
                         </div>
 
@@ -1326,7 +1329,7 @@ html -----
                         <div id="cond-emp-servicos" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="qual-servico">Qual serviço presta? *</label>
-                                <input type="text" id="qual-servico" placeholder="Ex: Consultoria, TI, Limpeza">
+                                <input type="text" id="qual-servico" required placeholder="Ex: Consultoria, TI, Limpeza">
                             </div>
                         </div>
 
@@ -1334,7 +1337,7 @@ html -----
                         <div id="cond-emp-outro" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="especificar-empresa">Especifique o tipo de empresa *</label>
-                                <input type="text" id="especificar-empresa" placeholder="Descreva o ramo de atividade">
+                                <input type="text" id="especificar-empresa" required placeholder="Descreva o ramo de atividade">
                             </div>
                         </div>
 
@@ -1362,7 +1365,7 @@ html -----
                         <div id="cond-emp-alugado" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="proteger-bens-alugado">Deseja proteger também os bens e equipamentos da empresa? *</label>
-                                <select id="proteger-bens-alugado">
+                                <select id="proteger-bens-alugado" required>
                                     <option value="">Selecione...</option>
                                     <option value="sim">Sim</option>
                                     <option value="nao">Não</option>
@@ -1416,7 +1419,7 @@ html -----
                         <div id="cond-emp-bem-valor" class="conditional-field" style="display: none;">
                             <div class="input-group">
                                 <label for="qual-equipamento">Qual equipamento/bem e o valor aproximado? *</label>
-                                <input type="text" id="qual-equipamento" placeholder="Ex: Máquinas específicas, servidores - R$ 50.000">
+                                <input type="text" id="qual-equipamento" requiredplaceholder="Ex: Máquinas específicas, servidores - R$ 50.000">
                             </div>
                         </div>
 
