@@ -650,7 +650,6 @@ function validarEtapaAtual() {
             campo.offsetWidth > 0 &&
             campo.offsetHeight > 0
         ) {
-
             const valor = campo.value.trim();
 
             // Campo vazio
@@ -664,9 +663,51 @@ function validarEtapaAtual() {
                 return;
             }
 
-            // Validação específica para números
-            if (campo.type === 'number') {
+            // Telefone
+            if (
+                campo.id === 'telefone' &&
+                !validarTelefone(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um telefone válido com DDD."
+                );
 
+                valido = false;
+                return;
+            }
+
+            // CPF
+            if (
+                campo.id === 'outra-cpf' &&
+                !validarCPF(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um CPF válido."
+                );
+
+                valido = false;
+                return;
+            }
+
+            //Validação de CEP
+            if (campo.id === 'cep') {
+            const numerosCEP = valor.replace(/\D/g, '');
+
+            if (numerosCEP.length !== 8) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um CEP válido."
+                );
+
+                valido = false;
+                return;
+            }
+        }
+
+            // Campos numéricos
+            if (campo.type === 'number') {
                 const numero = Number(valor);
 
                 if (campo.min !== '') {
@@ -846,6 +887,66 @@ function validarTelefone(telefone) {
 function validarEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
+}
+
+//Função auxiliar para validar CPF
+function mascaraCPF(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = valor.slice(0, 11);
+
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    return valor;
+}
+
+function validarCPF(cpf) {
+    cpf = cpf.replace(/\D/g, '');
+
+    if (cpf.length !== 11) return false;
+
+    if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+    let soma = 0;
+
+    for (let i = 0; i < 9; i++) {
+        soma += Number(cpf[i]) * (10 - i);
+    }
+
+    let primeiroDigito = (soma * 10) % 11;
+
+    if (primeiroDigito === 10) {
+        primeiroDigito = 0;
+    }
+
+    if (primeiroDigito !== Number(cpf[9])) {
+        return false;
+    }
+
+    soma = 0;
+
+    for (let i = 0; i < 10; i++) {
+        soma += Number(cpf[i]) * (11 - i);
+    }
+
+    let segundoDigito = (soma * 10) % 11;
+
+    if (segundoDigito === 10) {
+        segundoDigito = 0;
+    }
+
+    return segundoDigito === Number(cpf[10]);
+}
+
+//Macara para CEP
+function mascaraCEP(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = valor.slice(0, 8);
+
+    valor = valor.replace(/^(\d{5})(\d)/, '$1-$2');
+
+    return valor;
 }
 
 // Função auxiliar para validar e-mail
@@ -1106,10 +1207,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Máscara de CPF
+    const cpfInput = document.getElementById('outra-cpf');
+
+    if (cpfInput) {
+        cpfInput.addEventListener('input', () => {
+            cpfInput.value = mascaraCPF(cpfInput.value);
+        });
+    }
+
     // Busca de CEP
     const cepInput = document.getElementById('cep');
 
     if (cepInput) {
+        cepInput.addEventListener('input', () => {
+            cepInput.value = mascaraCEP(cepInput.value);
+        });
+
         cepInput.addEventListener('blur', buscarCEP);
     }
 

@@ -102,10 +102,18 @@
                     <div id="step-2" class="step">
                         <h3 class="step-title text-center">Qual o endereço do imóvel / residência?</h3>
 
-                        <div class="input-group">
-                            <label for="cep">*CEP</label>
-                            <input type="text" id="cep" placeholder="00000-000" maxlength="9" required>
-                        </div>
+                    <div class="input-group">
+                        <label for="cep">*CEP</label>
+
+                        <input
+                            type="text"
+                            id="cep"
+                            placeholder="00000-000"
+                            maxlength="9"
+                            inputmode="numeric"
+                            required
+                        >
+                    </div>
 
                         <div class="input-group">
                             <label for="logradouro">Logradouro</label>
@@ -172,9 +180,15 @@
                                         <input type="date" id="outra-nasc">
                                     </div>
                                     <div class="input-group flex-1">
-                                        <label for="outra-cpf">*CPF</label>
-                                        <input type="text" id="outra-cpf" placeholder="000.000.000-00">
-                                    </div>
+                                    <label for="outra-cpf">*CPF</label>
+                                    <input
+                                        type="text"
+                                        id="outra-cpf"
+                                        placeholder="000.000.000-00"
+                                        maxlength="14"
+                                        inputmode="numeric"
+                                    >
+                                     </div>
                                 </div>
                             </div>
 

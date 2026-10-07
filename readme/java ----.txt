@@ -619,10 +619,12 @@ function limparErros() {
 
 function validarEtapaAtual() {
     let stepDiv;
+
     if (etapaAtual === 1 || etapaAtual === 2) {
         stepDiv = document.getElementById(`step-${etapaAtual}`);
     } else {
         let sufixo = 'auto';
+
         if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
@@ -635,23 +637,118 @@ function validarEtapaAtual() {
 
     if (!stepDiv) return true;
 
-    const campos = stepDiv.querySelectorAll('input[required], select[required], textarea[required]');
+    const campos = stepDiv.querySelectorAll(
+        'input[required], select[required], textarea[required]'
+    );
+
     let valido = true;
 
     campos.forEach(campo => {
-        if (!campo.disabled && campo.offsetWidth > 0 && campo.offsetHeight > 0) {
-            if (!campo.value || campo.value.trim() === '') {
-                mostrarErroCampo(campo, "Por favor, preencha este campo.");
+
+        if (
+            !campo.disabled &&
+            campo.offsetWidth > 0 &&
+            campo.offsetHeight > 0
+        ) {
+            const valor = campo.value.trim();
+
+            // Campo vazio
+            if (!valor) {
+                mostrarErroCampo(
+                    campo,
+                    "Por favor, preencha este campo."
+                );
+
                 valido = false;
-            } else {
-                limparErroCampo(campo);
+                return;
             }
+
+            // Telefone
+            if (
+                campo.id === 'telefone' &&
+                !validarTelefone(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um telefone válido com DDD."
+                );
+
+                valido = false;
+                return;
+            }
+
+            // CPF
+            if (
+                campo.id === 'outra-cpf' &&
+                !validarCPF(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um CPF válido."
+                );
+
+                valido = false;
+                return;
+            }
+
+            //Validação de CEP
+            if (campo.id === 'cep') {
+            const numerosCEP = valor.replace(/\D/g, '');
+
+            if (numerosCEP.length !== 8) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um CEP válido."
+                );
+
+                valido = false;
+                return;
+            }
+        }
+
+            // Campos numéricos
+            if (campo.type === 'number') {
+                const numero = Number(valor);
+
+                if (campo.min !== '') {
+                    const minimo = Number(campo.min);
+
+                    if (numero < minimo) {
+                        mostrarErroCampo(
+                            campo,
+                            `O valor mínimo permitido é ${minimo}.`
+                        );
+
+                        valido = false;
+                        return;
+                    }
+                }
+
+                if (campo.max !== '') {
+                    const maximo = Number(campo.max);
+
+                    if (numero > maximo) {
+                        mostrarErroCampo(
+                            campo,
+                            `O valor máximo permitido é ${maximo}.`
+                        );
+
+                        valido = false;
+                        return;
+                    }
+                }
+            }
+
+            limparErroCampo(campo);
         }
     });
 
     if (!valido) {
         const primeiroErro = stepDiv.querySelector('.erro');
-        if (primeiroErro) primeiroErro.focus();
+
+        if (primeiroErro) {
+            primeiroErro.focus();
+        }
     }
 
     return valido;
@@ -750,11 +847,114 @@ function buscarCEP() {
     }
 }
 
+// Função auxiliar para validar Telefone
+function mascaraTelefone(valor) {
+    valor = valor.replace(/\D/g, '');
+
+    valor = valor.slice(0, 11);
+
+    if (valor.length <= 10) {
+        valor = valor.replace(
+            /^(\d{2})(\d)/g,
+            '($1) $2'
+        );
+
+        valor = valor.replace(
+            /(\d{4})(\d)/,
+            '$1-$2'
+        );
+    } else {
+        valor = valor.replace(
+            /^(\d{2})(\d)/g,
+            '($1) $2'
+        );
+
+        valor = valor.replace(
+            /(\d{5})(\d)/,
+            '$1-$2'
+        );
+    }
+
+    return valor;
+}
+
+function validarTelefone(telefone) {
+    const numeros = telefone.replace(/\D/g, '');
+
+    return numeros.length === 10 || numeros.length === 11;
+}
+
+function validarEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+//Função auxiliar para validar CPF
+function mascaraCPF(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = valor.slice(0, 11);
+
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    return valor;
+}
+
+function validarCPF(cpf) {
+    cpf = cpf.replace(/\D/g, '');
+
+    if (cpf.length !== 11) return false;
+
+    if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+    let soma = 0;
+
+    for (let i = 0; i < 9; i++) {
+        soma += Number(cpf[i]) * (10 - i);
+    }
+
+    let primeiroDigito = (soma * 10) % 11;
+
+    if (primeiroDigito === 10) {
+        primeiroDigito = 0;
+    }
+
+    if (primeiroDigito !== Number(cpf[9])) {
+        return false;
+    }
+
+    soma = 0;
+
+    for (let i = 0; i < 10; i++) {
+        soma += Number(cpf[i]) * (11 - i);
+    }
+
+    let segundoDigito = (soma * 10) % 11;
+
+    if (segundoDigito === 10) {
+        segundoDigito = 0;
+    }
+
+    return segundoDigito === Number(cpf[10]);
+}
+
+//Macara para CEP
+function mascaraCEP(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = valor.slice(0, 8);
+
+    valor = valor.replace(/^(\d{5})(\d)/, '$1-$2');
+
+    return valor;
+}
+
 // Função auxiliar para validar e-mail
 function validarEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
+
 
 // 10. ENVIO FINAL COM ISOLAMENTO TOTAL POR TIPO DE SEGURO
 function enviarFormulario() {
@@ -989,15 +1189,41 @@ emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
             'erro'
         );
     });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
+
     document.querySelectorAll('input, select, textarea').forEach(campo => {
         campo.addEventListener('input', () => limparErroCampo(campo));
         campo.addEventListener('change', () => limparErroCampo(campo));
     });
 
+    // Máscara de telefone
+    const telefoneInput = document.getElementById('telefone');
+
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', () => {
+            telefoneInput.value = mascaraTelefone(telefoneInput.value);
+        });
+    }
+
+    // Máscara de CPF
+    const cpfInput = document.getElementById('outra-cpf');
+
+    if (cpfInput) {
+        cpfInput.addEventListener('input', () => {
+            cpfInput.value = mascaraCPF(cpfInput.value);
+        });
+    }
+
+    // Busca de CEP
     const cepInput = document.getElementById('cep');
+
     if (cepInput) {
+        cepInput.addEventListener('input', () => {
+            cepInput.value = mascaraCEP(cepInput.value);
+        });
+
         cepInput.addEventListener('blur', buscarCEP);
     }
 
