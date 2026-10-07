@@ -1476,12 +1476,33 @@
 
                         <!-- Condicional: Se Sim (1) -->
                         <div id="cond-emp-bem-valor" class="conditional-field" style="display: none;">
-                            <div class="input-group">
-                                <label for="qual-equipamento">Qual equipamento/bem e o valor aproximado? *</label>
-                                <input type="text" id="qual-equipamento" required placeholder="Ex: Máquinas específicas, servidores - R$ 50.000">
-                            </div>
-                        </div>
 
+                            <div class="input-group">
+                                <label for="qual-equipamento">Qual equipamento ou bem? *</label>
+
+                                <input
+                                    type="text"
+                                    id="qual-equipamento"
+                                    required
+                                    placeholder="Ex: Máquinas específicas, servidores"
+                                >
+                            </div>
+
+                            <div class="input-group">
+                                <label for="valor-equipamento">
+                                    Valor aproximado do bem (R$) *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="valor-equipamento"
+                                    min="1"
+                                    required
+                                    placeholder="Ex: 50000"
+                                >
+                            </div>
+
+                        </div>
                         <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
                             <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
                             <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
