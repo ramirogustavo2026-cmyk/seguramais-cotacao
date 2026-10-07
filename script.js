@@ -573,14 +573,17 @@ function verificarCoberturasEmpresa(valor) {
 
 // 7. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
-    const dataList = document.getElementById('lista-profissoes');
-    if (!dataList) return;
+    const selectProfissao = document.getElementById('profissao-condutor');
+    if (!selectProfissao) return;
 
-    dataList.innerHTML = '';
+    selectProfissao.innerHTML = '<option value="">Selecione a profissão...</option>';
+
     profissoesPreFixadas.sort().forEach(profissao => {
         const option = document.createElement('option');
         option.value = profissao;
-        dataList.appendChild(option);
+        option.textContent = profissao;
+
+        selectProfissao.appendChild(option);
     });
 }
 
