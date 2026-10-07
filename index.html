@@ -784,7 +784,13 @@
 
                             <div class="input-group mt-20">
                                 <label for="p14-valor-caminhao">*14. Qual é o valor aproximado do caminhão (R$)?</label>
-                                <input type="number" id="p14-valor-caminhao" placeholder="Ex: 250000" required>
+                                <input
+                                type="number"
+                                id="p14-valor-caminhao"
+                                placeholder="Ex: 250000"
+                                min="1"
+                                required
+                            >
                             </div>
 
                             <div class="input-group mt-20">
@@ -1255,23 +1261,29 @@
 
                         <!-- Condicional: Se Possui Bem de Alto Valor (1) -->
                         <div id="cond-p4-bem-valor" class="conditional-field" style="display: none;">
+
                             <div class="input-group">
-                                <label for="qual-bem">Qual é o bem e seu valor aproximado? *</label>
-                                <input type="text" id="qual-bem" required placeholder="Ex: Obras de arte, joias, eletrônicos caros - R$ 15.000">
+                                <label for="qual-bem">Qual é o bem? *</label>
+                                <input
+                                    type="text"
+                                    id="qual-bem"
+                                    required
+                                    placeholder="Ex: Obras de arte, joias, eletrônicos"
+                                >
                             </div>
-                        </div>
 
-                        <div class="input-group" style="margin-top: 15px;">
-                            <label for="obs-residencial">Observações</label>
-                            <textarea id="obs-residencial" rows="3" placeholder="Existe alguma informação adicional sobre o imóvel ou sobre o seguro que gostaria de informar?"></textarea>
-                        </div>
+                            <div class="input-group">
+                                <label for="valor-bem">Valor aproximado do bem (R$) *</label>
+                                <input
+                                    type="number"
+                                    id="valor-bem"
+                                    min="1"
+                                    required
+                                    placeholder="Ex: 15000"
+                                >
+                            </div>
 
-                        <!-- Botão de Conclusão / Envio -->
-                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
-                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
-                            <button type="button" class="btn-enviar" onclick="enviarFormulario()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Enviar Cotação</button>
                         </div>
-                    </div>
 
                 </div>
 

@@ -619,10 +619,12 @@ function limparErros() {
 
 function validarEtapaAtual() {
     let stepDiv;
+
     if (etapaAtual === 1 || etapaAtual === 2) {
         stepDiv = document.getElementById(`step-${etapaAtual}`);
     } else {
         let sufixo = 'auto';
+
         if (tipoSeguroAtual === 'Moto') sufixo = 'moto';
         if (tipoSeguroAtual === 'Caminhão') sufixo = 'caminhao';
         if (tipoSeguroAtual === 'Vida') sufixo = 'vida';
@@ -635,23 +637,77 @@ function validarEtapaAtual() {
 
     if (!stepDiv) return true;
 
-    const campos = stepDiv.querySelectorAll('input[required], select[required], textarea[required]');
+    const campos = stepDiv.querySelectorAll(
+        'input[required], select[required], textarea[required]'
+    );
+
     let valido = true;
 
     campos.forEach(campo => {
-        if (!campo.disabled && campo.offsetWidth > 0 && campo.offsetHeight > 0) {
-            if (!campo.value || campo.value.trim() === '') {
-                mostrarErroCampo(campo, "Por favor, preencha este campo.");
+
+        if (
+            !campo.disabled &&
+            campo.offsetWidth > 0 &&
+            campo.offsetHeight > 0
+        ) {
+
+            const valor = campo.value.trim();
+
+            // Campo vazio
+            if (!valor) {
+                mostrarErroCampo(
+                    campo,
+                    "Por favor, preencha este campo."
+                );
+
                 valido = false;
-            } else {
-                limparErroCampo(campo);
+                return;
             }
+
+            // Validação específica para números
+            if (campo.type === 'number') {
+
+                const numero = Number(valor);
+
+                if (campo.min !== '') {
+                    const minimo = Number(campo.min);
+
+                    if (numero < minimo) {
+                        mostrarErroCampo(
+                            campo,
+                            `O valor mínimo permitido é ${minimo}.`
+                        );
+
+                        valido = false;
+                        return;
+                    }
+                }
+
+                if (campo.max !== '') {
+                    const maximo = Number(campo.max);
+
+                    if (numero > maximo) {
+                        mostrarErroCampo(
+                            campo,
+                            `O valor máximo permitido é ${maximo}.`
+                        );
+
+                        valido = false;
+                        return;
+                    }
+                }
+            }
+
+            limparErroCampo(campo);
         }
     });
 
     if (!valido) {
         const primeiroErro = stepDiv.querySelector('.erro');
-        if (primeiroErro) primeiroErro.focus();
+
+        if (primeiroErro) {
+            primeiroErro.focus();
+        }
     }
 
     return valido;
