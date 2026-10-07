@@ -932,7 +932,12 @@
 
                             <div id="cond-p4-valor-morte" style="display: none;" class="input-group mt-10">
                                 <label for="p4-capital-morte">Qual valor de cobertura por morte deseja?</label>
-                                <input type="text" id="p4-capital-morte" placeholder="Ex: R$ 200.000,00">
+                                <input
+                            type="text"
+                            id="p4-capital-morte"
+                            placeholder="R$ 0,00"
+                            inputmode="numeric"
+                        >
                             </div>
 
                             <!-- P5. Invalidez -->
@@ -1035,7 +1040,12 @@
 
                             <div id="cond-p9-outro-valor" style="display: none;" class="input-group mt-10">
                                 <label for="p9-especificar-valor">Informe o valor desejado (R$):</label>
-                                <input type="number" id="p9-especificar-valor" placeholder="Ex: 750000">
+                                <input
+                                type="text"
+                                id="p9-especificar-valor"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
+                            >
                             </div>
 
                             <!-- P10. Coberturas Adicionais -->
@@ -1310,12 +1320,12 @@
                             </label>
 
                             <input
-                                type="number"
-                                id="valor-bem"
-                                min="1"
-                                required
-                                placeholder="Ex: 15000"
-                            >
+                            type="text"
+                            id="valor-bem"
+                            placeholder="R$ 0,00"
+                            inputmode="numeric"
+                            required
+                        >
                         </div>
 
                     </div>
@@ -1512,13 +1522,13 @@
                                     Valor aproximado do bem (R$) *
                                 </label>
 
-                                <input
-                                    type="number"
-                                    id="valor-equipamento"
-                                    min="1"
-                                    required
-                                    placeholder="Ex: 50000"
-                                >
+                            <input
+                                type="text"
+                                id="valor-equipamento"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
+                                required
+                            >
                             </div>
 
                         </div>

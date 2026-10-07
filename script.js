@@ -1258,6 +1258,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    //Vida
+    const valorVidaInput = document.getElementById('p9-especificar-valor');
+
+    if (valorVidaInput) {
+        valorVidaInput.addEventListener('input', () => {
+            valorVidaInput.value = mascaraMoeda(valorVidaInput.value);
+        });
+    }
+
+    const valorMorteInput = document.getElementById('p4-capital-morte');
+
+    if (valorMorteInput) {
+        valorMorteInput.addEventListener('input', () => {
+            valorMorteInput.value = mascaraMoeda(valorMorteInput.value);
+        });
+    }
+
+    //Residencial
+    const valorBemInput = document.getElementById('valor-bem');
+
+    if (valorBemInput) {
+        valorBemInput.addEventListener('input', () => {
+            valorBemInput.value = mascaraMoeda(valorBemInput.value);
+        });
+    }
+
+    //Empresarial
+    const valorEquipamentoInput = document.getElementById('valor-equipamento');
+
+    if (valorEquipamentoInput) {
+        valorEquipamentoInput.addEventListener('input', () => {
+            valorEquipamentoInput.value = mascaraMoeda(valorEquipamentoInput.value);
+        });
+    }
+
     carregarMarcasFIPE();
     carregarProfissoes();
 });
