@@ -806,11 +806,54 @@ function buscarCEP() {
     }
 }
 
+// Função auxiliar para validar Telefone
+function mascaraTelefone(valor) {
+    valor = valor.replace(/\D/g, '');
+
+    valor = valor.slice(0, 11);
+
+    if (valor.length <= 10) {
+        valor = valor.replace(
+            /^(\d{2})(\d)/g,
+            '($1) $2'
+        );
+
+        valor = valor.replace(
+            /(\d{4})(\d)/,
+            '$1-$2'
+        );
+    } else {
+        valor = valor.replace(
+            /^(\d{2})(\d)/g,
+            '($1) $2'
+        );
+
+        valor = valor.replace(
+            /(\d{5})(\d)/,
+            '$1-$2'
+        );
+    }
+
+    return valor;
+}
+
+function validarTelefone(telefone) {
+    const numeros = telefone.replace(/\D/g, '');
+
+    return numeros.length === 10 || numeros.length === 11;
+}
+
+function validarEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
 // Função auxiliar para validar e-mail
 function validarEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
+
 
 // 10. ENVIO FINAL COM ISOLAMENTO TOTAL POR TIPO DE SEGURO
 function enviarFormulario() {
@@ -1048,12 +1091,24 @@ emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
     document.querySelectorAll('input, select, textarea').forEach(campo => {
         campo.addEventListener('input', () => limparErroCampo(campo));
         campo.addEventListener('change', () => limparErroCampo(campo));
     });
 
+    // Máscara de telefone
+    const telefoneInput = document.getElementById('telefone');
+
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', () => {
+            telefoneInput.value = mascaraTelefone(telefoneInput.value);
+        });
+    }
+
+    // Busca de CEP
     const cepInput = document.getElementById('cep');
+
     if (cepInput) {
         cepInput.addEventListener('blur', buscarCEP);
     }
