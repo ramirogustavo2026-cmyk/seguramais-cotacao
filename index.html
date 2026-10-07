@@ -768,7 +768,12 @@
                                 </div>
                                 <div class="input-group mt-10">
                                     <label for="p11-valor-aproximado">Valor aproximado dos equipamentos (R$):</label>
-                                    <input type="number" id="p11-valor-aproximado" placeholder="Ex: 35000">
+                                    <input
+                                    type="text"
+                                    id="p11-valor-aproximado"
+                                    placeholder="R$ 0,00"
+                                    inputmode="numeric"
+>
                                 </div>
                             </div>
 
@@ -798,11 +803,11 @@
 
                             <div class="input-group mt-20">
                                 <label for="p14-valor-caminhao">*14. Qual é o valor aproximado do caminhão (R$)?</label>
-                                <input
-                                type="number"
+                            <input
+                                type="text"
                                 id="p14-valor-caminhao"
-                                placeholder="Ex: 250000"
-                                min="1"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
                                 required
                             >
                             </div>

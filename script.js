@@ -949,6 +949,20 @@ function mascaraCEP(valor) {
     return valor;
 }
 
+//Mascara Moeda
+function mascaraMoeda(valor) {
+    valor = valor.replace(/\D/g, '');
+
+    if (!valor) return '';
+
+    const numero = Number(valor) / 100;
+
+    return numero.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+}
+
 // Função auxiliar para validar e-mail
 function validarEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -1225,6 +1239,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         cepInput.addEventListener('blur', buscarCEP);
+    }
+
+    //Mascara moeda
+    const valorCaminhaoInput = document.getElementById('p14-valor-caminhao');
+
+    if (valorCaminhaoInput) {
+        valorCaminhaoInput.addEventListener('input', () => {
+            valorCaminhaoInput.value = mascaraMoeda(valorCaminhaoInput.value);
+        });
+    }
+
+    const valorAcessoriosInput = document.getElementById('p11-valor-aproximado');
+
+    if (valorAcessoriosInput) {
+        valorAcessoriosInput.addEventListener('input', () => {
+            valorAcessoriosInput.value = mascaraMoeda(valorAcessoriosInput.value);
+        });
     }
 
     carregarMarcasFIPE();
