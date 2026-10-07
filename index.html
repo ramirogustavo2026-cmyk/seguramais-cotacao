@@ -271,9 +271,12 @@
                             </div>
                             <div class="input-group">
                                 <label for="modelo">*Modelo</label>
-                                <input type="text" id="modelo" list="lista-modelos" placeholder="Selecione primeiro a marca..." disabled autocomplete="off" required>
-                                <datalist id="lista-modelos"></datalist>
+
+                                <select id="modelo" disabled required>
+                                    <option value="">Selecione primeiro a marca...</option>
+                                </select>
                             </div>
+                            
                             <div class="modal-footer footer-espacado">
                                 <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
                                 <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>

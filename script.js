@@ -777,41 +777,46 @@ function carregarMarcasFIPE() {
 }
 
 function carregarModelos(codigoMarca) {
-    const inputModelo = document.getElementById('modelo');
-    const dataListModelos = document.getElementById('lista-modelos');
+    const selectModelo = document.getElementById('modelo');
 
-    if (!inputModelo || !dataListModelos) return;
+    if (!selectModelo) return;
 
     if (!codigoMarca) {
-        inputModelo.disabled = true;
-        inputModelo.value = '';
-        inputModelo.placeholder = 'Selecione primeiro a marca...';
-        dataListModelos.innerHTML = '';
+        selectModelo.disabled = true;
+        selectModelo.innerHTML =
+            '<option value="">Selecione primeiro a marca...</option>';
         return;
     }
 
-    inputModelo.value = '';
-    inputModelo.placeholder = 'A carregar modelos...';
-    inputModelo.disabled = true;
+    selectModelo.disabled = true;
+    selectModelo.innerHTML =
+        '<option value="">A carregar modelos...</option>';
 
     fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${codigoMarca}/modelos`)
         .then(res => res.json())
         .then(data => {
-            dataListModelos.innerHTML = '';
-            data.modelos.forEach(m => {
+
+            selectModelo.innerHTML =
+                '<option value="">Selecione o modelo...</option>';
+
+            data.modelos.forEach(modelo => {
                 const option = document.createElement('option');
-                option.value = m.nome;
-                dataListModelos.appendChild(option);
+
+                option.value = modelo.nome;
+                option.textContent = modelo.nome;
+
+                selectModelo.appendChild(option);
             });
 
-            inputModelo.placeholder = 'Digite para pesquisar o modelo...';
-            inputModelo.disabled = false;
-            inputModelo.focus();
+            selectModelo.disabled = false;
         })
         .catch(err => {
             console.error('Erro ao carregar modelos FIPE:', err);
-            inputModelo.placeholder = 'Digite o modelo manualmente...';
-            inputModelo.disabled = false;
+
+            selectModelo.innerHTML =
+                '<option value="">Erro ao carregar modelos</option>';
+
+            selectModelo.disabled = true;
         });
 }
 

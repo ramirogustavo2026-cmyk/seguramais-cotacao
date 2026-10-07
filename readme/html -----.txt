@@ -85,7 +85,14 @@
 
                         <div class="input-group">
                             <label for="telefone">*Telefone</label>
-                            <input type="tel" id="telefone" placeholder="(00) 00000-0000" required>
+                            <input
+                            type="tel"
+                            id="telefone"
+                            placeholder="(00) 00000-0000"
+                            maxlength="15"
+                            inputmode="numeric"
+                            required
+                        >
                         </div>
 
                         <div class="input-group">
@@ -194,8 +201,9 @@
 
                             <div class="input-group mt-20">
                                 <label for="profissao-condutor">Profissão do Condutor:</label>
-                                <input type="text" id="profissao-condutor" list="lista-profissoes" placeholder="Digite ou selecione a profissão..." autocomplete="off">
-                                <datalist id="lista-profissoes"></datalist>
+                            <select id="profissao-condutor">
+                                <option value="">Selecione a profissão...</option>
+                            </select>
                             </div>
 
                             <div class="input-group">
@@ -263,8 +271,11 @@
                             </div>
                             <div class="input-group">
                                 <label for="modelo">*Modelo</label>
-                                <input type="text" id="modelo" list="lista-modelos" placeholder="Selecione primeiro a marca..." disabled autocomplete="off" required>
-                                <datalist id="lista-modelos"></datalist>
+
+                                <select id="modelo" disabled required>
+                                    <option value="">Selecione primeiro a marca...</option>
+                                </select>
+                            </div>
                             </div>
                             <div class="modal-footer footer-espacado">
                                 <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
