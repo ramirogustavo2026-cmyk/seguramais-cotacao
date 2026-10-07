@@ -102,16 +102,18 @@
                     <div id="step-2" class="step">
                         <h3 class="step-title text-center">Qual o endereço do imóvel / residência?</h3>
 
-                        <div class="input-group">
-                            <label for="cep">*CEP</label>
-                    <input
-                        type="text"
-                        id="cep"
-                        placeholder="00000-000"
-                        maxlength="9"
-                        inputmode="numeric"
-                        required
-                    >
+                    <div class="input-group">
+                        <label for="cep">*CEP</label>
+
+                        <input
+                            type="text"
+                            id="cep"
+                            placeholder="00000-000"
+                            maxlength="9"
+                            inputmode="numeric"
+                            required
+                        >
+                    </div>
 
                         <div class="input-group">
                             <label for="logradouro">Logradouro</label>
@@ -766,7 +768,12 @@
                                 </div>
                                 <div class="input-group mt-10">
                                     <label for="p11-valor-aproximado">Valor aproximado dos equipamentos (R$):</label>
-                                    <input type="number" id="p11-valor-aproximado" placeholder="Ex: 35000">
+                                    <input
+                                    type="text"
+                                    id="p11-valor-aproximado"
+                                    placeholder="R$ 0,00"
+                                    inputmode="numeric"
+>
                                 </div>
                             </div>
 
@@ -796,11 +803,11 @@
 
                             <div class="input-group mt-20">
                                 <label for="p14-valor-caminhao">*14. Qual é o valor aproximado do caminhão (R$)?</label>
-                                <input
-                                type="number"
+                            <input
+                                type="text"
                                 id="p14-valor-caminhao"
-                                placeholder="Ex: 250000"
-                                min="1"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
                                 required
                             >
                             </div>
@@ -925,7 +932,12 @@
 
                             <div id="cond-p4-valor-morte" style="display: none;" class="input-group mt-10">
                                 <label for="p4-capital-morte">Qual valor de cobertura por morte deseja?</label>
-                                <input type="text" id="p4-capital-morte" placeholder="Ex: R$ 200.000,00">
+                                <input
+                            type="text"
+                            id="p4-capital-morte"
+                            placeholder="R$ 0,00"
+                            inputmode="numeric"
+                        >
                             </div>
 
                             <!-- P5. Invalidez -->
@@ -1028,7 +1040,12 @@
 
                             <div id="cond-p9-outro-valor" style="display: none;" class="input-group mt-10">
                                 <label for="p9-especificar-valor">Informe o valor desejado (R$):</label>
-                                <input type="number" id="p9-especificar-valor" placeholder="Ex: 750000">
+                                <input
+                                type="text"
+                                id="p9-especificar-valor"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
+                            >
                             </div>
 
                             <!-- P10. Coberturas Adicionais -->
@@ -1303,12 +1320,12 @@
                             </label>
 
                             <input
-                                type="number"
-                                id="valor-bem"
-                                min="1"
-                                required
-                                placeholder="Ex: 15000"
-                            >
+                            type="text"
+                            id="valor-bem"
+                            placeholder="R$ 0,00"
+                            inputmode="numeric"
+                            required
+                        >
                         </div>
 
                     </div>
@@ -1505,13 +1522,13 @@
                                     Valor aproximado do bem (R$) *
                                 </label>
 
-                                <input
-                                    type="number"
-                                    id="valor-equipamento"
-                                    min="1"
-                                    required
-                                    placeholder="Ex: 50000"
-                                >
+                            <input
+                                type="text"
+                                id="valor-equipamento"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
+                                required
+                            >
                             </div>
 
                         </div>
