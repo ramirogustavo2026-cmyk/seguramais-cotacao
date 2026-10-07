@@ -156,18 +156,17 @@ body {
     background: #ffffff;
     width: 100%;
     max-width: 500px;
-
-    height: 90vh;
+    max-height: 90vh;
 
     border-radius: 18px;
 
     display: flex;
     flex-direction: column;
 
+    overflow: hidden;
+
     border: 1px solid #e5e7eb;
     box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
-
-    overflow: hidden;
 }
 
 .modal-header {
@@ -224,10 +223,11 @@ body {
 .modal-body {
     padding: 24px;
 
-    height: calc(90vh - 60px);
-
     overflow-y: auto;
     overflow-x: hidden;
+
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 /* ==========================================================================
@@ -538,21 +538,23 @@ body {
 
     .modal-overlay {
         padding: 8px;
-        align-items: flex-end;
+        align-items: center;
     }
 
     .modal-card {
         width: 100%;
-        height: 94vh;
-        max-height: 94vh;
-        border-radius: 18px 18px 10px 10px;
+        max-height: calc(100dvh - 16px);
+        border-radius: 18px;
     }
+
 
     .modal-body {
-        padding: 20px 16px;
+        padding: 20px 16px 28px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 0;
+        -webkit-overflow-scrolling: touch;
     }
-
-}
 
     .form-row {
         flex-direction: column;
@@ -563,6 +565,7 @@ body {
     .btn-secondary {
         padding: 12px 18px;
     }
+    
 }
 
 /* ==================================================

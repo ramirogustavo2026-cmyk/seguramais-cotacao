@@ -565,6 +565,12 @@ body {
     .btn-secondary {
         padding: 12px 18px;
     }
+
+    .modal-footer {
+    margin-top: 20px;
+    gap: 10px;
+    }
+    
 }
 
 /* ==================================================
