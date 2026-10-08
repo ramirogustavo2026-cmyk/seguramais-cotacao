@@ -1,5 +1,6 @@
 let etapaAtual = 1;
 let tipoSeguroAtual = 'Auto';
+const TEMPO_ENTRE_ENVIOS = 60000; // 1 minuto
 
 // Mapeamento de Ícones por Serviço
 const iconesServico = {
@@ -981,6 +982,22 @@ function validarEmail(email) {
 // 10. ENVIO FINAL COM ISOLAMENTO TOTAL POR TIPO DE SEGURO
 function enviarFormulario() {
     if (!validarEtapaAtual()) return;
+    const ultimoEnvio = Number(localStorage.getItem('ultimoEnvioCotacao')) || 0;
+    const agora = Date.now();
+
+    if (agora - ultimoEnvio < TEMPO_ENTRE_ENVIOS) {
+        const segundosRestantes = Math.ceil(
+            (TEMPO_ENTRE_ENVIOS - (agora - ultimoEnvio)) / 1000
+        );
+
+        mostrarPopupFeedback(
+            'Aguarde um momento',
+            `Você poderá enviar uma nova cotação em ${segundosRestantes} segundos.`,
+            'aviso'
+        );
+
+        return;
+    }
 
     // Validação do e-mail
     const inputEmail = document.getElementById('email') || document.querySelector('input[type="email"]');
@@ -1174,6 +1191,8 @@ emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
     .then((response) => {
 
         console.log('E-mail enviado com sucesso!', response);
+
+        localStorage.setItem('ultimoEnvioCotacao', Date.now());
 
         // 1. Volta o botão ao normal
         if (botaoEnviar) {

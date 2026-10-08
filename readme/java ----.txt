@@ -573,14 +573,17 @@ function verificarCoberturasEmpresa(valor) {
 
 // 7. CARREGAR LISTA DE PROFISSÕES
 function carregarProfissoes() {
-    const dataList = document.getElementById('lista-profissoes');
-    if (!dataList) return;
+    const selectProfissao = document.getElementById('profissao-condutor');
+    if (!selectProfissao) return;
 
-    dataList.innerHTML = '';
+    selectProfissao.innerHTML = '<option value="">Selecione a profissão...</option>';
+
     profissoesPreFixadas.sort().forEach(profissao => {
         const option = document.createElement('option');
         option.value = profissao;
-        dataList.appendChild(option);
+        option.textContent = profissao;
+
+        selectProfissao.appendChild(option);
     });
 }
 
@@ -774,41 +777,46 @@ function carregarMarcasFIPE() {
 }
 
 function carregarModelos(codigoMarca) {
-    const inputModelo = document.getElementById('modelo');
-    const dataListModelos = document.getElementById('lista-modelos');
+    const selectModelo = document.getElementById('modelo');
 
-    if (!inputModelo || !dataListModelos) return;
+    if (!selectModelo) return;
 
     if (!codigoMarca) {
-        inputModelo.disabled = true;
-        inputModelo.value = '';
-        inputModelo.placeholder = 'Selecione primeiro a marca...';
-        dataListModelos.innerHTML = '';
+        selectModelo.disabled = true;
+        selectModelo.innerHTML =
+            '<option value="">Selecione primeiro a marca...</option>';
         return;
     }
 
-    inputModelo.value = '';
-    inputModelo.placeholder = 'A carregar modelos...';
-    inputModelo.disabled = true;
+    selectModelo.disabled = true;
+    selectModelo.innerHTML =
+        '<option value="">A carregar modelos...</option>';
 
     fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${codigoMarca}/modelos`)
         .then(res => res.json())
         .then(data => {
-            dataListModelos.innerHTML = '';
-            data.modelos.forEach(m => {
+
+            selectModelo.innerHTML =
+                '<option value="">Selecione o modelo...</option>';
+
+            data.modelos.forEach(modelo => {
                 const option = document.createElement('option');
-                option.value = m.nome;
-                dataListModelos.appendChild(option);
+
+                option.value = modelo.nome;
+                option.textContent = modelo.nome;
+
+                selectModelo.appendChild(option);
             });
 
-            inputModelo.placeholder = 'Digite para pesquisar o modelo...';
-            inputModelo.disabled = false;
-            inputModelo.focus();
+            selectModelo.disabled = false;
         })
         .catch(err => {
             console.error('Erro ao carregar modelos FIPE:', err);
-            inputModelo.placeholder = 'Digite o modelo manualmente...';
-            inputModelo.disabled = false;
+
+            selectModelo.innerHTML =
+                '<option value="">Erro ao carregar modelos</option>';
+
+            selectModelo.disabled = true;
         });
 }
 
@@ -947,6 +955,20 @@ function mascaraCEP(valor) {
     valor = valor.replace(/^(\d{5})(\d)/, '$1-$2');
 
     return valor;
+}
+
+//Mascara Moeda
+function mascaraMoeda(valor) {
+    valor = valor.replace(/\D/g, '');
+
+    if (!valor) return '';
+
+    const numero = Number(valor) / 100;
+
+    return numero.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
 }
 
 // Função auxiliar para validar e-mail
@@ -1225,6 +1247,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         cepInput.addEventListener('blur', buscarCEP);
+    }
+
+    //Mascara moeda
+    const valorCaminhaoInput = document.getElementById('p14-valor-caminhao');
+
+    if (valorCaminhaoInput) {
+        valorCaminhaoInput.addEventListener('input', () => {
+            valorCaminhaoInput.value = mascaraMoeda(valorCaminhaoInput.value);
+        });
+    }
+
+    const valorAcessoriosInput = document.getElementById('p11-valor-aproximado');
+
+    if (valorAcessoriosInput) {
+        valorAcessoriosInput.addEventListener('input', () => {
+            valorAcessoriosInput.value = mascaraMoeda(valorAcessoriosInput.value);
+        });
+    }
+
+    //Vida
+    const valorVidaInput = document.getElementById('p9-especificar-valor');
+
+    if (valorVidaInput) {
+        valorVidaInput.addEventListener('input', () => {
+            valorVidaInput.value = mascaraMoeda(valorVidaInput.value);
+        });
+    }
+
+    const valorMorteInput = document.getElementById('p4-capital-morte');
+
+    if (valorMorteInput) {
+        valorMorteInput.addEventListener('input', () => {
+            valorMorteInput.value = mascaraMoeda(valorMorteInput.value);
+        });
+    }
+
+    //Residencial
+    const valorBemInput = document.getElementById('valor-bem');
+
+    if (valorBemInput) {
+        valorBemInput.addEventListener('input', () => {
+            valorBemInput.value = mascaraMoeda(valorBemInput.value);
+        });
+    }
+
+    //Empresarial
+    const valorEquipamentoInput = document.getElementById('valor-equipamento');
+
+    if (valorEquipamentoInput) {
+        valorEquipamentoInput.addEventListener('input', () => {
+            valorEquipamentoInput.value = mascaraMoeda(valorEquipamentoInput.value);
+        });
     }
 
     carregarMarcasFIPE();
