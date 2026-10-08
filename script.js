@@ -985,6 +985,13 @@ function enviarFormulario() {
     const ultimoEnvio = Number(localStorage.getItem('ultimoEnvioCotacao')) || 0;
     const agora = Date.now();
 
+    const campoHoneypot = document.getElementById('site-contato');
+
+    if (campoHoneypot && campoHoneypot.value.trim() !== '') {
+        console.warn('Envio bloqueado pelo honeypot.');
+        return;
+    }
+
     if (agora - ultimoEnvio < TEMPO_ENTRE_ENVIOS) {
         const segundosRestantes = Math.ceil(
             (TEMPO_ENTRE_ENVIOS - (agora - ultimoEnvio)) / 1000
@@ -1194,6 +1201,8 @@ emailjs.send('service_h6v6mgg', 'template_d9f3clv', parametrosEnvio)
 
         localStorage.setItem('ultimoEnvioCotacao', Date.now());
 
+        
+
         // 1. Volta o botão ao normal
         if (botaoEnviar) {
             botaoEnviar.disabled = false;
@@ -1362,6 +1371,22 @@ function mostrarPopupFeedback(titulo, mensagem, tipo = 'sucesso') {
 function fecharPopupFeedback() {
 
     const overlay = document.getElementById('popup-feedback-overlay');
+
+    if (overlay) {
+        overlay.classList.remove('show');
+    }
+}
+
+function abrirAvisoPrivacidade() {
+    const overlay = document.getElementById('privacidade-overlay');
+
+    if (overlay) {
+        overlay.classList.add('show');
+    }
+}
+
+function fecharAvisoPrivacidade() {
+    const overlay = document.getElementById('privacidade-overlay');
 
     if (overlay) {
         overlay.classList.remove('show');

@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">
+    <script type="text/javascript">
+
    (function(){
       emailjs.init({
         publicKey: "I-bzXV-66FhCpoSaG",
@@ -72,7 +73,22 @@
 
             <div class="modal-body">
                 <form id="form-cotacao" onsubmit="event.preventDefault();" novalidate>
-                    
+
+                    <div 
+                    class="input-group" 
+                    style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" 
+                    aria-hidden="true">
+                    <label for="site-contato">Site</label>
+
+                    <input
+                        type="text"
+                        id="site-contato"
+                        name="site_contato"
+                        tabindex="-1"
+                        autocomplete="off"
+                    >
+                </div>
+                                    
                     <!-- ETAPA 1: DADOS OBRIGATÓRIOS DO SEGURADO (COMUM) -->
                     <div id="step-1" class="step active">
                         <p class="step-subtitle text-center">Ótimo! É rapidinho, vamos começar...</p>
@@ -276,7 +292,23 @@
                                     <option value="">Selecione primeiro a marca...</option>
                                 </select>
                             </div>
-                            </div>
+
+                            <div class="aviso-privacidade">
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+                            
                             <div class="modal-footer footer-espacado">
                                 <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
                                 <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
@@ -486,6 +518,22 @@
                                 <label for="p9-obs">Observações adicionais para a cotação:</label>
                                 <textarea id="p9-obs" rows="2" placeholder="Digite aqui alguma observação se desejar..."></textarea>
                             </div>
+
+                            <div class="aviso-privacidade">
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
 
                             <div class="modal-footer footer-espacado">
                                 <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
@@ -828,6 +876,20 @@
                                 <textarea id="p15-observacoes" rows="2" placeholder="Existe alguma informação adicional sobre o caminhão ou utilização?"></textarea>
                             </div>
 
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+
                             <div class="modal-footer footer-espacado">
                                 <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
                                 <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
@@ -1080,6 +1142,20 @@
                                 <textarea id="p11-observacoes-vida" rows="2" placeholder="Existe alguma informação adicional que você gostaria de informar sobre o seguro de vida, seus objetivos ou suas necessidades de cobertura?"></textarea>
                             </div>
 
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+
                             <div class="modal-footer footer-espacado">
                                 <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
                                 <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
@@ -1163,6 +1239,20 @@
                                 <label for="p4-observacoes-diversos">4. Observações adicionais:</label>
                                 <textarea id="p4-observacoes-diversos" rows="3" placeholder="Existe alguma informação adicional que gostaria de informar sobre o seguro?"></textarea>
                             </div>
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
 
                             <div class="modal-footer footer-espacado mt-20">
                                 <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
@@ -1611,30 +1701,110 @@
         lucide.createIcons();
     </script>
 
-<!-- POPUP DE RETORNO DO ENVIO -->
-<div id="popup-feedback-overlay" class="popup-feedback-overlay">
-    <div class="popup-feedback-card">
+    <!-- POPUP DE RETORNO DO ENVIO -->
+    <div id="popup-feedback-overlay" class="popup-feedback-overlay">
+        <div class="popup-feedback-card">
 
-        <div id="popup-feedback-icon" class="popup-feedback-icon">
-            ✓
+            <div id="popup-feedback-icon" class="popup-feedback-icon">
+                ✓
+            </div>
+
+            <h3 id="popup-feedback-title">
+                Cotação enviada!
+            </h3>
+
+            <p id="popup-feedback-message">
+                Sua cotação foi enviada com sucesso.
+            </p>
+
+            <button
+                type="button"
+                class="popup-feedback-button"
+                onclick="fecharPopupFeedback()"
+            >
+                OK
+            </button>
+
         </div>
+    </div>
 
-        <h3 id="popup-feedback-title">
-            Cotação enviada!
-        </h3>
+    <div id="privacidade-overlay" class="privacidade-overlay">
+        <div class="privacidade-card">
 
-        <p id="popup-feedback-message">
-            Sua cotação foi enviada com sucesso.
-        </p>
+            <div class="privacidade-header">
+                <h2>Aviso de Privacidade</h2>
 
-        <button
-            type="button"
-            class="popup-feedback-button"
-            onclick="fecharPopupFeedback()"
-        >
-            OK
-        </button>
+                <button
+                    type="button"
+                    class="privacidade-fechar"
+                    onclick="fecharAvisoPrivacidade()"
+                    aria-label="Fechar aviso de privacidade"
+                >
+                    ×
+                </button>
+            </div>
 
+            <div class="privacidade-conteudo">
+
+                <p>
+                    A <strong>SeguraMais Corretora de Seguros Ltda.</strong>
+                    respeita a sua privacidade e está comprometida com a proteção
+                    dos dados pessoais fornecidos por meio deste site.
+                </p>
+
+                <p>
+                    Ao solicitar uma cotação de seguro, algumas informações poderão
+                    ser coletadas, como nome, telefone, e-mail, CPF, endereço,
+                    informações sobre veículos, imóveis, empresa, profissão e
+                    demais dados necessários para a análise da modalidade de seguro escolhida.
+                </p>
+
+                <p>
+                    Esses dados são utilizados para receber e analisar sua solicitação
+                    de cotação, identificar suas necessidades, entrar em contato e
+                    fornecer informações relacionadas aos produtos e serviços de seguros solicitados.
+                </p>
+
+                <p>
+                    As informações poderão ser compartilhadas com seguradoras,
+                    prestadores de serviços e plataformas tecnológicas envolvidas
+                    no processamento da solicitação, quando necessário para
+                    viabilizar a cotação ou o atendimento.
+                </p>
+
+                <p>
+                    A SeguraMais adota medidas técnicas e administrativas razoáveis
+                    para proteger os dados pessoais contra acessos não autorizados,
+                    perda, alteração ou divulgação indevida.
+                </p>
+
+                <p>
+                    Para este projeto demonstrativo, considera-se como exemplo que
+                    os dados poderão ser mantidos por até 90 dias após o último contato,
+                    salvo quando houver necessidade de conservação por período superior.
+                </p>
+
+                <p>
+                    Para exercer direitos relacionados aos seus dados ou esclarecer
+                    dúvidas sobre privacidade, entre em contato:
+                </p>
+
+                <p>
+                    <strong>E-mail:</strong> privacidade@seguramais.com.br<br>
+                    <strong>Telefone:</strong> (11) 99999-9999
+                </p>
+
+                <p>
+                    <strong>SeguraMais Corretora de Seguros Ltda.</strong><br>
+                    CNPJ: 12.345.678/0001-90<br>
+                    São Paulo - SP
+                </p>
+
+                <p>
+                    <small>Última atualização: outubro de 2026.</small>
+                </p>
+
+        </div>
     </div>
 </div>
     
