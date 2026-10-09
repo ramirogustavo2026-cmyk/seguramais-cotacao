@@ -643,7 +643,12 @@ function validarNomeOuRazaoSocial(valor) {
         return false;
     }
 
-    if (termosInvalidos.includes(textoNormalizado)) {
+    const palavras = textoNormalizado.split(/\s+/);
+
+    if (
+        termosInvalidos.includes(textoNormalizado) ||
+        palavras.every(palavra => termosInvalidos.includes(palavra))
+    ) {
         return false;
     }
 
@@ -654,8 +659,92 @@ function validarNomeOuRazaoSocial(valor) {
     return true;
 }
 
-function validarEtapaAtual() {
-    let stepDiv;
+function validarNumeroEndereco(valor) {
+    const texto = valor.trim().toLowerCase();
+
+    const termosInvalidos = [
+        'teste',
+        'test',
+        'aaa',
+        'aaaa',
+        'xxx',
+        'xxxx',
+        '000',
+        '0000'
+    ];
+
+    if (termosInvalidos.includes(texto)) {
+        return false;
+    }
+
+    if (texto === 's/n' || texto === 'sn') {
+        return true;
+    }
+
+    // Precisa conter pelo menos um número
+    if (!/\d/.test(texto)) {
+        return false;
+    }
+
+    return true;
+}
+
+function validarTextoEndereco(valor) {
+    const texto = valor.trim().toLowerCase();
+
+    const termosInvalidos = [
+        'teste',
+        'test',
+        'aaa',
+        'aaaa',
+        'xxx',
+        'xxxx',
+        'asdf',
+        'qwerty'
+    ];
+
+    if (texto.length < 3) {
+        return false;
+    }
+
+    if (termosInvalidos.includes(texto)) {
+        return false;
+    }
+
+    if (!/[a-zA-ZÀ-ÿ]/.test(texto)) {
+        return false;
+    }
+
+    return true;
+}
+
+function validarComplemento(valor) {
+    const texto = valor.trim().toLowerCase();
+
+    const termosInvalidos = [
+        'teste',
+        'test',
+        'aaa',
+        'aaaa',
+        'xxx',
+        'xxxx',
+        'asdf',
+        'qwerty'
+    ];
+
+    if (termosInvalidos.includes(texto)) {
+        return false;
+    }
+
+    if (!/[a-zA-ZÀ-ÿ0-9]/.test(texto)) {
+        return false;
+    }
+
+    return true;
+}
+
+    function validarEtapaAtual() {
+        let stepDiv;
 
     if (etapaAtual === 1 || etapaAtual === 2) {
         stepDiv = document.getElementById(`step-${etapaAtual}`);
@@ -675,7 +764,7 @@ function validarEtapaAtual() {
     if (!stepDiv) return true;
 
     const campos = stepDiv.querySelectorAll(
-        'input[required], select[required], textarea[required]'
+        'input[required], select[required], textarea[required], #complemento'
     );
 
     let valido = true;
@@ -728,6 +817,20 @@ function validarEtapaAtual() {
                 return;
             }
 
+            // E-mail
+        if (
+            campo.id === 'email' &&
+            !validarEmail(valor)
+        ) {
+            mostrarErroCampo(
+                campo,
+                "Informe um e-mail válido."
+            );
+
+            valido = false;
+            return;
+        }
+
             // CPF
             if (
                 campo.id === 'outra-cpf' &&
@@ -756,6 +859,77 @@ function validarEtapaAtual() {
                 return;
             }
         }
+
+             // Número do endereço
+            if (
+                campo.id === 'numero' &&
+                !validarNumeroEndereco(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um número de endereço válido ou S/N."
+                );
+
+                valido = false;
+                return;
+            }
+
+            // Logradouro
+            if (
+                campo.id === 'logradouro' &&
+                !validarTextoEndereco(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um logradouro válido."
+                );
+
+                valido = false;
+                return;
+            }
+
+            // Bairro
+            if (
+                campo.id === 'bairro' &&
+                !validarTextoEndereco(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um bairro válido."
+                );
+
+                valido = false;
+                return;
+            }
+
+            // Cidade
+            if (
+                campo.id === 'cidade' &&
+                !validarTextoEndereco(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe uma cidade válida."
+                );
+
+                valido = false;
+                return;
+            }
+
+            // Complemento
+            if (
+                campo.id === 'complemento' &&
+                valor !== '' &&
+                !validarComplemento(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um complemento válido."
+                );
+
+                valido = false;
+                return;
+            }
 
             // Campos numéricos
             if (campo.type === 'number') {
@@ -945,12 +1119,67 @@ function mascaraTelefone(valor) {
 function validarTelefone(telefone) {
     const numeros = telefone.replace(/\D/g, '');
 
-    return numeros.length === 10 || numeros.length === 11;
+    if (numeros.length !== 10 && numeros.length !== 11) {
+        return false;
+    }
+
+    // Bloqueia números com todos os dígitos iguais
+    if (/^(\d)\1+$/.test(numeros)) {
+        return false;
+    }
+
+    const ddd = numeros.slice(0, 2);
+
+    // DDD não pode começar com 0
+    if (ddd.startsWith('0')) {
+        return false;
+    }
+
+    // Celular com 11 dígitos deve começar com 9 após o DDD
+    if (numeros.length === 11 && numeros[2] !== '9') {
+        return false;
+    }
+
+    return true;
 }
 
 function validarEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
+    const valor = email.trim().toLowerCase();
+
+    const re = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+
+    if (!re.test(valor)) {
+        return false;
+    }
+
+    const [usuario, dominio] = valor.split('@');
+
+    const usuariosInvalidos = [
+        'teste',
+        'test',
+        'email',
+        'exemplo',
+        'example',
+        'aaa',
+        'aaaa'
+    ];
+
+    const dominiosInvalidos = [
+        'teste.com',
+        'test.com',
+        'exemplo.com',
+        'example.com'
+    ];
+
+    if (usuariosInvalidos.includes(usuario)) {
+        return false;
+    }
+
+    if (dominiosInvalidos.includes(dominio)) {
+        return false;
+    }
+
+    return true;
 }
 
 //Função auxiliar para validar CPF
@@ -1026,13 +1255,6 @@ function mascaraMoeda(valor) {
         currency: 'BRL'
     });
 }
-
-// Função auxiliar para validar e-mail
-function validarEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
-
 
 // 10. ENVIO FINAL COM ISOLAMENTO TOTAL POR TIPO DE SEGURO
 function enviarFormulario() {

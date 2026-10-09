@@ -112,12 +112,19 @@
                         </div>
 
                         <div class="input-group">
-                            <label for="email">E-mail</label>
-                            <input type="email" id="email" placeholder="email@exemplo.com">
-                        </div>
+                            <label for="email">*E-mail</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="email@exemplo.com"
+                                required
+                            >
+                            </div>
 
                         <div class="modal-footer footer-right">
-                            <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            <button type="button"; 
+                            class="btn-primary" ;
+                            onclick="proximaEtapa()">PRÓXIMO</button>
                         </div>
                     </div>
 
@@ -139,8 +146,11 @@
                     </div>
 
                         <div class="input-group">
-                            <label for="logradouro">Logradouro</label>
-                            <input type="text" id="logradouro" placeholder="Ex: Rua das Flores">
+                            <label for="logradouro">*Logradouro</label>
+                            <input type="text" 
+                            id="logradouro" 
+                            placeholder="Ex: Rua das Flores"
+                            required>
                         </div>
 
                         <div class="form-row">
@@ -155,15 +165,22 @@
                         </div>
 
                         <div class="input-group">
-                            <label for="bairro">Bairro</label>
-                            <input type="text" id="bairro" placeholder="Centro">
+                            <label for="bairro">*Bairro</label>
+                            <input type="text" 
+                            id="bairro" 
+                            placeholder="Centro"
+                            required>
                         </div>
 
                         <div class="form-row">
                             <div class="input-group flex-2">
-                                <label for="cidade">Cidade</label>
-                                <input type="text" id="cidade" placeholder="São Paulo">
+                                <label for="cidade">*Cidade</label>
+                                <input type="text" 
+                                id="cidade" 
+                                placeholder="São Paulo" 
+                                required>
                             </div>
+                            
                             <div class="input-group flex-1">
                                 <label for="uf">UF</label>
                                 <select id="uf">
