@@ -1,6 +1,7 @@
 let etapaAtual = 1;
 let tipoSeguroAtual = 'Auto';
 const TEMPO_ENTRE_ENVIOS = 60000; // 1 minuto
+let cepValidado = false;
 
 // Mapeamento de Ícones por Serviço
 const iconesServico = {
@@ -621,6 +622,38 @@ function limparErros() {
     });
 }
 
+function validarNomeOuRazaoSocial(valor) {
+    const texto = valor.trim();
+
+    const termosInvalidos = [
+        'teste',
+        'test',
+        'asdf',
+        'qwerty',
+        'aaa',
+        'aaaa',
+        'xxxx',
+        'xxx',
+        'sem nome'
+    ];
+
+    const textoNormalizado = texto.toLowerCase();
+
+    if (texto.length < 5) {
+        return false;
+    }
+
+    if (termosInvalidos.includes(textoNormalizado)) {
+        return false;
+    }
+
+    if (!/[a-zA-ZÀ-ÿ]/.test(texto)) {
+        return false;
+    }
+
+    return true;
+}
+
 function validarEtapaAtual() {
     let stepDiv;
 
@@ -661,6 +694,20 @@ function validarEtapaAtual() {
                 mostrarErroCampo(
                     campo,
                     "Por favor, preencha este campo."
+                );
+
+                valido = false;
+                return;
+            }
+
+            // Nome / Razão Social
+            if (
+                campo.id === 'nome' &&
+                !validarNomeOuRazaoSocial(valor)
+            ) {
+                mostrarErroCampo(
+                    campo,
+                    "Informe um nome ou razão social válido."
                 );
 
                 valido = false;
@@ -827,11 +874,18 @@ function buscarCEP() {
 
     let cep = cepInput.value.replace(/\D/g, '');
 
+    cepValidado = false;
+
     if (cep.length === 8) {
         fetch(`https://viacep.com.br/ws/${cep}/json/`)
+
             .then(res => res.json())
             .then(data => {
+
                 if (!data.erro) {
+
+                    cepValidado = true;
+
                     const logradouro = document.getElementById('logradouro');
                     const bairro = document.getElementById('bairro');
                     const cidade = document.getElementById('cidade');
@@ -846,6 +900,7 @@ function buscarCEP() {
                     const numero = document.getElementById('numero');
                     if (numero) numero.focus();
                 } else {
+                    cepValidado = false;
                     mostrarErroCampo(cepInput, "CEP não encontrado.");
                 }
             })
