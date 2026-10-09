@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotação de Seguro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+
+   (function(){
+      emailjs.init({
+        publicKey: "I-bzXV-66FhCpoSaG",
+      });
+   })();
+</script>
+</head>
+<body>
+
+    <!-- 1. TELA INICIAL: SELEÇÃO DE SERVIÇO -->
+    <main class="main-selection-wrapper">
+        <header class="header-banner">
+            <h1>Escolha o tipo de seguro</h1>
+            <p>Clique em uma das opções abaixo para iniciar sua cotação rápida</p>
+        </header>
+
+        <section class="services-grid-container">
+            <button type="button" class="service-card" onclick="abrirModal('Auto')">
+                <div class="icon-circle"><i data-lucide="car"></i></div>
+                <span>Auto</span>
+            </button>
+            <button type="button" class="service-card" onclick="abrirModal('Moto')">
+                <div class="icon-circle"><i data-lucide="bike"></i></div>
+                <span>Moto</span>
+            </button>
+            <button type="button" class="service-card" onclick="abrirModal('Caminhão')">
+                <div class="icon-circle"><i data-lucide="truck"></i></div>
+                <span>Caminhão</span>
+            </button>
+            <button type="button" class="service-card" onclick="abrirModal('Vida')">
+                <div class="icon-circle"><i data-lucide="heart"></i></div>
+                <span>Vida</span>
+            </button>
+            <button type="button" class="service-card" onclick="abrirModal('Diversos')">
+                <div class="icon-circle"><i data-lucide="shield"></i></div>
+                <span>Diversos</span>
+            </button>
+            <button type="button" class="service-card" onclick="abrirModal('Residencial')">
+                <div class="icon-circle"><i data-lucide="home"></i></div>
+                <span>Residencial</span>
+            </button>
+            <button type="button" class="service-card grid-center" onclick="abrirModal('Empresarial')">
+                <div class="icon-circle"><i data-lucide="building-2"></i></div>
+                <span>Empresarial</span>
+            </button>
+        </section>
+    </main>
+
+    <!-- 2. MODAL FLUTUANTE DE FORMULÁRIO -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-card">
+            
+            <div class="modal-header">
+                <div class="modal-header-title">
+                    <div class="header-icon-badge" id="modal-header-icon">
+                        <i data-lucide="car"></i>
+                    </div>
+                    <span id="modal-header-text">SEGURO AUTO</span>
+                </div>
+                <button type="button" class="btn-close" onclick="fecharModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="form-cotacao" onsubmit="event.preventDefault();" novalidate>
+
+                    <div 
+                    class="input-group" 
+                    style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" 
+                    aria-hidden="true">
+                    <label for="site-contato">Site</label>
+
+                    <input
+                        type="text"
+                        id="site-contato"
+                        name="site_contato"
+                        tabindex="-1"
+                        autocomplete="off"
+                    >
+                </div>
+                                    
+                    <!-- ETAPA 1: DADOS OBRIGATÓRIOS DO SEGURADO (COMUM) -->
+                    <div id="step-1" class="step active">
+                        <p class="step-subtitle text-center">Ótimo! É rapidinho, vamos começar...</p>
+                        <h3 class="step-title text-center">Primeiro algumas informações sobre o segurado</h3>
+
+                        <div class="input-group">
+                            <label for="nome">*Nome/Razão Social</label>
+                            <input type="text" id="nome" placeholder="Digite seu nome completo" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="telefone">*Telefone</label>
+                            <input
+                            type="tel"
+                            id="telefone"
+                            placeholder="(00) 00000-0000"
+                            maxlength="15"
+                            inputmode="numeric"
+                            required
+                        >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="email">*E-mail</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="email@exemplo.com"
+                                required
+                            >
+                            </div>
+
+                        <div class="modal-footer footer-right">
+                            <button type="button"; 
+                            class="btn-primary" ;
+                            onclick="proximaEtapa()">PRÓXIMO</button>
+                        </div>
+                    </div>
+
+                    <!-- ETAPA 2: ENDEREÇO (COMUM) -->
+                    <div id="step-2" class="step">
+                        <h3 class="step-title text-center">Qual o endereço do imóvel / residência?</h3>
+
+                    <div class="input-group">
+                        <label for="cep">*CEP</label>
+
+                        <input
+                            type="text"
+                            id="cep"
+                            placeholder="00000-000"
+                            maxlength="9"
+                            inputmode="numeric"
+                            required
+                        >
+                    </div>
+
+                        <div class="input-group">
+                            <label for="logradouro">*Logradouro</label>
+                            <input type="text" 
+                            id="logradouro" 
+                            placeholder="Ex: Rua das Flores"
+                            required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group flex-1">
+                                <label for="numero">*Número</label>
+                                <input type="text" id="numero" placeholder="123" required>
+                            </div>
+                            <div class="input-group flex-1">
+                                <label for="complemento">Complemento</label>
+                                <input type="text" id="complemento" placeholder="Apto 42">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="bairro">*Bairro</label>
+                            <input type="text" 
+                            id="bairro" 
+                            placeholder="Centro"
+                            required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group flex-2">
+                                <label for="cidade">*Cidade</label>
+                                <input type="text" 
+                                id="cidade" 
+                                placeholder="São Paulo" 
+                                required>
+                            </div>
+                            
+                            <div class="input-group flex-1">
+                                <label for="uf">UF</label>
+                                <select id="uf">
+                                    <option value="">UF</option>
+                                    <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer footer-espacado">
+                            <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                            <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: AUTO                     -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-auto" style="display: none;">
+                        
+                        <!-- ETAPA 3 (AUTO) -->
+                        <div id="step-3-auto" class="step">
+                            <h3 class="step-title text-center">Quem é o condutor principal?</h3>
+                            <div class="options-grid grid-2">
+                                <button type="button" class="btn-option active" onclick="selecionarTipoCondutor('segurado', this)">SEGURADO</button>
+                                <button type="button" class="btn-option" onclick="selecionarTipoCondutor('outra_pessoa', this)">OUTRA PESSOA</button>
+                            </div>
+
+                            <div id="campos-outra-pessoa" style="display: none;" class="mt-20">
+                                <div class="input-group">
+                                    <label for="outra-nome">*Nome do Condutor</label>
+                                    <input type="text" id="outra-nome" placeholder="Nome completo">
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group flex-1">
+                                        <label for="outra-nasc">*Data Nasc.</label>
+                                        <input type="date" id="outra-nasc">
+                                    </div>
+                                    <div class="input-group flex-1">
+                                    <label for="outra-cpf">*CPF</label>
+                                    <input
+                                        type="text"
+                                        id="outra-cpf"
+                                        placeholder="000.000.000-00"
+                                        maxlength="14"
+                                        inputmode="numeric"
+                                    >
+                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="profissao-condutor">Profissão do Condutor:</label>
+                            <select id="profissao-condutor">
+                                <option value="">Selecione a profissão...</option>
+                            </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="tempo-habilitacao">*Tempo de habilitação</label>
+                                <select id="tempo-habilitacao" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Mais de 10 anos">Mais de 10 anos</option>
+                                    <option value="8 a 10 anos">8 a 10 anos</option>
+                                    <option value="5 a 7 anos">5 a 7 anos</option>
+                                    <option value="2 a 4 anos">2 a 4 anos</option>
+                                    <option value="Menos de 1 ano">Menos de 1 ano</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 4 (AUTO) -->
+                        <div id="step-4-auto" class="step">
+                            <p class="step-subtitle text-center">Vamos falar um pouco sobre como o veículo é utilizado</p>
+                            <div class="input-group mt-10">
+                                <label for="tipo-utilizacao">Qual o tipo de utilização do veículo?</label>
+                                <select id="tipo-utilizacao">
+                                    <option value="Locomoção Diária">Locomoção Diária</option>
+                                    <option value="Lazer">Lazer</option>
+                                    <option value="Comercial">Comercial / Trabalho</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="km-mensal">*Km mensal</label>
+                                <select id="km-mensal" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Até 500 km">Até 500 km</option>
+                                    <option value="500 a 1000 km">500 a 1000 km</option>
+                                    <option value="Mais de 1000 km">Mais de 1000 km</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 5 (AUTO) -->
+                        <div id="step-5-auto" class="step">
+                            <h3 class="step-title text-center">Informações do Veículo</h3>
+                            <div class="form-row mt-10">
+                                <div class="input-group flex-1">
+                                    <label for="placa">Placa</label>
+                                    <input type="text" id="placa" placeholder="ABC1D23">
+                                </div>
+                                <div class="input-group flex-1">
+                                    <label for="chassi">Chassi</label>
+                                    <input type="text" id="chassi" placeholder="Chassi do veículo">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="marca">*Marca</label>
+                                <select id="marca" required onchange="carregarModelos(this.value)">
+                                    <option value="">A carregar marcas...</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="modelo">*Modelo</label>
+
+                                <select id="modelo" disabled required>
+                                    <option value="">Selecione primeiro a marca...</option>
+                                </select>
+                            </div>
+
+                            <div class="aviso-privacidade">
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+                            
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: MOTO                     -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-moto" style="display: none;">
+
+                        <!-- ETAPA 3 (MOTO): PERGUNTAS 1, 2 E 3 -->
+                        <div id="step-3-moto" class="step">
+                            <h3 class="step-title text-center">Uso e Garagem da Moto</h3>
+
+                            <div class="input-group">
+                                <label for="p1-uso-moto">*1. Qual é o tipo de uso da moto?</label>
+                                <select id="p1-uso-moto" required onchange="verificarUsoMoto(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Uso pessoal</option>
+                                    <option value="2">2 — Trabalho/entrega</option>
+                                    <option value="3">3 — Ambos</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p1-local" style="display: none;" class="input-group mt-10">
+                                <label for="p1-local-estacionado">Onde a moto fica estacionada?</label>
+                                <input type="text" id="p1-local-estacionado" placeholder="Ex: Garagem de casa, pátio...">
+                            </div>
+
+                            <div id="cond-p1-km" style="display: none;" class="input-group mt-10">
+                                <label for="p1-km-dia">Quantos quilômetros roda por dia?</label>
+                                <input type="number" id="p1-km-dia" placeholder="Ex: 40">
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p2-garagem-noite">*2. A moto fica estacionada em garagem fechada durante a noite?</label>
+                                <select id="p2-garagem-noite" required onchange="verificarGaragemNoite(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-tipo-garagem" style="display: none;" class="input-group mt-10">
+                                <label for="p2-propria-condominio">A garagem é própria ou condomínio?</label>
+                                <select id="p2-propria-condominio">
+                                    <option value="propria">Garagem Própria</option>
+                                    <option value="condominio">Condomínio</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-onde-estaciona" style="display: none;" class="input-group mt-10">
+                                <label for="p2-local-noite">Onde normalmente a moto fica estacionada?</label>
+                                <input type="text" id="p2-local-noite" placeholder="Ex: Na calçada, estacionamento rotativo...">
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p3-estacionamento-trabalho">*3. Onde a moto fica estacionada durante o trabalho?</label>
+                                <select id="p3-estacionamento-trabalho" required onchange="verificarEstacionamentoTrabalho(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Garagem</option>
+                                    <option value="2">2 — Estacionamento</option>
+                                    <option value="3">3 — Na rua</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-seguranca" style="display: none;" class="input-group mt-10">
+                                <label for="p3-possui-seguranca">O estacionamento possui segurança / vigilância?</label>
+                                <select id="p3-possui-seguranca">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-alerta-rua" style="display: none; background-color: #fef3c7; border: 1px solid #f59e0b; color: #92400e; padding: 10px; border-radius: 6px;" class="mt-10 text-center">
+                                <small>Aviso: Estacionar em via pública eleva o nível de risco da cotação.</small>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 4 (MOTO): PERGUNTAS 4, 5 E 6 -->
+                        <div id="step-4-moto" class="step">
+                            <h3 class="step-title text-center">Perfil do Condutor e Entregas</h3>
+
+                            <div class="input-group">
+                                <label for="p4-entregas">*4. Você utiliza a moto para fazer entregas?</label>
+                                <select id="p4-entregas" required onchange="verificarEntregas(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p4-horas" style="display: none;" class="input-group mt-10">
+                                <label for="p4-horas-dia">Quantas horas por dia trabalha com a moto?</label>
+                                <input type="number" id="p4-horas-dia" placeholder="Ex: 8">
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p5-idade">*5. Quantos anos você tem?</label>
+                                <select id="p5-idade" required onchange="verificarIdadeMoto(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="menos_18">1 — Menos de 18</option>
+                                    <option value="18_25">2 — 18 a 25</option>
+                                    <option value="26_40">3 — 26 a 40</option>
+                                    <option value="mais_40">4 — Mais de 40</option>
+                                </select>
+                            </div>
+
+                            <div id="alerta-bloqueio-idade" style="display: none; background-color: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 12px; border-radius: 6px;" class="mt-10 text-center">
+                                <strong>Bloqueio:</strong> Não é possível continuar a cotação para condutores menores de 18 anos.
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p6-tempo-habilitacao">*6. Há quanto tempo você possui habilitação para moto?</label>
+                                <select id="p6-tempo-habilitacao" required onchange="verificarHabilitacaoMoto(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Menos de 1 ano</option>
+                                    <option value="2">2 — 1 a 3 anos</option>
+                                    <option value="3">3 — Mais de 3 anos</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p6-experiencia" style="display: none;" class="input-group mt-10">
+                                <label for="p6-experiencia-anterior">Já possui experiência anterior?</label>
+                                <select id="p6-experiencia-anterior">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" id="btn-next-step-4-moto" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 5 (MOTO): PERGUNTAS 7, 8 E 9 -->
+                        <div id="step-5-moto" class="step">
+                            <h3 class="step-title text-center">Financiamento, Seguro e Histórico</h3>
+
+                            <div class="input-group">
+                                <label for="p7-financiamento">*7. A moto possui financiamento?</label>
+                                <select id="p7-financiamento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p8-finalidade">*8. Qual é a finalidade principal do seguro?</label>
+                                <select id="p8-finalidade" required onchange="verificarFinalidadeSeguro(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Roubo e furto</option>
+                                    <option value="2">2 — Acidentes</option>
+                                    <option value="3">3 — Roubo, furto e acidentes</option>
+                                    <option value="4">4 — Cobertura completa</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p8-coberturas" style="display: none;" class="input-group mt-10">
+                                <label for="p8-coberturas-adicionais">Quais coberturas adicionais deseja?</label>
+                                <input type="text" id="p8-coberturas-adicionais" placeholder="Ex: Guincho ilimitado, proteção a terceiros...">
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p9-acidentes">*9. A moto já sofreu algum acidente?</label>
+                                <select id="p9-acidentes" required onchange="verificarAcidentes(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p9-detalhes-acidente" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p9-qtd-acidentes">Quantos acidentes?</label>
+                                    <input type="number" id="p9-qtd-acidentes" placeholder="Ex: 1">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p9-indenizacao">Houve indenização?</label>
+                                    <select id="p9-indenizacao">
+                                        <option value="sim">Sim</option>
+                                        <option value="nao">Não</option>
+                                    </select>
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p9-data-ultimo">Quando ocorreu o último?</label>
+                                    <input type="month" id="p9-data-ultimo">
+                                </div>
+                            </div>
+
+                            <div id="cond-p9-observacoes" style="display: none;" class="input-group mt-10">
+                                <label for="p9-obs">Observações adicionais para a cotação:</label>
+                                <textarea id="p9-obs" rows="2" placeholder="Digite aqui alguma observação se desejar..."></textarea>
+                            </div>
+
+                            <div class="aviso-privacidade">
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: CAMINHÃO                 -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-caminhao" style="display: none;">
+
+                        <!-- ETAPA 3 (CAMINHÃO): P1, P2 E P3 -->
+                        <div id="step-3-caminhao" class="step">
+                            <h3 class="step-title text-center">Uso, Carga e Rotas do Caminhão</h3>
+
+                            <div class="input-group">
+                                <label for="p1-finalidade-caminhao">*1. Qual é a finalidade principal do caminhão?</label>
+                                <select id="p1-finalidade-caminhao" required onchange="verificarFinalidadeCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Transporte de cargas</option>
+                                    <option value="2">2 — Uso próprio</option>
+                                    <option value="3">3 — Prestação de serviços</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p1-transporte-cargas" style="display: none;" class="input-group mt-10">
+                                <label for="p1-tipo-carga-resp">Qual tipo de carga transporta?</label>
+                                <input type="text" id="p1-tipo-carga-resp" placeholder="Ex: Grãos, eletrodomésticos...">
+                            </div>
+                            <div id="cond-p1-uso-proprio" style="display: none;" class="input-group mt-10">
+                                <label for="p1-normalmente-transporta">O que normalmente transporta?</label>
+                                <input type="text" id="p1-normalmente-transporta" placeholder="Ex: Ferramentas e mercadorias próprias...">
+                            </div>
+                            <div id="cond-p1-servico" style="display: none;" class="input-group mt-10">
+                                <label for="p1-servico-realiza">Qual serviço realiza?</label>
+                                <input type="text" id="p1-servico-realiza" placeholder="Ex: Guincho, caçamba, mudança...">
+                            </div>
+                            <div id="cond-p1-outro" style="display: none;" class="input-group mt-10">
+                            <label for="p1-especificar-outro">Por favor, especifique:</label>
+                            <input type="text" id="p1-especificar-outro" placeholder="Especifique a finalidade...">
+                        </div>
+
+                            <div id="grp-p2-tipo-carga" style="display: none;" class="input-group mt-20">
+                                <label for="p2-tipo-carga">*2. Qual tipo de carga o caminhão transporta?</label>
+                                <select id="p2-tipo-carga" required onchange="verificarTipoCargaCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Alimentos</option>
+                                    <option value="2">2 — Materiais de construção</option>
+                                    <option value="3">3 — Produtos agrícolas</option>
+                                    <option value="4">4 — Produtos industrializados</option>
+                                    <option value="5">5 — Carga perigosa</option>
+                                    <option value="6">6 — Outra</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-carga-perigosa" style="display: none;" class="input-group mt-10">
+                                <label for="p2-detalhe-carga-perigosa">Qual é o tipo de carga perigosa?</label>
+                                <input type="text" id="p2-detalhe-carga-perigosa" placeholder="Ex: Combustível, químicos, gás...">
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p3-viagens-caminhao">*3. O caminhão realiza viagens:</label>
+                                <select id="p3-viagens-caminhao" required onchange="verificarViagensCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Apenas dentro da cidade</option>
+                                    <option value="2">2 — Dentro do estado</option>
+                                    <option value="3">3 — Entre estados</option>
+                                    <option value="4">4 — Internacionalmente</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-cidade" style="display: none;" class="input-group mt-10">
+                                <label for="p3-distancia-media">Distância média percorrida por dia (km):</label>
+                                <input type="number" id="p3-distancia-media" placeholder="Ex: 120">
+                            </div>
+                            <div id="cond-p3-estado" style="display: none;" class="input-group mt-10">
+                                <label for="p3-regioes-atendidas">Quais cidades/regiões costuma atender?</label>
+                                <input type="text" id="p3-regioes-atendidas" placeholder="Ex: Grande SP e Vale do Paraíba">
+                            </div>
+                            <div id="cond-p3-estados" style="display: none;" class="input-group mt-10">
+                                <label for="p3-estados-atendidos">Quais estados costuma atender?</label>
+                                <input type="text" id="p3-estados-atendidos" placeholder="Ex: SP, RJ, MG e PR">
+                            </div>
+                            <div id="cond-p3-internacional" style="display: none;" class="input-group mt-10">
+                                <label for="p3-paises-atendidos">Quais países costuma atender?</label>
+                                <input type="text" id="p3-paises-atendidos" placeholder="Ex: Argentina, Uruguai, Paraguai">
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 4 (CAMINHÃO): P4, P5, P6 E P7 -->
+                        <div id="step-4-caminhao" class="step">
+                            <h3 class="step-title text-center">Motorista, Segurança e Histórico</h3>
+
+                            <div class="input-group">
+                                <label for="p4-quem-dirige">*4. Quem dirige o caminhão?</label>
+                                <select id="p4-quem-dirige" required onchange="verificarQuemDirigeCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — O próprio proprietário</option>
+                                    <option value="2">2 — Motorista contratado</option>
+                                    <option value="3">3 — Vários motoristas</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p4-tempo-cnh" style="display: none;" class="input-group mt-10">
+                                <label for="p4-tempo-cnh-motorista">Há quanto tempo o motorista possui CNH de caminhão?</label>
+                                <select id="p4-tempo-cnh-motorista">
+                                    <option value="menos_2">Menos de 2 anos</option>
+                                    <option value="2_5">2 a 5 anos</option>
+                                    <option value="mais_5">Mais de 5 anos</option>
+                                </select>
+                            </div>
+                            <div id="cond-p4-qtd-motoristas" style="display: none;" class="input-group mt-10">
+                                <label for="p4-qtd-motoristas-num">Quantos motoristas utilizam o veículo?</label>
+                                <input type="number" id="p4-qtd-motoristas-num" placeholder="Ex: 3">
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p5-rastreador">*5. O caminhão possui rastreador?</label>
+                                <select id="p5-rastreador" required onchange="verificarRastreadorCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p5-monitoramento" style="display: none;" class="input-group mt-10">
+                                <label for="p5-monitoramento-24h">O rastreador possui monitoramento 24 horas?</label>
+                                <select id="p5-monitoramento-24h">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p5-deseja-rastreio" style="display: none;" class="input-group mt-10">
+                                <label for="p5-incluir-rastreio">Deseja incluir rastreamento como parte da proteção?</label>
+                                <select id="p5-incluir-rastreio">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p6-estacionamento-caminhao">*6. Onde o caminhão costuma ficar estacionado?</label>
+                                <select id="p6-estacionamento-caminhao" required onchange="verificarEstacionamentoCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Garagem própria</option>
+                                    <option value="2">2 — Garagem da empresa</option>
+                                    <option value="3">3 — Estacionamento</option>
+                                    <option value="4">4 — Via pública</option>
+                                    <option value="5">5 — Outro local</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p6-empresa-acesso" style="display: none;" class="input-group mt-10">
+                                <label for="p6-controle-acesso">O local possui controle de acesso?</label>
+                                <select id="p6-controle-acesso">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p6-estac-seguranca" style="display: none;" class="input-group mt-10">
+                                <label for="p6-possui-seguranca">O estacionamento possui segurança / vigilância?</label>
+                                <select id="p6-possui-seguranca">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p6-via-noite" style="display: none;" class="input-group mt-10">
+                                <label for="p6-rua-noite">Fica estacionado na rua durante a noite?</label>
+                                <select id="p6-rua-noite">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div id="cond-p6-outro-local" style="display: none;" class="input-group mt-10">
+                                <label for="p6-especificar-local">Por favor, especifique o local:</label>
+                                <input type="text" id="p6-especificar-local" placeholder="Especifique o local...">
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p7-acidente-caminhao">*7. O caminhão já sofreu algum acidente?</label>
+                                <select id="p7-acidente-caminhao" required onchange="verificarAcidenteCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p7-detalhes-acidente" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p7-qtd-acidentes">Quantos acidentes?</label>
+                                    <input type="number" id="p7-qtd-acidentes" placeholder="Ex: 1">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p7-ultimo-acidente">Quando ocorreu o último?</label>
+                                    <input type="month" id="p7-ultimo-acidente">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p7-danos-caminhao">Houve danos significativos ao caminhão?</label>
+                                    <select id="p7-danos-caminhao">
+                                        <option value="sim">Sim</option>
+                                        <option value="nao">Não</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 5 (CAMINHÃO): P8 A P15 -->
+                        <div id="step-5-caminhao" class="step">
+                            <h3 class="step-title text-center">Cobertura e Dados Finais do Caminhão</h3>
+
+                            <div class="input-group">
+                                <label for="p8-roubo-caminhao">*8. O caminhão já foi roubado ou furtado alguma vez?</label>
+                                <select id="p8-roubo-caminhao" required onchange="verificarRouboCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p8-detalhes-roubo" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p8-quando-aconteceu">Quando aconteceu?</label>
+                                    <input type="month" id="p8-quando-aconteceu">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p8-veiculo-recuperado">O veículo foi recuperado?</label>
+                                    <select id="p8-veiculo-recuperado">
+                                        <option value="sim">Sim</option>
+                                        <option value="nao">Não</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p9-coberturas-caminhao">*9. Quais coberturas você deseja contratar?</label>
+                                <select id="p9-coberturas-caminhao" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Roubo e furto</option>
+                                    <option value="2">2 — Colisão</option>
+                                    <option value="3">3 — Roubo, furto e colisão</option>
+                                    <option value="4">4 — Cobertura completa</option>
+                                    <option value="5">5 — Ainda não sei (Análise)</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p10-terceiros">*10. Deseja cobertura para danos causados a terceiros?</label>
+                                <select id="p10-terceiros" required onchange="verificarTerceirosCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p10-limite-terceiros" style="display: none;" class="input-group mt-10">
+                                <label for="p10-limite-valor">Qual limite de cobertura deseja para terceiros?</label>
+                                <select id="p10-limite-valor">
+                                    <option value="100k">R$ 100.000,00</option>
+                                    <option value="200k">R$ 200.000,00</option>
+                                    <option value="500k">R$ 500.000,00 ou mais</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p11-acessorios">*11. Possui algum equipamento ou acessório adicional?</label>
+                                <select id="p11-acessorios" required onchange="verificarAcessoriosCaminhao(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p11-detalhe-acessorios" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p11-quais-equipamentos">Quais equipamentos/acessórios possui?</label>
+                                    <input type="text" id="p11-quais-equipamentos" placeholder="Ex: Munck, câmara fria, plataforma...">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p11-valor-aproximado">Valor aproximado dos equipamentos (R$):</label>
+                                    <input
+                                    type="text"
+                                    id="p11-valor-aproximado"
+                                    placeholder="R$ 0,00"
+                                    inputmode="numeric"
+>
+                                </div>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p12-financiado">*12. O caminhão é financiado?</label>
+                                <select id="p12-financiado" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p13-ano-caminhao">*13. Qual é o ano do caminhão?</label>
+                                <input type="number" id="p13-ano-caminhao" placeholder="Ex: 2018" min="1970" max="2027" required onchange="verificarAnoCaminhao(this.value)">
+                            </div>
+
+                            <div id="cond-p13-conservacao" style="display: none;" class="input-group mt-10">
+                                <label for="p13-estado-conservacao">Como está o estado de conservação/manutenção do veículo?</label>
+                                <textarea id="p13-estado-conservacao" rows="2" placeholder="Descreva brevemente a conservação..."></textarea>
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p14-valor-caminhao">*14. Qual é o valor aproximado do caminhão (R$)?</label>
+                            <input
+                                type="text"
+                                id="p14-valor-caminhao"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
+                                required
+                            >
+                            </div>
+
+                            <div class="input-group mt-20">
+                                <label for="p15-observacoes">15. Observações adicionais:</label>
+                                <textarea id="p15-observacoes" rows="2" placeholder="Existe alguma informação adicional sobre o caminhão ou utilização?"></textarea>
+                            </div>
+
+                            <div class="aviso-privacidade">
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: SEGURO DE VIDA (11 PERG) -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-vida" style="display: none;">
+
+                        <!-- ETAPA 3 (VIDA): P1, P2 E P3 -->
+                        <div id="step-3-vida" class="step">
+                            <h3 class="step-title text-center">Objetivo e Perfil Pessoal</h3>
+
+                            <!-- P1. Objetivo -->
+                            <div class="input-group">
+                                <label for="p1-objetivo-vida">*1. Qual é o objetivo principal do seguro?</label>
+                                <select id="p1-objetivo-vida" required onchange="verificarObjetivoVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Proteção da família</option>
+                                    <option value="2">2 — Proteção financeira pessoal</option>
+                                    <option value="3">3 — Proteção para financiamento/dívidas</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p1-beneficiario-fam" style="display: none;" class="input-group mt-10">
+                                <label for="p1-beneficiarios-fam">Quem deseja indicar como beneficiário?</label>
+                                <input type="text" id="p1-beneficiarios-fam" placeholder="Ex: Cônjuge, filhos, pais...">
+                            </div>
+                            <div id="cond-p1-sit-pessoal" style="display: none;" class="input-group mt-10">
+                                <label for="p1-situacoes-proteger">Quais situações deseja proteger?</label>
+                                <input type="text" id="p1-situacoes-proteger" placeholder="Ex: Invalidez, afastamento do trabalho, DIT...">
+                            </div>
+                            <div id="cond-p1-tipo-fin" style="display: none;" class="input-group mt-10">
+                                <label for="p1-financiamento-divida">Qual tipo de financiamento ou dívida?</label>
+                                <input type="text" id="p1-financiamento-divida" placeholder="Ex: Financiamento imobiliário, empréstimo...">
+                            </div>
+                            <div id="cond-p1-especificar-outro" style="display: none;" class="input-group mt-10">
+                                <label for="p1-outro-objetivo">Por favor, especifique seu objetivo:</label>
+                                <input type="text" id="p1-outro-objetivo" placeholder="Descreva seu objetivo principal...">
+                            </div>
+
+                            <!-- P2. Faixa etária -->
+                            <div class="input-group mt-20">
+                                <label for="p2-faixa-etaria-vida">*2. Qual é a sua faixa etária?</label>
+                                <select id="p2-faixa-etaria-vida" required onchange="verificarFaixaEtariaVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Até 25 anos</option>
+                                    <option value="2">2 — 26 a 40 anos</option>
+                                    <option value="3">3 — 41 a 60 anos</option>
+                                    <option value="4">4 — Acima de 60 anos</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-adicionais-41" style="display: none;" class="input-group mt-10">
+                                <label for="p2-incluir-adicionais-41">Deseja incluir coberturas adicionais?</label>
+                                <select id="p2-incluir-adicionais-41">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p2-alerta-analise" style="display: none; background-color: #eff6ff; border: 1px solid #3b82f6; color: #1e40af; padding: 10px; border-radius: 6px;" class="mt-10 text-center">
+                                <small>Informação: Propostas para cima de 60 anos passam por uma análise técnica específica das seguradoras.</small>
+                            </div>
+
+                            <!-- P3. Dependentes -->
+                            <div class="input-group mt-20">
+                                <label for="p3-dependentes-vida">*3. Você possui dependentes financeiros?</label>
+                                <select id="p3-dependentes-vida" required onchange="verificarDependentesVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p3-qtd-dep" style="display: none;" class="input-group mt-10">
+                                <label for="p3-num-dependentes">Quantos dependentes possui?</label>
+                                <input type="number" id="p3-num-dependentes" placeholder="Ex: 2" min="1">
+                            </div>
+
+                            <div id="cond-p3-protecao-pessoal" style="display: none;" class="input-group mt-10">
+                                <label for="p3-foco-pessoal">Deseja contratar o seguro principalmente para proteção pessoal?</label>
+                                <select id="p3-foco-pessoal">
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 4 (VIDA): P4, P5, P6 E P7 -->
+                        <div id="step-4-vida" class="step">
+                            <h3 class="step-title text-center">Cobertura de Riscos e Atividades</h3>
+
+                            <!-- P4. Morte -->
+                            <div class="input-group">
+                                <label for="p4-morte-vida">*4. Você deseja incluir cobertura por morte?</label>
+                                <select id="p4-morte-vida" required onchange="verificarMorteVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p4-valor-morte" style="display: none;" class="input-group mt-10">
+                                <label for="p4-capital-morte">Qual valor de cobertura por morte deseja?</label>
+                                <input
+                            type="text"
+                            id="p4-capital-morte"
+                            placeholder="R$ 0,00"
+                            inputmode="numeric"
+                        >
+                            </div>
+
+                            <!-- P5. Invalidez -->
+                            <div class="input-group mt-20">
+                                <label for="p5-invalidez-vida">*5. Deseja incluir cobertura para invalidez?</label>
+                                <select id="p5-invalidez-vida" required onchange="verificarInvalidezVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p5-tipo-invalidez" style="display: none;" class="input-group mt-10">
+                                <label for="p5-detalhe-invalidez">Qual tipo de invalidez deseja incluir?</label>
+                                <select id="p5-detalhe-invalidez">
+                                    <option value="total_parcial">Invalidez Total e Parcial por Acidente (IPA)</option>
+                                    <option value="funcional">Invalidez Funcional por Doença (IFPD)</option>
+                                    <option value="ambas">Ambas as coberturas</option>
+                                </select>
+                            </div>
+
+                            <!-- P6. Doenças Graves -->
+                            <div class="input-group mt-20">
+                                <label for="p6-doencas-vida">*6. Deseja incluir cobertura para doenças graves?</label>
+                                <select id="p6-doencas-vida" required onchange="verificarDoencasVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p6-tipos-doencas" style="display: none;" class="input-group mt-10">
+                                <label for="p6-quais-doencas">Quais coberturas para doenças graves deseja considerar?</label>
+                                <input type="text" id="p6-quais-doencas" placeholder="Ex: Cobertura para câncer, AVC, infarto ou pacote de doenças graves...">
+                            </div>
+
+                            <!-- P7. Esportes de risco -->
+                            <div class="input-group mt-20">
+                                <label for="p7-esportes-vida">*7. Você pratica algum esporte ou atividade considerada de maior risco?</label>
+                                <select id="p7-esportes-vida" required onchange="verificarEsportesVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p7-detalhe-esporte" style="display: none;" class="mt-10">
+                                <div class="input-group">
+                                    <label for="p7-qual-atividade">Qual atividade pratica?</label>
+                                    <input type="text" id="p7-qual-atividade" placeholder="Ex: Paraquedismo, mergulho, artes marciais, automobilismo...">
+                                </div>
+                                <div class="input-group mt-10">
+                                    <label for="p7-frequencia">Com que frequência?</label>
+                                    <input type="text" id="p7-frequencia" placeholder="Ex: 2 vezes por mês, profissionalmente...">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="proximaEtapa()">PRÓXIMO</button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 5 (VIDA): P8, P9, P10 E P11 -->
+                        <div id="step-5-vida" class="step">
+                            <h3 class="step-title text-center">Valores e Definições Finais</h3>
+
+                            <!-- P8. Indicar Beneficiários -->
+                            <div class="input-group">
+                                <label for="p8-beneficiarios-opcao">*8. Você deseja indicar beneficiários?</label>
+                                <select id="p8-beneficiarios-opcao" required onchange="verificarBeneficiariosVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                    <option value="3">3 — Ainda não sei</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p8-num-benef" style="display: none;" class="input-group mt-10">
+                                <label for="p8-qtd-beneficiarios">Quantos beneficiários deseja indicar?</label>
+                                <input type="number" id="p8-qtd-beneficiarios" placeholder="Ex: 2" min="1">
+                            </div>
+
+                            <div id="cond-p8-msg-posterior" style="display: none; background-color: #f3f4f6; color: #4b5563; padding: 10px; border-radius: 6px;" class="mt-10 text-center">
+                                <small>Sem problemas! Os beneficiários poderão ser definidos a qualquer momento após a emissão da apólice.</small>
+                            </div>
+
+                            <!-- P9. Valor Global da Cobertura -->
+                            <div class="input-group mt-20">
+                                <label for="p9-valor-cobertura">*9. Qual valor de cobertura global você deseja?</label>
+                                <select id="p9-valor-cobertura" required onchange="verificarValorCoberturaVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="50k">1 — R$ 50.000</option>
+                                    <option value="100k">2 — R$ 100.000</option>
+                                    <option value="250k">3 — R$ 250.000</option>
+                                    <option value="500k">4 — R$ 500.000</option>
+                                    <option value="outro">5 — Outro valor</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p9-outro-valor" style="display: none;" class="input-group mt-10">
+                                <label for="p9-especificar-valor">Informe o valor desejado (R$):</label>
+                                <input
+                                type="text"
+                                id="p9-especificar-valor"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
+                            >
+                            </div>
+
+                            <!-- P10. Coberturas Adicionais -->
+                            <div class="input-group mt-20">
+                                <label for="p10-cobertura-adicional">*10. Deseja incluir alguma cobertura adicional?</label>
+                                <select id="p10-cobertura-adicional" required onchange="verificarAdicionaisVida(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Sim</option>
+                                    <option value="2">2 — Não</option>
+                                </select>
+                            </div>
+
+                            <div id="cond-p10-quais-adicionais" style="display: none;" class="input-group mt-10">
+                                <label for="p10-quais-coberturas">Selecione ou descreva as coberturas adicionais:</label>
+                                <input type="text" id="p10-quais-coberturas" placeholder="Ex: Assistência Funeral, Diária por Internação, DIT...">
+                            </div>
+
+                            <!-- P11. Observações -->
+                            <div class="input-group mt-20">
+                                <label for="p11-observacoes-vida">11. Observações adicionais:</label>
+                                <textarea id="p11-observacoes-vida" rows="2" placeholder="Existe alguma informação adicional que você gostaria de informar sobre o seguro de vida, seus objetivos ou suas necessidades de cobertura?"></textarea>
+                            </div>
+
+                            <div class="aviso-privacidade">
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+
+                            <div class="modal-footer footer-espacado">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- FLUXO ESPECÍFICO: SEGURO DIVERSOS          -->
+                    <!-- ========================================== -->
+                    <div id="fluxo-diversos" style="display: none;">
+                        <div id="step-3-diversos" class="step">
+                            <h3 class="step-title text-center">Proteção e Riscos (Diversos)</h3>
+
+                            <!-- 1. O que você deseja proteger? -->
+                            <div class="input-group">
+                                <label for="p1-protecao-diversos">*1. O que você deseja proteger?</label>
+                                <select id="p1-protecao-diversos" required onchange="verificarProtecaoDiversos(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Equipamento</option>
+                                    <option value="2">2 — Objeto pessoal</option>
+                                    <option value="3">3 — Evento</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <!-- Campos Condicionais da Pergunta 1 -->
+                            <div id="cond-p1-equipamento" style="display: none;" class="input-group mt-10">
+                                <label for="p1-qual-equipamento">Qual equipamento deseja proteger?</label>
+                                <input type="text" id="p1-qual-equipamento" placeholder="Ex: Câmera fotográfica, drone, notebook...">
+                            </div>
+                            <div id="cond-p1-objeto" style="display: none;" class="input-group mt-10">
+                                <label for="p1-qual-objeto">Qual objeto pessoal deseja proteger?</label>
+                                <input type="text" id="p1-qual-objeto" placeholder="Ex: Relógio, joia, instrumento musical...">
+                            </div>
+                            <div id="cond-p1-evento" style="display: none;" class="input-group mt-10">
+                                <label for="p1-qual-evento">Qual é o evento?</label>
+                                <input type="text" id="p1-qual-evento" placeholder="Ex: Casamento, show, feira corporativa...">
+                            </div>
+                            <div id="cond-p1-outro-diversos" style="display: none;" class="input-group mt-10">
+                            <label for="p1-especificar-protecao">Por favor, especifique o que deseja proteger:</label>
+                            <input
+                                type="text"
+                                id="p1-especificar-protecao"
+                                placeholder="Descreva o bem ou serviço..."
+                            >
+                        </div>
+
+                            <!-- 2. Qual é o principal risco que deseja proteger? -->
+                            <div class="input-group mt-20">
+                                <label for="p2-risco-diversos">*2. Qual é o principal risco que deseja proteger?</label>
+                                <select id="p2-risco-diversos" required onchange="verificarRiscoDiversos(this.value)">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Roubo ou furto</option>
+                                    <option value="2">2 — Danos acidentais</option>
+                                    <option value="3">3 — Perda ou quebra</option>
+                                    <option value="4">4 — Outro</option>
+                                </select>
+                            </div>
+
+                            <!-- Campo Condicional da Pergunta 2 -->
+                            <div id="cond-p2-especificar-risco" style="display: none;" class="input-group mt-10">
+                                <label for="p2-qual-risco">Especifique o risco que deseja proteger:</label>
+                                <input type="text" id="p2-qual-risco" placeholder="Ex: Inundações, incêndio, cancelamento...">
+                            </div>
+
+                            <!-- 3. Qual é o valor aproximado do bem ou serviço? -->
+                            <div class="input-group mt-20">
+                                <label for="p3-valor-diversos">*3. Qual é o valor aproximado do bem ou serviço?</label>
+                                <select id="p3-valor-diversos" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="1">1 — Até R$ 5.000</option>
+                                    <option value="2">2 — R$ 5.001 a R$ 20.000</option>
+                                    <option value="3">3 — Acima de R$ 20.000</option>
+                                </select>
+                            </div>
+
+                            <!-- 4. Observações -->
+                            <div class="input-group mt-20">
+                                <label for="p4-observacoes-diversos">4. Observações adicionais:</label>
+                                <textarea id="p4-observacoes-diversos" rows="3" placeholder="Existe alguma informação adicional que gostaria de informar sobre o seguro?"></textarea>
+                            </div>
+
+                            <div class="aviso-privacidade">
+
+                            <p>
+                                Ao enviar esta cotação, você declara estar ciente de que seus dados
+                                serão utilizados para analisar sua solicitação e entrar em contato
+                                sobre o seguro solicitado.
+                                <button
+                                    type="button"
+                                    class="link-privacidade"
+                                    onclick="abrirAvisoPrivacidade()"
+                                >
+                                    Aviso de Privacidade
+                                </button>
+                            </p>
+                        </div>
+
+                            <div class="modal-footer footer-espacado mt-20">
+                                <button type="button" class="btn-secondary" onclick="etapaAnterior()">VOLTAR</button>
+                                <button type="button" class="btn-primary" onclick="enviarFormulario()">ENVIAR COTAÇÃO</button>
+                            </div>
+                        </div>
+                    </div>
+<!-- ========================================== -->
+                <!-- FLUXO: SEGURO RESIDENCIAL                  -->
+                <!-- ========================================== -->
+                <div id="fluxo-residencial" style="display: none;">
+                    
+                    <!-- Etapa 3: Tipo do Imóvel -->
+                    <div id="step-3-residencial" class="step" style="display: none;">
+                        <h3>Qual é o tipo do imóvel?</h3>
+                        <p>Informe as características básicas da residência.</p>
+                        
+                        <div class="input-group">
+                            <label for="tipo-imovel">Tipo de Imóvel *</label>
+                            <select id="tipo-imovel" required onchange="verificarTipoImovelResidencial(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Casa</option>
+                                <option value="2">Apartamento</option>
+                                <option value="3">Outro</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Casa (1) -->
+                        <div id="cond-p1-garagem" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="possui-garagem">O imóvel possui garagem? *</label>
+                                <select id="possui-garagem" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Apartamento (2) -->
+                        <div id="cond-p1-portaria" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="possui-portaria">O condomínio possui portaria? *</label>
+                                <select id="possui-portaria" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="24h">Sim (Portaria 24h)</option>
+                                    <option value="parcial">Sim (Portaria parcial / remota)</option>
+                                    <option value="nao">Não possui</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Outro (3) -->
+                        <div id="cond-p1-outro-imovel" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="especificar-imovel">Especifique o tipo de imóvel * </label>
+                                <input type="text" id="especificar-imovel" required placeholder="Ex: Chácara, Flat, Sobrado em condomínio fechado">
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 4: Posse do Imóvel -->
+                    <div id="step-4-residencial" class="step" style="display: none;">
+                        <h3>O imóvel é próprio ou alugado?</h3>
+                        <p>Precisamos saber a sua relação jurídica com o local.</p>
+
+                        <div class="input-group">
+                            <label for="posse-imovel">Situação do Imóvel *</label>
+                            <select id="posse-imovel" required onchange="verificarPosseImovelResidencial(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Próprio</option>
+                                <option value="2">Alugado</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Alugado (2) -->
+                        <div id="cond-p2-alugado" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="desejo-alugado">O que deseja proteger? *</label>
+                                <select id="desejo-alugado" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="apenas_bens">Apenas os bens (conteúdo)</option>
+                                    <option value="imovel_e_bens">Também o imóvel (responsabilidade civil / danos estruturais)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 5: Coberturas, Bens e Observações -->
+                    <div id="step-5-residencial" class="step" style="display: none;">
+                        <h3>Coberturas e Detalhes Finais</h3>
+                        <p>Defina as proteções desejadas e informações adicionais.</p>
+
+                        <div class="input-group">
+                            <label for="cobertura-residencial">Qual cobertura deseja contratar? *</label>
+                            <select id="cobertura-residencial" required onchange="verificarCoberturasResidencial(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Incêndio</option>
+                                <option value="2">Roubo e furto</option>
+                                <option value="3">Danos elétricos</option>
+                                <option value="4">Cobertura completa</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Cobertura Completa (4) -->
+                        <div id="cond-p3-adicionais" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label>Selecione as coberturas adicionais desejadas:</label>
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 5px;">
+                                    <label><input type="checkbox" name="adic" value="vendaval"> Vendaval, furacão e granizo</label>
+                                    <label><input type="checkbox" name="adic" value="responsabilidade_civil"> Responsabilidade Civil Familiar</label>
+                                    <label><input type="checkbox" name="adic" value="impacto_veiculos"> Impacto de veículos</label>
+                                    <label><input type="checkbox" name="adic" value="moradia_temporaria"> Perda ou pagamento de aluguel</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 15px;">
+                            
+                        <label for="bem-alto-valor">
+                            O imóvel possui algum bem de alto valor? *
+                        </label>
+
+                        <select
+                            id="bem-alto-valor"
+                            required
+                            onchange="verificarBemAltoValorResidencial(this.value)"
+                        >
+                            <option value="">Selecione...</option>
+                            <option value="1">Sim</option>
+                            <option value="2">Não</option>
+                        </select>
+                    </div>
+
+                    <!-- Condicional: Se Possui Bem de Alto Valor -->
+                    <div
+                        id="cond-p4-bem-valor"
+                        class="conditional-field"
+                        style="display: none;"
+                    >
+
+                        <div class="input-group">
+                            <label for="qual-bem">Tipo de bem de maior valor *</label>
+
+                            <input
+                                type="text"
+                                id="qual-bem"
+                                required
+                                placeholder="Ex: Obras de arte, joias, eletrônicos"
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="valor-bem">
+                                Valor aproximado do bem (R$) *
+                            </label>
+
+                            <input
+                            type="text"
+                            id="valor-bem"
+                            placeholder="R$ 0,00"
+                            inputmode="numeric"
+                            required
+                        >
+                        </div>
+
+                    </div>
+
+                        <div class="input-group" style="margin-top: 15px;">
+                            <label for="obs-residencial">Observações</label>
+                            <textarea
+                                id="obs-residencial"
+                                rows="3"
+                                placeholder="Existe alguma informação adicional sobre o imóvel ou sobre o seguro que gostaria de informar?"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button
+                                type="button"
+                                class="btn-voltar"
+                                onclick="etapaAnterior()"
+                                style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;"
+                            >
+                                Voltar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn-enviar"
+                                onclick="enviarFormulario()"
+                                style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+                            >
+                                Enviar Cotação
+                            </button>
+                        </div>
+
+                        </div>
+
+                </div>
+
+                <!-- ========================================== -->
+                <!-- FLUXO: SEGURO EMPRESARIAL                  -->
+                <!-- ========================================== -->
+                <div id="fluxo-empresarial" style="display: none;">
+                    
+                    <!-- Etapa 3: Tipo de Empresa -->
+                    <div id="step-3-empresarial" class="step" style="display: none;">
+                        <h3>Qual é o tipo de empresa?</h3>
+                        <p>Informe as características básicas do seu negócio.</p>
+                        
+                        <div class="input-group">
+                            <label for="tipo-empresa">*Tipo de Empresa </label>
+                            <select id="tipo-empresa" required onchange="verificarTipoEmpresa(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Comércio</option>
+                                <option value="2">Indústria</option>
+                                <option value="3">Escritório</option>
+                                <option value="4">Prestação de serviços</option>
+                                <option value="5">Outro</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Comércio (1) -->
+                        <div id="cond-emp-comercio" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="possui-estoque-emp">*A empresa possui estoque? </label>
+                                <select id="possui-estoque-emp" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Indústria (2) -->
+                        <div id="cond-emp-industria" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="tipo-producao">*Qual tipo de produção realiza? </label>
+                                <input type="text" id="tipo-producao" required placeholder="Ex: Têxtil, Metalúrgica, Alimentícia">
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Escritório (3) -->
+                        <div id="cond-emp-escritorio" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="qtd-funcionarios">*Quantidade aproximada de funcionários </label>
+                                <input type="number" id="qtd-funcionarios" required placeholder="Ex: 10">
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Prestação de Serviços (4) -->
+                        <div id="cond-emp-servicos" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="qual-servico">*Qual serviço presta? </label>
+                                <input type="text" id="qual-servico" required placeholder="Ex: Consultoria, TI, Limpeza">
+                            </div>
+                        </div>
+
+                        <!-- Condicional: Se Outro (5) -->
+                        <div id="cond-emp-outro" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="especificar-empresa">*Especifique o tipo de empresa </label>
+                                <input type="text" id="especificar-empresa" required placeholder="Descreva o ramo de atividade">
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 4: Imóvel da Empresa -->
+                    <div id="step-4-empresarial" class="step" style="display: none;">
+                        <h3>O imóvel da empresa é próprio ou alugado?</h3>
+                        <p>Informe a situação do local do seu negócio.</p>
+
+                        <div class="input-group">
+                            <label for="imovel-empresa">*Situação do Imóvel</label>
+                            <select id="imovel-empresa" required onchange="verificarImovelEmpresa(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Próprio</option>
+                                <option value="2">Alugado</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Alugado (2) -->
+                        <div id="cond-emp-alugado" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label for="proteger-bens-alugado">*Deseja proteger também os bens e equipamentos da empresa? </label>
+                                <select id="proteger-bens-alugado" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 5: O que deseja proteger -->
+                    <div id="step-5-empresarial" class="step" style="display: none;">
+                        <h3>O que deseja proteger?</h3>
+                        <p>Selecione o foco principal da proteção patrimonial.</p>
+
+                        <div class="input-group">
+                            <label for="desejo-proteger-emp">*Proteção Desejada </label>
+                            <select id="desejo-proteger-emp" required onchange="verificarDesejoProtegerEmp(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Imóvel</option>
+                                <option value="2">Equipamentos</option>
+                                <option value="3">Estoque</option>
+                                <option value="4">Tudo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 6: Equipamentos ou bens de alto valor -->
+                    <div id="step-6-empresarial" class="step" style="display: none;">
+                        <h3>Bens de Alto Valor</h3>
+                        <p>A empresa possui algum equipamento ou bem de alto valor?</p>
+
+                        <div class="input-group">
+                            <label for="bem-alto-valor-emp">*Possui bem de alto valor? </label>
+                            <select id="bem-alto-valor-emp" required onchange="verificarBemAltoValorEmp(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Sim</option>
+                                <option value="2">Não</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Sim (1) -->
+                        <div id="cond-emp-bem-valor" class="conditional-field" style="display: none;">
+
+                            <div class="input-group">
+                                <label for="qual-equipamento">*Qual equipamento ou bem? </label>
+
+                                <input
+                                    type="text"
+                                    id="qual-equipamento"
+                                    required
+                                    placeholder="Ex: Máquinas específicas, servidores"
+                                >
+                            </div>
+
+                            <div class="input-group">
+                                <label for="valor-equipamento">
+                                    *Valor aproximado do bem (R$) 
+                                </label>
+
+                            <input
+                                type="text"
+                                id="valor-equipamento"
+                                placeholder="R$ 0,00"
+                                inputmode="numeric"
+                                required
+                            >
+                            </div>
+
+                        </div>
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 7: Coberturas -->
+                    <div id="step-7-empresarial" class="step" style="display: none;">
+                        <h3>Coberturas Principais</h3>
+                        <p>Qual é a principal cobertura desejada?</p>
+
+                        <div class="input-group">
+                            <label for="cobertura-empresa">*Cobertura Desejada </label>
+                            <select id="cobertura-empresa" required onchange="verificarCoberturasEmpresa(this.value)">
+                                <option value="">Selecione...</option>
+                                <option value="1">Incêndio</option>
+                                <option value="2">Roubo e furto</option>
+                                <option value="3">Danos elétricos</option>
+                                <option value="4">Cobertura completa</option>
+                            </select>
+                        </div>
+
+                        <!-- Condicional: Se Cobertura Completa (4) -->
+                        <div id="cond-emp-adicionais" class="conditional-field" style="display: none;">
+                            <div class="input-group">
+                                <label>Coberturas adicionais recomendadas:</label>
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 5px;">
+                                    <label><input type="checkbox" name="adic-emp" value="lucros_cessantes"> Lucros cessantes</label>
+                                    <label><input type="checkbox" name="adic-emp" value="responsabilidade_civil"> Responsabilidade Civil Operações</label>
+                                    <label><input type="checkbox" name="adic-emp" value="vendaval"> Vendaval e granizo</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-proximo" onclick="proximaEtapa()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Próximo</button>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 8: Observações e Envio -->
+                    <div id="step-8-empresarial" class="step" style="display: none;">
+                        <h3>Observações</h3>
+                        <p>Existe alguma informação adicional sobre a empresa, seus bens ou sobre o seguro que gostaria de informar?</p>
+
+                        <div class="input-group">
+                            <label for="obs-empresarial">Observações</label>
+                            <textarea id="obs-empresarial" rows="4" placeholder="Detalhes adicionais sobre o negócio..."></textarea>
+                        </div>
+
+                        <div class="form-actions" style="display: flex; justify-content: space-between; margin-top: 25px;">
+                            <button type="button" class="btn-voltar" onclick="etapaAnterior()" style="padding: 10px 20px; background-color: #e2e8f0; color: #1e293b; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase;">Voltar</button>
+                            <button type="button" class="btn-enviar" onclick="enviarFormulario()" style="padding: 10px 20px; background-color: #3f51b5; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Enviar Cotação</button>
+                        </div>
+                    </div>
+
+                </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <!-- POPUP DE RETORNO DO ENVIO -->
+    <div id="popup-feedback-overlay" class="popup-feedback-overlay">
+        <div class="popup-feedback-card">
+
+            <div id="popup-feedback-icon" class="popup-feedback-icon">
+                ✓
+            </div>
+
+            <h3 id="popup-feedback-title">
+                Cotação enviada!
+            </h3>
+
+            <p id="popup-feedback-message">
+                Sua cotação foi enviada com sucesso.
+            </p>
+
+            <button
+                type="button"
+                class="popup-feedback-button"
+                onclick="fecharPopupFeedback()"
+            >
+                OK
+            </button>
+
+        </div>
+    </div>
+
+    <div id="privacidade-overlay" class="privacidade-overlay">
+        <div class="privacidade-card">
+
+            <div class="privacidade-header">
+                <h2>Aviso de Privacidade</h2>
+
+                <button
+                    type="button"
+                    class="privacidade-fechar"
+                    onclick="fecharAvisoPrivacidade()"
+                    aria-label="Fechar aviso de privacidade"
+                >
+                    ×
+                </button>
+            </div>
+
+            <div class="privacidade-conteudo">
+
+                <p>
+                    A <strong>SeguraMais Corretora de Seguros Ltda.</strong>
+                    respeita a sua privacidade e está comprometida com a proteção
+                    dos dados pessoais fornecidos por meio deste site.
+                </p>
+
+                <p>
+                    Ao solicitar uma cotação de seguro, algumas informações poderão
+                    ser coletadas, como nome, telefone, e-mail, CPF, endereço,
+                    informações sobre veículos, imóveis, empresa, profissão e
+                    demais dados necessários para a análise da modalidade de seguro escolhida.
+                </p>
+
+                <p>
+                    Esses dados são utilizados para receber e analisar sua solicitação
+                    de cotação, identificar suas necessidades, entrar em contato e
+                    fornecer informações relacionadas aos produtos e serviços de seguros solicitados.
+                </p>
+
+                <p>
+                    Quando necessário para viabilizar a cotação ou o atendimento,
+                    os dados poderão ser compartilhados com seguradoras para análise
+                    da proposta, prestadores de serviços que apoiem o atendimento
+                    e plataformas tecnológicas utilizadas no envio, armazenamento
+                    ou processamento das informações.
+                </p>
+
+                <p>
+                    São adotadas medidas técnicas e administrativas destinadas a reduzir
+                    riscos de acesso não autorizado, perda, alteração, divulgação indevida
+                    ou outras formas de tratamento inadequado dos dados pessoais.
+                </p>
+
+                <p>
+                    Os dados pessoais coletados serão utilizados para receber e analisar
+                    sua solicitação de cotação, avaliar as informações necessárias à
+                    modalidade de seguro escolhida, entrar em contato para dar continuidade
+                    ao atendimento e apresentar informações relacionadas aos produtos ou
+                    serviços de seguros solicitados.
+                </p>
+
+                <p>
+                    Você poderá solicitar informações sobre o tratamento de seus dados,
+                    correção de informações incompletas ou incorretas, eliminação de dados
+                    quando aplicável e demais direitos previstos na legislação de proteção
+                    de dados pessoais.
+                </p>
+
+                <p>
+                    Para exercer esses direitos ou esclarecer dúvidas sobre privacidade,
+                    entre em contato:
+                </p>
+
+                <p>
+                    <strong>E-mail:</strong> privacidade@seguramais.com.br<br>
+                    <strong>Telefone:</strong> (11) 99999-9999
+                </p>
+
+                <p>
+                    <strong>SeguraMais Corretora de Seguros Ltda.</strong><br>
+                    CNPJ: 12.345.678/0001-90<br>
+                    São Paulo - SP
+                </p>
+
+                <p>
+                    <small>Última atualização: outubro de 2026.</small>
+                </p>
+
+        </div>
+    </div>
+</div>
+    
+</body>
