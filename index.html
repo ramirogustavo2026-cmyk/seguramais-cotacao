@@ -1488,7 +1488,7 @@
                         <p>Informe as características básicas do seu negócio.</p>
                         
                         <div class="input-group">
-                            <label for="tipo-empresa">Tipo de Empresa *</label>
+                            <label for="tipo-empresa">*Tipo de Empresa </label>
                             <select id="tipo-empresa" required onchange="verificarTipoEmpresa(this.value)">
                                 <option value="">Selecione...</option>
                                 <option value="1">Comércio</option>
@@ -1502,7 +1502,7 @@
                         <!-- Condicional: Se Comércio (1) -->
                         <div id="cond-emp-comercio" class="conditional-field" style="display: none;">
                             <div class="input-group">
-                                <label for="possui-estoque-emp">A empresa possui estoque? *</label>
+                                <label for="possui-estoque-emp">*A empresa possui estoque? </label>
                                 <select id="possui-estoque-emp" required>
                                     <option value="">Selecione...</option>
                                     <option value="sim">Sim</option>
@@ -1514,7 +1514,7 @@
                         <!-- Condicional: Se Indústria (2) -->
                         <div id="cond-emp-industria" class="conditional-field" style="display: none;">
                             <div class="input-group">
-                                <label for="tipo-producao">Qual tipo de produção realiza? *</label>
+                                <label for="tipo-producao">*Qual tipo de produção realiza? </label>
                                 <input type="text" id="tipo-producao" required placeholder="Ex: Têxtil, Metalúrgica, Alimentícia">
                             </div>
                         </div>
@@ -1522,7 +1522,7 @@
                         <!-- Condicional: Se Escritório (3) -->
                         <div id="cond-emp-escritorio" class="conditional-field" style="display: none;">
                             <div class="input-group">
-                                <label for="qtd-funcionarios">Quantidade aproximada de funcionários *</label>
+                                <label for="qtd-funcionarios">*Quantidade aproximada de funcionários </label>
                                 <input type="number" id="qtd-funcionarios" required placeholder="Ex: 10">
                             </div>
                         </div>
@@ -1530,7 +1530,7 @@
                         <!-- Condicional: Se Prestação de Serviços (4) -->
                         <div id="cond-emp-servicos" class="conditional-field" style="display: none;">
                             <div class="input-group">
-                                <label for="qual-servico">Qual serviço presta? *</label>
+                                <label for="qual-servico">*Qual serviço presta? </label>
                                 <input type="text" id="qual-servico" required placeholder="Ex: Consultoria, TI, Limpeza">
                             </div>
                         </div>
@@ -1538,7 +1538,7 @@
                         <!-- Condicional: Se Outro (5) -->
                         <div id="cond-emp-outro" class="conditional-field" style="display: none;">
                             <div class="input-group">
-                                <label for="especificar-empresa">Especifique o tipo de empresa *</label>
+                                <label for="especificar-empresa">*Especifique o tipo de empresa </label>
                                 <input type="text" id="especificar-empresa" required placeholder="Descreva o ramo de atividade">
                             </div>
                         </div>
@@ -1555,7 +1555,7 @@
                         <p>Informe a situação do local do seu negócio.</p>
 
                         <div class="input-group">
-                            <label for="imovel-empresa">Situação do Imóvel *</label>
+                            <label for="imovel-empresa">*Situação do Imóvel</label>
                             <select id="imovel-empresa" required onchange="verificarImovelEmpresa(this.value)">
                                 <option value="">Selecione...</option>
                                 <option value="1">Próprio</option>
@@ -1566,7 +1566,7 @@
                         <!-- Condicional: Se Alugado (2) -->
                         <div id="cond-emp-alugado" class="conditional-field" style="display: none;">
                             <div class="input-group">
-                                <label for="proteger-bens-alugado">Deseja proteger também os bens e equipamentos da empresa? *</label>
+                                <label for="proteger-bens-alugado">*Deseja proteger também os bens e equipamentos da empresa? </label>
                                 <select id="proteger-bens-alugado" required>
                                     <option value="">Selecione...</option>
                                     <option value="sim">Sim</option>
@@ -1587,7 +1587,7 @@
                         <p>Selecione o foco principal da proteção patrimonial.</p>
 
                         <div class="input-group">
-                            <label for="desejo-proteger-emp">Proteção Desejada *</label>
+                            <label for="desejo-proteger-emp">*Proteção Desejada </label>
                             <select id="desejo-proteger-emp" required onchange="verificarDesejoProtegerEmp(this.value)">
                                 <option value="">Selecione...</option>
                                 <option value="1">Imóvel</option>
@@ -1609,7 +1609,7 @@
                         <p>A empresa possui algum equipamento ou bem de alto valor?</p>
 
                         <div class="input-group">
-                            <label for="bem-alto-valor-emp">Possui bem de alto valor? *</label>
+                            <label for="bem-alto-valor-emp">*Possui bem de alto valor? </label>
                             <select id="bem-alto-valor-emp" required onchange="verificarBemAltoValorEmp(this.value)">
                                 <option value="">Selecione...</option>
                                 <option value="1">Sim</option>
@@ -1621,7 +1621,7 @@
                         <div id="cond-emp-bem-valor" class="conditional-field" style="display: none;">
 
                             <div class="input-group">
-                                <label for="qual-equipamento">Qual equipamento ou bem? *</label>
+                                <label for="qual-equipamento">*Qual equipamento ou bem? </label>
 
                                 <input
                                     type="text"
@@ -1633,7 +1633,7 @@
 
                             <div class="input-group">
                                 <label for="valor-equipamento">
-                                    Valor aproximado do bem (R$) *
+                                    *Valor aproximado do bem (R$) 
                                 </label>
 
                             <input
@@ -1658,7 +1658,7 @@
                         <p>Qual é a principal cobertura desejada?</p>
 
                         <div class="input-group">
-                            <label for="cobertura-empresa">Cobertura Desejada *</label>
+                            <label for="cobertura-empresa">*Cobertura Desejada </label>
                             <select id="cobertura-empresa" required onchange="verificarCoberturasEmpresa(this.value)">
                                 <option value="">Selecione...</option>
                                 <option value="1">Incêndio</option>

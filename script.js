@@ -96,6 +96,8 @@ function fecharModal() {
         form.reset();
     }
 
+    cepValidado = false;
+
     // Esconde novamente todos os campos condicionais
     document.querySelectorAll('[id^="cond-"]').forEach(elemento => {
         elemento.style.display = 'none';
@@ -592,21 +594,26 @@ function carregarProfissoes() {
 // 8. VALIDAÇÃO DE CAMPOS E MENSAGENS DE ERRO
 function mostrarErroCampo(campo, mensagem = "Por favor, preencha este campo.") {
     campo.classList.add('erro');
+
     const inputGroup = campo.closest('.input-group');
     if (!inputGroup) return;
 
     let msgExistente = inputGroup.querySelector('.erro-mensagem');
+
     if (!msgExistente) {
-        const msgDiv = document.createElement('span');
-        msgDiv.className = 'erro-mensagem';
-        msgDiv.innerText = mensagem;
-        inputGroup.appendChild(msgDiv);
+        msgExistente = document.createElement('span');
+        msgExistente.className = 'erro-mensagem';
+        inputGroup.appendChild(msgExistente);
     }
+
+    msgExistente.innerText = mensagem;
 }
 
 function limparErroCampo(campo) {
     campo.classList.remove('erro');
+
     const inputGroup = campo.closest('.input-group');
+
     if (inputGroup) {
         const msgExistente = inputGroup.querySelector('.erro-mensagem');
         if (msgExistente) msgExistente.remove();
@@ -616,39 +623,131 @@ function limparErroCampo(campo) {
 function limparErros() {
     document.querySelectorAll('.input-group').forEach(group => {
         const campo = group.querySelector('input, select, textarea');
+
         if (campo) campo.classList.remove('erro');
+
         const msg = group.querySelector('.erro-mensagem');
         if (msg) msg.remove();
     });
 }
 
-function validarNomeOuRazaoSocial(valor) {
+const TERMOS_INVALIDOS_GERAIS = [
+    'teste',
+    'test',
+    'asdf',
+    'qwerty',
+    'aaa',
+    'aaaa',
+    'aaaaa',
+    'xxx',
+    'xxxx',
+    'xxxxx',
+    'sem nome',
+    'nao sei',
+    'não sei',
+    'qualquer',
+    'nenhum teste'
+];
+
+const CAMPOS_MOEDA = new Set([
+    'p11-valor-aproximado',
+    'p14-valor-caminhao',
+    'p4-capital-morte',
+    'p9-especificar-valor',
+    'valor-bem',
+    'valor-equipamento'
+]);
+
+const CAMPOS_COM_VALIDACAO_ESPECIFICA = new Set([
+    'nome',
+    'outra-nome',
+    'telefone',
+    'email',
+    'cep',
+    'numero',
+    'logradouro',
+    'complemento',
+    'bairro',
+    'cidade',
+    'outra-cpf',
+    'outra-nasc',
+    'placa',
+    'chassi',
+    ...CAMPOS_MOEDA
+]);
+
+const LIMITES_NUMERICOS = {
+    'p1-km-dia': { min: 1, max: 1000 },
+    'p4-horas-dia': { min: 1, max: 24 },
+    'p9-qtd-acidentes': { min: 1, max: 99 },
+    'p3-distancia-media': { min: 1, max: 3000 },
+    'p4-qtd-motoristas-num': { min: 2, max: 100 },
+    'p7-qtd-acidentes': { min: 1, max: 99 },
+    'p3-num-dependentes': { min: 1, max: 50 },
+    'p8-qtd-beneficiarios': { min: 1, max: 50 },
+    'qtd-funcionarios': { min: 1, max: 100000 }
+};
+
+function normalizarTexto(valor) {
+    return valor
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, ' ');
+}
+
+function textoPareceFicticio(valor) {
+    const texto = normalizarTexto(valor);
+
+    if (!texto) return false;
+
+    if (TERMOS_INVALIDOS_GERAIS.includes(texto)) {
+        return true;
+    }
+
+    const palavras = texto.split(' ');
+
+    if (
+        palavras.length > 0 &&
+        palavras.every(palavra => TERMOS_INVALIDOS_GERAIS.includes(palavra))
+    ) {
+        return true;
+    }
+
+    const semEspacos = texto.replace(/\s/g, '');
+
+    if (/^([a-zà-ÿ0-9])\1{3,}$/i.test(semEspacos)) {
+        return true;
+    }
+
+    return false;
+}
+
+function validarTextoSignificativo(valor, tamanhoMinimo = 2) {
     const texto = valor.trim();
 
-    const termosInvalidos = [
-        'teste',
-        'test',
-        'asdf',
-        'qwerty',
-        'aaa',
-        'aaaa',
-        'xxxx',
-        'xxx',
-        'sem nome'
-    ];
+    if (texto.length < tamanhoMinimo) {
+        return false;
+    }
 
-    const textoNormalizado = texto.toLowerCase();
+    if (textoPareceFicticio(texto)) {
+        return false;
+    }
+
+    if (!/[a-zA-ZÀ-ÿ]/.test(texto)) {
+        return false;
+    }
+
+    return true;
+}
+
+function validarNomeOuRazaoSocial(valor) {
+    const texto = valor.trim();
 
     if (texto.length < 5) {
         return false;
     }
 
-    const palavras = textoNormalizado.split(/\s+/);
-
-    if (
-        termosInvalidos.includes(textoNormalizado) ||
-        palavras.every(palavra => termosInvalidos.includes(palavra))
-    ) {
+    if (textoPareceFicticio(texto)) {
         return false;
     }
 
@@ -660,20 +759,9 @@ function validarNomeOuRazaoSocial(valor) {
 }
 
 function validarNumeroEndereco(valor) {
-    const texto = valor.trim().toLowerCase();
+    const texto = normalizarTexto(valor);
 
-    const termosInvalidos = [
-        'teste',
-        'test',
-        'aaa',
-        'aaaa',
-        'xxx',
-        'xxxx',
-        '000',
-        '0000'
-    ];
-
-    if (termosInvalidos.includes(texto)) {
+    if (textoPareceFicticio(texto)) {
         return false;
     }
 
@@ -681,70 +769,257 @@ function validarNumeroEndereco(valor) {
         return true;
     }
 
-    // Precisa conter pelo menos um número
-    if (!/\d/.test(texto)) {
+    if (/^0+$/.test(texto)) {
         return false;
     }
 
-    return true;
+    return /\d/.test(texto);
 }
 
 function validarTextoEndereco(valor) {
-    const texto = valor.trim().toLowerCase();
-
-    const termosInvalidos = [
-        'teste',
-        'test',
-        'aaa',
-        'aaaa',
-        'xxx',
-        'xxxx',
-        'asdf',
-        'qwerty'
-    ];
-
-    if (texto.length < 3) {
-        return false;
-    }
-
-    if (termosInvalidos.includes(texto)) {
-        return false;
-    }
-
-    if (!/[a-zA-ZÀ-ÿ]/.test(texto)) {
-        return false;
-    }
-
-    return true;
+    return validarTextoSignificativo(valor, 3);
 }
 
 function validarComplemento(valor) {
-    const texto = valor.trim().toLowerCase();
+    const texto = valor.trim();
 
-    const termosInvalidos = [
-        'teste',
-        'test',
-        'aaa',
-        'aaaa',
-        'xxx',
-        'xxxx',
-        'asdf',
-        'qwerty'
-    ];
+    if (!texto) {
+        return true;
+    }
 
-    if (termosInvalidos.includes(texto)) {
+    if (textoPareceFicticio(texto)) {
         return false;
     }
 
-    if (!/[a-zA-ZÀ-ÿ0-9]/.test(texto)) {
-        return false;
-    }
-
-    return true;
+    return /[a-zA-ZÀ-ÿ0-9]/.test(texto);
 }
 
-    function validarEtapaAtual() {
-        let stepDiv;
+function validarPlaca(valor) {
+    const placa = valor
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '');
+
+    // Aceita padrão antigo ABC1234 e Mercosul ABC1D23.
+    return /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/.test(placa);
+}
+
+function validarChassi(valor) {
+    const chassi = valor
+        .toUpperCase()
+        .replace(/\s/g, '');
+
+    // Chassi/VIN: 17 caracteres; I, O e Q não são usados.
+    return /^[A-HJ-NPR-Z0-9]{17}$/.test(chassi);
+}
+
+function validarMoedaPositiva(valor) {
+    const somenteDigitos = valor.replace(/\D/g, '');
+
+    if (!somenteDigitos) {
+        return false;
+    }
+
+    return Number(somenteDigitos) > 0;
+}
+
+function validarDataNaoFutura(valor) {
+    if (!valor) return false;
+
+    const hoje = new Date();
+    hoje.setHours(23, 59, 59, 999);
+
+    let data;
+
+    if (/^\d{4}-\d{2}$/.test(valor)) {
+        data = new Date(`${valor}-01T12:00:00`);
+    } else {
+        data = new Date(`${valor}T12:00:00`);
+    }
+
+    return !Number.isNaN(data.getTime()) && data <= hoje;
+}
+
+function validarNascimentoCondutor(valor) {
+    if (!validarDataNaoFutura(valor)) {
+        return false;
+    }
+
+    const nascimento = new Date(`${valor}T12:00:00`);
+    const hoje = new Date();
+
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const diferencaMes = hoje.getMonth() - nascimento.getMonth();
+
+    if (
+        diferencaMes < 0 ||
+        (diferencaMes === 0 && hoje.getDate() < nascimento.getDate())
+    ) {
+        idade--;
+    }
+
+    return idade >= 18 && idade <= 100;
+}
+
+function obterErroNumero(campo, valor) {
+    const numero = Number(valor);
+
+    if (!Number.isFinite(numero)) {
+        return "Informe um número válido.";
+    }
+
+    let minimo = campo.min !== '' ? Number(campo.min) : null;
+    let maximo = campo.max !== '' ? Number(campo.max) : null;
+
+    if (LIMITES_NUMERICOS[campo.id]) {
+        minimo = LIMITES_NUMERICOS[campo.id].min;
+        maximo = LIMITES_NUMERICOS[campo.id].max;
+    }
+
+    if (campo.id === 'p13-ano-caminhao') {
+        minimo = 1970;
+        maximo = new Date().getFullYear() + 1;
+    }
+
+    if (minimo !== null && numero < minimo) {
+        return `O valor mínimo permitido é ${minimo}.`;
+    }
+
+    if (maximo !== null && numero > maximo) {
+        return `O valor máximo permitido é ${maximo}.`;
+    }
+
+    return '';
+}
+
+function obterErroCampo(campo, valor) {
+    if (
+        (campo.id === 'nome' || campo.id === 'outra-nome') &&
+        !validarNomeOuRazaoSocial(valor)
+    ) {
+        return campo.id === 'nome'
+            ? "Informe um nome ou razão social válido."
+            : "Informe um nome de condutor válido.";
+    }
+
+    if (
+        campo.id === 'telefone' &&
+        !validarTelefone(valor)
+    ) {
+        return "Informe um telefone válido com DDD.";
+    }
+
+    if (
+        campo.id === 'email' &&
+        !validarEmail(valor)
+    ) {
+        return "Informe um e-mail válido.";
+    }
+
+    if (campo.id === 'cep') {
+        const numerosCEP = valor.replace(/\D/g, '');
+
+        if (numerosCEP.length !== 8) {
+            return "Informe um CEP válido.";
+        }
+
+        if (!cepValidado) {
+            return "Informe um CEP existente.";
+        }
+    }
+
+    if (
+        campo.id === 'numero' &&
+        !validarNumeroEndereco(valor)
+    ) {
+        return "Informe um número de endereço válido ou S/N.";
+    }
+
+    if (
+        ['logradouro', 'bairro', 'cidade'].includes(campo.id) &&
+        !validarTextoEndereco(valor)
+    ) {
+        const nomes = {
+            logradouro: 'logradouro',
+            bairro: 'bairro',
+            cidade: 'cidade'
+        };
+
+        return `Informe um ${nomes[campo.id]} válido.`;
+    }
+
+    if (
+        campo.id === 'complemento' &&
+        !validarComplemento(valor)
+    ) {
+        return "Informe um complemento válido.";
+    }
+
+    if (
+        campo.id === 'outra-cpf' &&
+        !validarCPF(valor)
+    ) {
+        return "Informe um CPF válido.";
+    }
+
+    if (
+        campo.id === 'outra-nasc' &&
+        !validarNascimentoCondutor(valor)
+    ) {
+        return "Informe uma data de nascimento válida para um condutor maior de 18 anos.";
+    }
+
+    if (
+        campo.id === 'placa' &&
+        !validarPlaca(valor)
+    ) {
+        return "Informe uma placa válida, como ABC1D23.";
+    }
+
+    if (
+        campo.id === 'chassi' &&
+        !validarChassi(valor)
+    ) {
+        return "Informe um chassi válido com 17 caracteres.";
+    }
+
+    if (
+        CAMPOS_MOEDA.has(campo.id) &&
+        !validarMoedaPositiva(valor)
+    ) {
+        return "Informe um valor maior que zero.";
+    }
+
+    if (campo.type === 'number') {
+        const erroNumero = obterErroNumero(campo, valor);
+
+        if (erroNumero) {
+            return erroNumero;
+        }
+    }
+
+    if (
+        (campo.type === 'date' || campo.type === 'month') &&
+        campo.id !== 'outra-nasc' &&
+        !validarDataNaoFutura(valor)
+    ) {
+        return "Informe uma data válida que não esteja no futuro.";
+    }
+
+    const tipo = (campo.type || '').toLowerCase();
+
+    if (
+        !CAMPOS_COM_VALIDACAO_ESPECIFICA.has(campo.id) &&
+        (tipo === 'text' || campo.tagName.toLowerCase() === 'textarea') &&
+        !validarTextoSignificativo(valor, 2)
+    ) {
+        return "Informe uma informação válida.";
+    }
+
+    return '';
+}
+
+function validarEtapaAtual() {
+    let stepDiv;
 
     if (etapaAtual === 1 || etapaAtual === 2) {
         stepDiv = document.getElementById(`step-${etapaAtual}`);
@@ -764,208 +1039,56 @@ function validarComplemento(valor) {
     if (!stepDiv) return true;
 
     const campos = stepDiv.querySelectorAll(
-        'input[required], select[required], textarea[required], #complemento'
+        'input, select, textarea'
     );
 
     let valido = true;
 
     campos.forEach(campo => {
+        if (
+            campo.disabled ||
+            campo.offsetWidth === 0 ||
+            campo.offsetHeight === 0
+        ) {
+            return;
+        }
 
         if (
-            !campo.disabled &&
-            campo.offsetWidth > 0 &&
-            campo.offsetHeight > 0
+            campo.type === 'checkbox' ||
+            campo.type === 'radio' ||
+            campo.type === 'button' ||
+            campo.type === 'submit' ||
+            campo.type === 'hidden'
         ) {
-            const valor = campo.value.trim();
+            return;
+        }
 
-            // Campo vazio
-            if (!valor) {
+        const valor = campo.value.trim();
+
+        if (!valor) {
+            if (campo.required) {
                 mostrarErroCampo(
                     campo,
                     "Por favor, preencha este campo."
                 );
 
                 valido = false;
-                return;
+            } else {
+                limparErroCampo(campo);
             }
 
-            // Nome / Razão Social
-            if (
-                campo.id === 'nome' &&
-                !validarNomeOuRazaoSocial(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um nome ou razão social válido."
-                );
+            return;
+        }
 
-                valido = false;
-                return;
-            }
+        const mensagemErro = obterErroCampo(campo, valor);
 
-            // Telefone
-            if (
-                campo.id === 'telefone' &&
-                !validarTelefone(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um telefone válido com DDD."
-                );
-
-                valido = false;
-                return;
-            }
-
-            // E-mail
-        if (
-            campo.id === 'email' &&
-            !validarEmail(valor)
-        ) {
-            mostrarErroCampo(
-                campo,
-                "Informe um e-mail válido."
-            );
-
+        if (mensagemErro) {
+            mostrarErroCampo(campo, mensagemErro);
             valido = false;
             return;
         }
 
-            // CPF
-            if (
-                campo.id === 'outra-cpf' &&
-                !validarCPF(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um CPF válido."
-                );
-
-                valido = false;
-                return;
-            }
-
-            //Validação de CEP
-            if (campo.id === 'cep') {
-            const numerosCEP = valor.replace(/\D/g, '');
-
-            if (numerosCEP.length !== 8) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um CEP válido."
-                );
-
-                valido = false;
-                return;
-            }
-        }
-
-             // Número do endereço
-            if (
-                campo.id === 'numero' &&
-                !validarNumeroEndereco(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um número de endereço válido ou S/N."
-                );
-
-                valido = false;
-                return;
-            }
-
-            // Logradouro
-            if (
-                campo.id === 'logradouro' &&
-                !validarTextoEndereco(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um logradouro válido."
-                );
-
-                valido = false;
-                return;
-            }
-
-            // Bairro
-            if (
-                campo.id === 'bairro' &&
-                !validarTextoEndereco(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um bairro válido."
-                );
-
-                valido = false;
-                return;
-            }
-
-            // Cidade
-            if (
-                campo.id === 'cidade' &&
-                !validarTextoEndereco(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe uma cidade válida."
-                );
-
-                valido = false;
-                return;
-            }
-
-            // Complemento
-            if (
-                campo.id === 'complemento' &&
-                valor !== '' &&
-                !validarComplemento(valor)
-            ) {
-                mostrarErroCampo(
-                    campo,
-                    "Informe um complemento válido."
-                );
-
-                valido = false;
-                return;
-            }
-
-            // Campos numéricos
-            if (campo.type === 'number') {
-                const numero = Number(valor);
-
-                if (campo.min !== '') {
-                    const minimo = Number(campo.min);
-
-                    if (numero < minimo) {
-                        mostrarErroCampo(
-                            campo,
-                            `O valor mínimo permitido é ${minimo}.`
-                        );
-
-                        valido = false;
-                        return;
-                    }
-                }
-
-                if (campo.max !== '') {
-                    const maximo = Number(campo.max);
-
-                    if (numero > maximo) {
-                        mostrarErroCampo(
-                            campo,
-                            `O valor máximo permitido é ${maximo}.`
-                        );
-
-                        valido = false;
-                        return;
-                    }
-                }
-            }
-
-            limparErroCampo(campo);
-        }
+        limparErroCampo(campo);
     });
 
     if (!valido) {
@@ -978,6 +1101,7 @@ function validarComplemento(valor) {
 
     return valido;
 }
+
 
 // 9. INTEGRAÇÃO COM APIS (FIPE E VIACEP)
 function carregarMarcasFIPE() {
@@ -1079,6 +1203,7 @@ function buscarCEP() {
                 }
             })
             .catch(err => {
+                cepValidado = false;
                 console.error('Erro ao buscar CEP:', err);
                 mostrarErroCampo(cepInput, "Erro ao buscar CEP.");
             });
@@ -1123,19 +1248,28 @@ function validarTelefone(telefone) {
         return false;
     }
 
-    // Bloqueia números com todos os dígitos iguais
     if (/^(\d)\1+$/.test(numeros)) {
         return false;
     }
 
+    const dddsValidos = new Set([
+        '11','12','13','14','15','16','17','18','19',
+        '21','22','24','27','28',
+        '31','32','33','34','35','37','38',
+        '41','42','43','44','45','46','47','48','49',
+        '51','53','54','55',
+        '61','62','63','64','65','66','67','68','69',
+        '71','73','74','75','77','79',
+        '81','82','83','84','85','86','87','88','89',
+        '91','92','93','94','95','96','97','98','99'
+    ]);
+
     const ddd = numeros.slice(0, 2);
 
-    // DDD não pode começar com 0
-    if (ddd.startsWith('0')) {
+    if (!dddsValidos.has(ddd)) {
         return false;
     }
 
-    // Celular com 11 dígitos deve começar com 9 após o DDD
     if (numeros.length === 11 && numeros[2] !== '9') {
         return false;
     }
@@ -1152,34 +1286,18 @@ function validarEmail(email) {
         return false;
     }
 
-    const [usuario, dominio] = valor.split('@');
+    const [, dominio] = valor.split('@');
 
-    const usuariosInvalidos = [
-        'teste',
-        'test',
-        'email',
-        'exemplo',
-        'example',
-        'aaa',
-        'aaaa'
-    ];
-
-    const dominiosInvalidos = [
+    const dominiosInvalidos = new Set([
         'teste.com',
         'test.com',
         'exemplo.com',
-        'example.com'
-    ];
+        'example.com',
+        'email.com',
+        'aaa.com'
+    ]);
 
-    if (usuariosInvalidos.includes(usuario)) {
-        return false;
-    }
-
-    if (dominiosInvalidos.includes(dominio)) {
-        return false;
-    }
-
-    return true;
+    return !dominiosInvalidos.has(dominio);
 }
 
 //Função auxiliar para validar CPF
@@ -1548,6 +1666,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cepInput) {
         cepInput.addEventListener('input', () => {
+            cepValidado = false;
             cepInput.value = mascaraCEP(cepInput.value);
         });
 
